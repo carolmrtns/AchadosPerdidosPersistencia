@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.ufsc.ine5605.controllers;
-import br.ufsc.ine5605.models.Local;
-import br.ufsc.ine5605.models.Objeto;
-import br.ufsc.ine5605.models.Pessoa;
-import br.ufsc.ine5605.views.TelaObjeto;
-import br.ufsc.ine5605.models.TipoObjeto;
-import br.ufsc.ine5605.models.TipoStatus;
+package br.ufsc.ine5605.achadoseperdidos.controllers;
+import br.ufsc.ine5605.achadoseperdidos.models.Local;
+import br.ufsc.ine5605.achadoseperdidos.models.Objeto;
+import br.ufsc.ine5605.achadoseperdidos.models.Pessoa;
+import br.ufsc.ine5605.achadoseperdidos.views.TelaObjeto;
+import br.ufsc.ine5605.achadoseperdidos.models.TipoObjeto;
+import br.ufsc.ine5605.achadoseperdidos.models.TipoStatus;
 import java.util.ArrayList;
 /**
  *

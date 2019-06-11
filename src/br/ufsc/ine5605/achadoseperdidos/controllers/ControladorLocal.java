@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.ufsc.ine5605.controllers;
-import br.ufsc.ine5605.models.Local;
-import br.ufsc.ine5605.views.TelaLocal;
+package br.ufsc.ine5605.achadoseperdidos.controllers;
+import br.ufsc.ine5605.achadoseperdidos.models.Local;
+import br.ufsc.ine5605.achadoseperdidos.views.TelaLocal;
 import java.util.ArrayList;
 /**
  *

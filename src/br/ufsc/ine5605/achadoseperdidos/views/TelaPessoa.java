@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.ufsc.ine5605.views;
+package br.ufsc.ine5605.achadoseperdidos.views;
 
-import br.ufsc.ine5605.models.Aluno;
-import br.ufsc.ine5605.models.Funcionario;
-import br.ufsc.ine5605.models.Visitante;
-import br.ufsc.ine5605.controllers.ControladorPessoa;
+import br.ufsc.ine5605.achadoseperdidos.models.Aluno;
+import br.ufsc.ine5605.achadoseperdidos.models.Funcionario;
+import br.ufsc.ine5605.achadoseperdidos.models.Visitante;
+import br.ufsc.ine5605.achadoseperdidos.controllers.ControladorPessoa;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 

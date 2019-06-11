@@ -3,15 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.ufsc.ine5605.controllers;
+package br.ufsc.ine5605.achadoseperdidos.controllers;
 
-import br.ufsc.ine5605.models.Aluno;
-import br.ufsc.ine5605.models.Funcionario;
-import br.ufsc.ine5605.models.Pessoa;
-import br.ufsc.ine5605.views.TelaPessoa;
-import br.ufsc.ine5605.models.TipoPessoa;
-import br.ufsc.ine5605.models.Visitante;
-import br.ufsc.ine5605.persistencia.PessoaDAO;
+import br.ufsc.ine5605.achadoseperdidos.models.Aluno;
+import br.ufsc.ine5605.achadoseperdidos.models.Funcionario;
+import br.ufsc.ine5605.achadoseperdidos.models.Pessoa;
+import br.ufsc.ine5605.achadoseperdidos.views.TelaPessoa;
+import br.ufsc.ine5605.achadoseperdidos.models.TipoPessoa;
+import br.ufsc.ine5605.achadoseperdidos.models.Visitante;
+import br.ufsc.ine5605.achadoseperdidos.persistencia.PessoaDAO;
 import java.util.ArrayList;
 
 /**

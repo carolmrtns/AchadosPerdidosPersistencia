@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.ufsc.ine5605;
+package br.ufsc.ine5605.achadoseperdidos;
 
-import br.ufsc.ine5605.controllers.ControladorPrincipal;
+import br.ufsc.ine5605.achadoseperdidos.controllers.ControladorPrincipal;
 
 /**
  *

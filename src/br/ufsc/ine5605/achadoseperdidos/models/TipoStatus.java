@@ -3,15 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.ufsc.ine5605.models;
+package br.ufsc.ine5605.achadoseperdidos.models;
 
 /**
  *
- * @author 18206078
+ * @author Caroline Martins Alves
  */
-public interface Identificavel {
-    
-    public Integer getId();
-    public void setId(Integer id);
-    
-}
+public enum TipoStatus {PERDIDO, ENCONTRADO}

@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.ufsc.ine5605.views;
-import br.ufsc.ine5605.models.TipoObjeto;
-import br.ufsc.ine5605.models.TipoStatus;
-import br.ufsc.ine5605.controllers.ControladorObjeto;
+package br.ufsc.ine5605.achadoseperdidos.views;
+import br.ufsc.ine5605.achadoseperdidos.models.TipoObjeto;
+import br.ufsc.ine5605.achadoseperdidos.models.TipoStatus;
+import br.ufsc.ine5605.achadoseperdidos.controllers.ControladorObjeto;
 import java.util.Scanner;
 /**
  *

@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.ufsc.ine5605.models;
+package br.ufsc.ine5605.achadoseperdidos.models;
 
 /**
  *
  * @author Caroline Martins Alves
  */
-public enum TipoPessoa {VISITANTE, ALUNO, FUNCIONARIO}
+public enum TipoObjeto {ELETROELETRONICO, MATERIAIS, VESTUARIO, ALIMENTO, DOCUMENTOS}
