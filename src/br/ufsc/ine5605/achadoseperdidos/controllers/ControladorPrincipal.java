@@ -67,4 +67,15 @@ public class ControladorPrincipal {
     public String retornarNomeLocal(Local local){
         return controladorLocal.encontrarNomeDoLocal(local);
     }
+    
+    public void mostrarTelas(String opcao){
+        switch(opcao){
+            case "1": listarTelaPessoa();
+                break;
+            case "2": listarTelaLocal();
+                break;
+            case "3": listarTelaObjeto();
+                break;
+        }
+    }
 }
