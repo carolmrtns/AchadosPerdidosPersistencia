@@ -5,6 +5,7 @@
  */
 package br.ufsc.ine5605.achadoseperdidos;
 
+import br.ufsc.ine5605.achadoseperdidos.controllers.ControladorObjeto;
 import br.ufsc.ine5605.achadoseperdidos.controllers.ControladorPrincipal;
 
 /**
@@ -20,6 +21,6 @@ public class AchadosEPerdidos {
     public static void main(String[] args) {
         //ControladorPrincipal controladorPrincipal = new ControladorPrincipal();
         ControladorPrincipal.getInstancia().inicia();
-        
+  
     }
 }

@@ -9,7 +9,9 @@ import br.ufsc.ine5605.achadoseperdidos.models.Objeto;
 import br.ufsc.ine5605.achadoseperdidos.models.Pessoa;
 import br.ufsc.ine5605.achadoseperdidos.views.TelaObjeto;
 import br.ufsc.ine5605.achadoseperdidos.models.TipoObjeto;
+import br.ufsc.ine5605.achadoseperdidos.models.TipoPessoa;
 import br.ufsc.ine5605.achadoseperdidos.models.TipoStatus;
+import br.ufsc.ine5605.achadoseperdidos.persistencia.ObjetoDAO;
 import java.util.ArrayList;
 /**
  *
@@ -25,6 +27,7 @@ public class ControladorObjeto {
         objetos = new ArrayList<>();
         telaObjeto = new TelaObjeto();
         //this.controladorPrincipal = controladorPrincipal;
+        
     }
     
     public void inicia(){

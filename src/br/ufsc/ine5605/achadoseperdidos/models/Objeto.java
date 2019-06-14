@@ -5,11 +5,13 @@
  */
 package br.ufsc.ine5605.achadoseperdidos.models;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Caroline Martins Alves
  */
-public class Objeto {
+public class Objeto implements Identificavel, Serializable{
     
     private static int proxCodigo = 1;
     
@@ -90,5 +92,14 @@ public class Objeto {
     public void setDono(Pessoa dono){
         this.dono = dono;
     }    
+
+    @Override
+    public Integer getId() {
+        return this.codigo;
+    }
+
+    @Override
+    public void setId(Integer id){};
+      
     
 }
