@@ -22,7 +22,7 @@ import javax.swing.JMenuItem;
  *
  * @author Caroline Martins Alves
  */
-public class TelaPrincipal extends JFrame { 
+public class TelaPrincipal extends TelaGlobal { 
 
     private Scanner teclado;
     //private ControladorPrincipal controladorPrincipal;
@@ -31,14 +31,14 @@ public class TelaPrincipal extends JFrame {
     private ImageIcon icone;
 
     public TelaPrincipal() {
-        super("Achados e Perdidos - Tela Principal");
-        icone = new ImageIcon("achadosperdidos.png");
+        //super("Achados e Perdidos - Tela Principal");
+        //icone = new ImageIcon("achadosperdidos.png");
         teclado = new Scanner(System.in);
         //this.controladorPrincipal = controladorPrincipal;
     }
 
     public void menuInicial() {
-        /*
+        
         int opcao;
         do {
             System.out.println("----------ACHADOS E PERDIDOS----------");
@@ -61,7 +61,8 @@ public class TelaPrincipal extends JFrame {
                     break;
             }
         } while (opcao != 0);
-        */
+        
+        /*
         Container container = getContentPane();
         container.setLayout(new FlowLayout());
         
@@ -105,6 +106,7 @@ public class TelaPrincipal extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        */
     }
 
     public void exibirTelaPessoa() {
@@ -120,6 +122,7 @@ public class TelaPrincipal extends JFrame {
     }
     
     //VAI TER QUE TIRAR ESSA MELECA DAQUI DEPOIS
+    /*
     public String recebeValorString(){
         return teclado.nextLine();
     }
@@ -138,5 +141,5 @@ public class TelaPrincipal extends JFrame {
         } while (valor == -1);
         return valor;
     }    
-
+    */
 }
