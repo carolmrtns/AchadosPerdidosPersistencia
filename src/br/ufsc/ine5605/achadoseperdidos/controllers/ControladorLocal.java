@@ -5,6 +5,7 @@
  */
 package br.ufsc.ine5605.achadoseperdidos.controllers;
 import br.ufsc.ine5605.achadoseperdidos.models.Local;
+import br.ufsc.ine5605.achadoseperdidos.persistencia.LocalDAO;
 import br.ufsc.ine5605.achadoseperdidos.views.TelaLocal;
 import java.util.ArrayList;
 /**
@@ -12,13 +13,13 @@ import java.util.ArrayList;
  * @author Caroline Martins Alves
  */
 public class ControladorLocal {
-    private ArrayList<Local> locais;
+    //private ArrayList<Local> locais;
     private TelaLocal telaLocal;
     //private ControladorPrincipal controladorPrincipal;
     private static ControladorLocal instancia;
 
     public ControladorLocal(){
-        locais = new ArrayList<Local>();
+        //locais = new ArrayList<Local>();
         telaLocal = new TelaLocal();
         
         //this.controladorPrincipal = controladorPrincipal;
@@ -29,12 +30,12 @@ public class ControladorLocal {
         Local local5 = new Local("CCE", "Setor E");
         Local local6 = new Local("CCS", "Setor F");
         
-        locais.add(local1);
-        locais.add(local2);
-        locais.add(local3);
-        locais.add(local4);
-        locais.add(local5);
-        locais.add(local6);
+        //locais.add(local1);
+        //locais.add(local2);
+        //locais.add(local3);
+        //locais.add(local4);
+        //locais.add(local5);
+        //locais.add(local6);
         
     }
     
@@ -53,7 +54,8 @@ public class ControladorLocal {
         if(!nomeLocal.equals("") && !localizacao.equals("")){
             if(encontrarLocalPeloNome(nomeLocal) == null){
                 Local novoLocal = new Local(nomeLocal, localizacao);
-                locais.add(novoLocal);
+                //locais.add(novoLocal);
+                LocalDAO.getInstancia().put(novoLocal);
                 telaLocal.exibirMensagem("Local cadastrado com sucesso!");
             }else{
                 telaLocal.exibirMensagem("Local ja existe!");
@@ -63,7 +65,8 @@ public class ControladorLocal {
     
     public void excluirLocal(String nomeLocal){
         if(encontrarLocalPeloNome(nomeLocal) != null){
-            locais.remove(encontrarLocalPeloNome(nomeLocal));
+            LocalDAO.getInstancia().removeLocal(encontrarLocalPeloNome(nomeLocal));
+            //locais.remove(encontrarLocalPeloNome(nomeLocal));
             telaLocal.exibirMensagem("Local removido com sucesso!");
         }else{
             telaLocal.exibirMensagem("Local nao existe");
@@ -71,7 +74,7 @@ public class ControladorLocal {
     }
     
     public Local encontrarLocalPeloNome(String nomeLocal){
-        for(Local locaisLista: locais){
+        for(Local locaisLista: LocalDAO.getInstancia().getList()){
             if(locaisLista.getNomeLocal().equalsIgnoreCase(nomeLocal)){
                 return locaisLista;
             }
@@ -85,7 +88,7 @@ public class ControladorLocal {
     
     public void listarLocais(){
         telaLocal.exibirMensagem("---------LISTANDO LOCAIS---------");
-        for(Local locaisLista: locais){
+        for(Local locaisLista: LocalDAO.getInstancia().getList()){
             telaLocal.exibirMensagem("Nome: "+locaisLista.getNomeLocal());
             telaLocal.exibirMensagem("Localizacao: "+locaisLista.getLocalizacao());
             telaLocal.exibirMensagem("---------------------------------");
