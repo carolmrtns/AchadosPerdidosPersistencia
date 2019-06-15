@@ -10,23 +10,45 @@ import br.ufsc.ine5605.achadoseperdidos.models.Funcionario;
 import br.ufsc.ine5605.achadoseperdidos.models.Visitante;
 import br.ufsc.ine5605.achadoseperdidos.controllers.ControladorPessoa;
 import java.util.InputMismatchException;
+import java.awt.Container;
+import java.awt.GridBagLayout;
 import java.util.Scanner;
+import javax.swing.JButton;
+import javax.swing.JFrame;
 
 /**
  *
  * @author Henrique Meireles
  */public class TelaPessoa extends TelaGlobal{
 
-    private Scanner teclado;
+   // private Scanner teclado; > Deletado para JFrame
+     private JButton btnVoltar;
     
 
     public TelaPessoa() {
-        teclado = new Scanner(System.in);
-       
+         super("Tela Pessoa");
+        
+         
     }
 
-    public void menuInicial() {
-        int escolhaTipo;
+    public void initComponents() {
+       
+        //teclado = new Scanner(System.in);
+        Container container = getContentPane();
+        container.setLayout(new GridBagLayout());
+        
+        btnVoltar = new JButton();
+        btnVoltar.setText("Voltar");
+        btnVoltar.setActionCommand("1");
+        
+        container.add(btnVoltar);
+        
+        setSize(360, 150);
+        
+        setVisible(true);
+        
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        /*int escolhaTipo;
 
         System.out.println("----------TELA PESSOA----------");
         System.out.println("1 - Cadastrar uma Pessoa");
@@ -150,7 +172,7 @@ import java.util.Scanner;
                 System.out.println("Operação inválida!");
                 break;
         }
-
+      */
     }
 
     public void incluirAluno() {

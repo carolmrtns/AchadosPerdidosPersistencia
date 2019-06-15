@@ -9,6 +9,8 @@ import br.ufsc.ine5605.achadoseperdidos.controllers.ControladorPrincipal;
 import br.ufsc.ine5605.achadoseperdidos.controllers.GerenciadorBotoes;
 import java.awt.Container;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Scanner;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -17,6 +19,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -31,7 +34,7 @@ public class TelaPrincipal extends TelaGlobal {
     private ImageIcon icone;
 
     public TelaPrincipal() {
-        //super("Achados e Perdidos - Tela Principal");
+        super("Achados e Perdidos - Tela Principal");
         //icone = new ImageIcon("achadosperdidos.png");
         teclado = new Scanner(System.in);
         //this.controladorPrincipal = controladorPrincipal;
@@ -39,7 +42,7 @@ public class TelaPrincipal extends TelaGlobal {
 
     public void menuInicial() {
         
-        int opcao;
+        /*int opcao;
         do {
             System.out.println("----------ACHADOS E PERDIDOS----------");
             System.out.println("1 - Pessoas");
@@ -60,9 +63,9 @@ public class TelaPrincipal extends TelaGlobal {
                     exibirTelaObjeto();
                     break;
             }
-        } while (opcao != 0);
+        } while (opcao != 0);*/
         
-        /*
+        
         Container container = getContentPane();
         container.setLayout(new FlowLayout());
         
@@ -106,7 +109,7 @@ public class TelaPrincipal extends TelaGlobal {
         setLocationRelativeTo(null);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        */
+        
     }
 
     public void exibirTelaPessoa() {
@@ -142,4 +145,14 @@ public class TelaPrincipal extends TelaGlobal {
         return valor;
     }    
     */
+    private class GerenciadorBotoes implements ActionListener{
+    
+    @Override
+    public void actionPerformed(ActionEvent ae){
+        JOptionPane.showMessageDialog(null, "Botão Pressionado: "+
+                ae.getActionCommand(), "Titulo", 2);
+        ControladorPrincipal.getInstancia().mostrarTelas(ae.getActionCommand());
+    }
+    
+}
 }

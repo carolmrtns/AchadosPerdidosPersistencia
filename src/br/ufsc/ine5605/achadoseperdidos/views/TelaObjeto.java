@@ -19,6 +19,7 @@ public class TelaObjeto extends TelaGlobal{
     
     
     public TelaObjeto(){
+        super("Tela Objeto");
         teclado = new Scanner(System.in);
         //this.controladorObjeto = ControladorObjeto.getInstancia();
     }

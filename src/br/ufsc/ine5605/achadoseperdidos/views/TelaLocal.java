@@ -15,6 +15,7 @@ public class TelaLocal extends TelaGlobal{
     //private ControladorLocal controladorLocal;
     
     public TelaLocal(){
+        super("Tela Local");
         teclado = new Scanner(System.in);
         //this.controladorLocal = ControladorLocal.getInstancia();
     }

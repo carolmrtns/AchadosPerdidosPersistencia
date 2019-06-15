@@ -26,7 +26,7 @@ public class ControladorPessoa {
  
 
     public void inicia() {
-        telaPessoa.menuInicial();
+        telaPessoa.initComponents();
     }
     
     

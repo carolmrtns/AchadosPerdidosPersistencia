@@ -5,19 +5,22 @@
  */
 package br.ufsc.ine5605.achadoseperdidos.views;
 import java.util.Scanner;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author caroline
  */
-public abstract class TelaGlobal {
+public abstract class TelaGlobal extends JFrame{
     Scanner teclado;
     
-    public TelaGlobal(){
-        teclado = new Scanner(System.in);
+    public TelaGlobal(String nomeJanela){
+        super(nomeJanela);
     }
     
     public void exibirMensagem(String mensagem){
-        System.out.println(mensagem);
+        JOptionPane.showMessageDialog(null, mensagem);
     }
     
     public String recebeValorString(){
