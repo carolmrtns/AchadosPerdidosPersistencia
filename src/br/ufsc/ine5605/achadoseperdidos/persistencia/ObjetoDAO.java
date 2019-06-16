@@ -83,7 +83,7 @@ public class ObjetoDAO {
         }
     }
     
-    public ArrayList getLista(){
+    public ArrayList<Objeto> getList(){
         return new ArrayList(this.cacheObjetos.values());
     }
     

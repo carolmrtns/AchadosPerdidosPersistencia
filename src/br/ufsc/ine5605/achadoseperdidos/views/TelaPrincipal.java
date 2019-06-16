@@ -6,7 +6,6 @@
 package br.ufsc.ine5605.achadoseperdidos.views;
 
 import br.ufsc.ine5605.achadoseperdidos.controllers.ControladorPrincipal;
-import br.ufsc.ine5605.achadoseperdidos.controllers.GerenciadorBotoes;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -35,14 +34,14 @@ public class TelaPrincipal extends TelaGlobal {
 
     public TelaPrincipal() {
         super("Achados e Perdidos - Tela Principal");
-        //icone = new ImageIcon("achadosperdidos.png");
+        icone = new ImageIcon("achadosperdidos.png");
         teclado = new Scanner(System.in);
         //this.controladorPrincipal = controladorPrincipal;
     }
 
     public void menuInicial() {
-        
-        /*int opcao;
+        /*
+        int opcao;
         do {
             System.out.println("----------ACHADOS E PERDIDOS----------");
             System.out.println("1 - Pessoas");
@@ -63,8 +62,8 @@ public class TelaPrincipal extends TelaGlobal {
                     exibirTelaObjeto();
                     break;
             }
-        } while (opcao != 0);*/
-        
+        } while (opcao != 0);
+        */
         
         Container container = getContentPane();
         container.setLayout(new FlowLayout());
@@ -149,8 +148,6 @@ public class TelaPrincipal extends TelaGlobal {
     
     @Override
     public void actionPerformed(ActionEvent ae){
-        JOptionPane.showMessageDialog(null, "Botão Pressionado: "+
-                ae.getActionCommand(), "Titulo", 2);
         ControladorPrincipal.getInstancia().mostrarTelas(ae.getActionCommand());
     }
     

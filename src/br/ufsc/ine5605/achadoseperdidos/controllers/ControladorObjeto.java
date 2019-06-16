@@ -18,13 +18,13 @@ import java.util.ArrayList;
  * @author Caroline Martins Alves
  */
 public class ControladorObjeto {
-    private ArrayList<Objeto> objetos;
+    //private ArrayList<Objeto> objetos;
     private TelaObjeto telaObjeto;
     //private ControladorPrincipal controladorPrincipal;
     private static ControladorObjeto instancia;
     
     public ControladorObjeto(){
-        objetos = new ArrayList<>();
+        //objetos = new ArrayList<>();
         telaObjeto = new TelaObjeto();
         //this.controladorPrincipal = controladorPrincipal;
         
@@ -57,7 +57,7 @@ public class ControladorObjeto {
                             ControladorPrincipal.getInstancia().retornarNomeLocal(novoObjeto.getLocal()), 
                             ControladorPrincipal.getInstancia().retornarNomePessoa(novoObjeto.getCadastrador()));
 
-                    objetos.add(novoObjeto);
+                    ObjetoDAO.getInstancia().put(novoObjeto);
                     telaObjeto.exibirMensagem("Objeto cadastrado com Sucesso!");
                 }else{
                     telaObjeto.exibirMensagem("Digite um local existente! Objeto nao foi inserido.");
@@ -89,9 +89,10 @@ public class ControladorObjeto {
     }
     
     public void listarObjetosPerdidos(){
+        /*
         TipoStatus status = null;
         telaObjeto.exibirMensagem("----------LISTANDO OBJETOS PERDIDOS----------");
-        for(Objeto objetosLista : objetos){
+        for(Objeto objetosLista : ObjetoDAO.getInstancia().getList()){
             if(objetosLista.getStatus().equals(status.PERDIDO)){
                 telaObjeto.exibirMensagem("Codigo:" + objetosLista.getCodigo());
                 telaObjeto.exibirMensagem("Descricao:" + objetosLista.getDescricao());
@@ -100,14 +101,16 @@ public class ControladorObjeto {
                 telaObjeto.exibirMensagem("Local:" + ControladorPrincipal.getInstancia().retornarNomeLocal(objetosLista.getLocal()));
                 telaObjeto.exibirMensagem("Cadastrador:" + ControladorPrincipal.getInstancia().retornarNomePessoa(objetosLista.getCadastrador()));
                 telaObjeto.exibirMensagem("---------------------------------------------");
-            }
+            } 
         }
+        */
+
     }
 
     public void listarObjetosPorTipo(TipoObjeto tipoObjeto){
         TipoStatus status = null;
         telaObjeto.exibirMensagem("----------LISTANDO OBJETOS PERDIDOS DO TIPO " + tipoObjeto +"----------");
-        for(Objeto objetosLista: objetos){
+        for(Objeto objetosLista: ObjetoDAO.getInstancia().getList()){
             if(objetosLista.getTipoObjeto().equals(tipoObjeto)){
                 if(objetosLista.getStatus().equals(status.PERDIDO)){
                     telaObjeto.exibirMensagem("Codigo:" + objetosLista.getCodigo());
@@ -123,12 +126,25 @@ public class ControladorObjeto {
     }
     
     public Objeto encontrarObjetoPorCodigo(int codigo){
-        for(Objeto objetosLista: objetos){
+        for(Objeto objetosLista: ObjetoDAO.getInstancia().getList()){
             if(objetosLista.getCodigo() == codigo){
                 return objetosLista;
             }
         }
         return null;
+    }
+    
+    public void exibirTelas(String opcao){
+        switch(opcao){
+            case "1": telaObjeto.inserirObjetos();
+                break;
+            case "2": telaObjeto.alterarStatusObjeto();
+                break;
+            case "3": telaObjeto.exibirObjetos();
+                break;
+            case "4": telaObjeto.exibirObjetosPorTipo(null);
+                break;
+        }
     }
    
     

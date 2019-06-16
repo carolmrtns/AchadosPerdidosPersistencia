@@ -7,7 +7,23 @@ package br.ufsc.ine5605.achadoseperdidos.views;
 import br.ufsc.ine5605.achadoseperdidos.models.TipoObjeto;
 import br.ufsc.ine5605.achadoseperdidos.models.TipoStatus;
 import br.ufsc.ine5605.achadoseperdidos.controllers.ControladorObjeto;
+import br.ufsc.ine5605.achadoseperdidos.models.Objeto;
+import br.ufsc.ine5605.achadoseperdidos.persistencia.ObjetoDAO;
+import java.awt.Container;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Scanner;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 /**
  *
  * @author Caroline Martins Alves
@@ -16,7 +32,18 @@ public class TelaObjeto extends TelaGlobal{
     
     private Scanner teclado;
     //private ControladorObjeto controladorObjeto;
-    
+    private JTable tabelaObjeto;
+    private JLabel lblDescricao;
+    private JTextField txtDescricao;
+    private JLabel lblStatus;
+    private JComboBox cmbStatus;
+    private JLabel lblTipoObjeto;
+    private JComboBox cmbTipoObjeto;
+    private JLabel lblLocal;
+    private JTextField txtLocal;
+    private JLabel lblCadastrador;
+    private JTextField txtCadastrador;
+    private JButton btnCadastrar;
     
     public TelaObjeto(){
         super("Tela Objeto");
@@ -24,78 +51,108 @@ public class TelaObjeto extends TelaGlobal{
         //this.controladorObjeto = ControladorObjeto.getInstancia();
     }
     
-    public void menuInicial(){
-        int opcao;
-        do{
-            System.out.println("----------TELA OBJETO----------");
-            System.out.println("1 - Cadastrar um objeto");
-            System.out.println("2 - Encontrei meu objeto");
-            System.out.println("3 - Listar objetos perdidos");
-            System.out.println("4 - Listar objetos perdidos por tipo");
-            System.out.println("0 - Voltar");
-            System.out.println("-------------------------------");
-            System.out.print("Digite o numero da operacao desejada: ");
-            opcao = recebeValorInteiro();
-            switch(opcao){
-                case 1: inserirObjetos();
-                    break;
-                case 2: alterarStatusObjeto();
-                    break;
-                case 3: exibirObjetos();
-                    break;
-                case 4: System.out.println("----------SELECIONE O TIPO DO OBJETO----------");
-                        System.out.println("Tipo do objeto [1 - Eletroeletronico, 2 - Materiais, 3 - Vestuario, 4 - Alimento, 5 - Documento] :");
-                        int opcaoTipo = recebeValorInteiro();
-                        TipoObjeto objetoTipo;
-                        switch(opcaoTipo){
-                            case 1: objetoTipo = TipoObjeto.ELETROELETRONICO;
-                                break;
-                            case 2: objetoTipo = TipoObjeto.MATERIAIS;
-                                break;
-                            case 3: objetoTipo = TipoObjeto.VESTUARIO;
-                                break;
-                            case 4: objetoTipo = TipoObjeto.ALIMENTO;
-                                break;
-                            case 5: objetoTipo = TipoObjeto.DOCUMENTOS;
-                                break;
-                            default: objetoTipo = null;
-                        }                        
-                        exibirObjetosPorTipo(objetoTipo);
-                    break;
-                default: System.out.println("Opcao invalida");
-            }
-        }while(opcao != 0);
+    public void menuInicial(){        
+        Container container = getContentPane();
+        container.setLayout(new FlowLayout());
+        
+        JMenuBar menuPrincipal = new JMenuBar();
+        
+        setJMenuBar(menuPrincipal);
 
+        JMenu objetos = new JMenu("Objetos");
+        menuPrincipal.add(objetos);
+        
+        JMenuItem cadastrar = new JMenuItem("Cadastrar novo objeto");
+        JMenuItem alterar = new JMenuItem("Achei meu objeto");
+        JMenuItem listar = new JMenuItem("Listar objetos perdidos");
+        JMenuItem listarPorTipo = new JMenuItem("Listar objetos perdidos por tipo");
+        
+        objetos.add(cadastrar);
+        objetos.add(alterar);
+        objetos.add(listar);
+        objetos.add(listarPorTipo);
+                
+        cadastrar.setActionCommand("1");
+        alterar.setActionCommand("2");
+        listar.setActionCommand("3");
+        listarPorTipo.setActionCommand("4");
+        
+        String colunas[] = {"Descricao", "Status", "Tipo Objeto", "Local", "Cadastrador"};
+        String listaObjetos[];
+        TipoStatus status = null;
+        
+        GerenciadorBotoes gerenciadorBotoes = new GerenciadorBotoes();
+        cadastrar.addActionListener(gerenciadorBotoes);
+        alterar.addActionListener(gerenciadorBotoes);
+        listar.addActionListener(gerenciadorBotoes);
+        listarPorTipo.addActionListener(gerenciadorBotoes);
+ 
+        setSize(600, 500);
+        setLocationRelativeTo(null);
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        
+        
     }
     
     public void inserirObjetos(){
-        System.out.println("----------INSERINDO OBJETOS----------");
-        System.out.println("Descricao: ");
-        String descricao = recebeValorString();
-        System.out.println("Status: PERDIDO");
-        TipoStatus status = TipoStatus.PERDIDO;
-        System.out.println("Tipo do objeto [1 - Eletroeletronico, 2 - Materiais, 3 - Vestuario, 4 - Alimento, 5 - Documento] :");
-        int escolhaTipoObjeto = recebeValorInteiro();
-        TipoObjeto tipoObjeto;
-        switch(escolhaTipoObjeto){
-            case 1: tipoObjeto = TipoObjeto.ELETROELETRONICO;
-                break;
-            case 2: tipoObjeto = TipoObjeto.MATERIAIS;
-                break;
-            case 3: tipoObjeto = TipoObjeto.VESTUARIO;
-                break;
-            case 4: tipoObjeto = TipoObjeto.ALIMENTO;
-                break;
-            case 5: tipoObjeto = TipoObjeto.DOCUMENTOS;
-                break;
-            default: tipoObjeto = null;
-        }
-        System.out.println("Local: ");
-        String local = recebeValorString();
-        System.out.println("Cadastrador: ");
-        String cadastrador = recebeValorString();
         
-        ControladorObjeto.getInstancia().cadastrarObjetos(descricao, status, tipoObjeto, local, cadastrador);
+        //Componentes da tela
+        Container container = getContentPane();
+        container.setLayout(new FlowLayout());
+        
+        TipoStatus tipoStatus[] = {TipoStatus.ENCONTRADO, TipoStatus.PERDIDO};
+        TipoObjeto tipoObjeto[] = {TipoObjeto.ALIMENTO, TipoObjeto.DOCUMENTOS, 
+            TipoObjeto.ELETROELETRONICO, TipoObjeto.MATERIAIS, TipoObjeto.VESTUARIO};
+        
+        lblDescricao = new JLabel();
+        txtDescricao = new JTextField(10);
+        
+        lblStatus = new JLabel();
+        cmbStatus = new JComboBox(tipoStatus);
+        
+        lblTipoObjeto = new JLabel();
+        cmbTipoObjeto = new JComboBox(tipoObjeto);
+        
+        lblLocal = new JLabel();
+        txtLocal = new JTextField(10);
+
+        lblCadastrador = new JLabel();
+        txtCadastrador = new JTextField(10);        
+        
+        btnCadastrar = new JButton();
+        //Fim componentes da tela
+        
+        //Conteudo dentro dos componentes da tela
+        lblDescricao.setText("Descricao: ");
+        lblStatus.setText("Status: ");
+        lblTipoObjeto.setText("Tipo Objeto: ");
+        lblLocal.setText("Local: ");
+        lblCadastrador.setText("Cadastrador: ");        
+        btnCadastrar.setText("Cadastrar");
+        
+        //Adicionando acao no button
+        GerenciadorBotaoCadastrar gerenciadorBotaoCadastrar = new GerenciadorBotaoCadastrar();
+        btnCadastrar.addActionListener(gerenciadorBotaoCadastrar);
+        
+        //Adicionando componentes a tela
+        container.add(lblDescricao);
+        container.add(txtDescricao);
+        container.add(lblStatus);
+        container.add(cmbStatus);
+        container.add(lblTipoObjeto);
+        container.add(cmbTipoObjeto);
+        container.add(lblLocal);
+        container.add(txtLocal);
+        container.add(lblCadastrador);
+        container.add(txtCadastrador);
+        container.add(btnCadastrar);
+        
+        //Configuracoes da tela
+        setSize(600, 500);
+        setLocationRelativeTo(null);
+        setVisible(true);
+        pack();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        
         
     }
     
@@ -127,6 +184,35 @@ public class TelaObjeto extends TelaGlobal{
         System.out.println("Tipo do objeto: " + tipoObjeto);
         System.out.println("Local: " + nomeLocal);
         System.out.println("Cadastrador: " + nomeCadastrador);
+    }
+    
+    private class GerenciadorBotoes implements ActionListener{
+    
+        @Override
+        public void actionPerformed(ActionEvent ae){
+            ControladorObjeto.getInstancia().exibirTelas(ae.getActionCommand());
+        }
+    }
+    
+    private class GerenciadorBotaoCadastrar implements ActionListener{
+        
+        @Override
+        public void actionPerformed(ActionEvent ae){
+            String descricao = txtDescricao.getText();
+            TipoStatus status = (TipoStatus) cmbStatus.getSelectedItem();
+            TipoObjeto tipoObjeto = (TipoObjeto) cmbTipoObjeto.getSelectedItem();
+            String local = txtLocal.getText();
+            String cadastrador = txtCadastrador.getText();
+
+            System.out.println(descricao);
+            System.out.println(status);
+            System.out.println(tipoObjeto);
+            System.out.println(local);
+            System.out.println(cadastrador);            
+            
+            ControladorObjeto.getInstancia().cadastrarObjetos(descricao, status, 
+                    tipoObjeto, local, cadastrador);
+        }
     }
     
 }

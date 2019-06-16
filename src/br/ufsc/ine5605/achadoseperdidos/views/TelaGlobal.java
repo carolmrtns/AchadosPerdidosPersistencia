@@ -17,6 +17,7 @@ public abstract class TelaGlobal extends JFrame{
     
     public TelaGlobal(String nomeJanela){
         super(nomeJanela);
+        teclado = new Scanner(System.in);
     }
     
     public void exibirMensagem(String mensagem){
