@@ -12,9 +12,17 @@ import br.ufsc.ine5605.achadoseperdidos.controllers.ControladorPessoa;
 import java.util.InputMismatchException;
 import java.awt.Container;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.*;
+import java.awt.event.ActionListener;
 import java.util.Scanner;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JTextField;
 
 /**
  *
@@ -23,6 +31,13 @@ import javax.swing.JFrame;
 
    // private Scanner teclado; > Deletado para JFrame
      private JButton btnVoltar;
+     private JLabel lblNome;
+     private JTextField txtNome;
+     private JLabel lblTelefone;
+     private JTextField txtTelefone;
+     private JLabel lblMatricula;
+     private JTextField txtMatricula;
+     private JButton btnCadastrarAluno;
     
 
     public TelaPessoa() {
@@ -37,11 +52,27 @@ import javax.swing.JFrame;
         Container container = getContentPane();
         container.setLayout(new GridBagLayout());
         
+        //Criando a Barra de Menu Superior e Adicionando suas opcoes
+        JMenuBar menPessoa = new JMenuBar();
+        setJMenuBar(menPessoa);
+        
+        JMenu aluno = new JMenu("Aluno");
+        menPessoa.add(aluno);
+        
+        JMenuItem cadastrarAluno = new JMenuItem("Cadastrar Aluno");
+        
+        aluno.add(cadastrarAluno);
+        cadastrarAluno.setActionCommand("1");
+        
+        
         btnVoltar = new JButton();
         btnVoltar.setText("Voltar");
-        btnVoltar.setActionCommand("1");
+        btnVoltar.setActionCommand("2");
         
-        container.add(btnVoltar);
+        //container.add(btnVoltar);
+        
+        GerenciadorBotoes gerenciadorBotoes = new GerenciadorBotoes();
+        cadastrarAluno.addActionListener(gerenciadorBotoes);
         
         setSize(360, 150);
         
@@ -176,14 +207,75 @@ import javax.swing.JFrame;
     }
 
     public void incluirAluno() {
-        System.out.println("----------CADASTRAR ALUNO----------");
+        //Componentes da tela
+        Container container = getContentPane();
+        container.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        
+        
+        lblNome = new JLabel();
+        c.gridx = 0;
+        c.gridy = 0;
+        container.add(lblNome, c);
+        
+        txtNome = new JTextField(20);
+        c.gridx = 1;
+        c.gridy = 0;
+        container.add(txtNome, c);
+        
+        lblTelefone = new JLabel();
+        c.gridx = 0;
+        c.gridy = 1;
+        container.add(lblTelefone, c);
+        
+        txtTelefone = new JTextField(20);
+        c.gridx = 1;
+        c.gridy = 1;
+        container.add(txtTelefone, c);
+        
+        lblMatricula = new JLabel();
+        c.gridx = 0;
+        c.gridy = 2;
+        container.add(lblMatricula, c);
+       
+        txtMatricula = new JTextField(20);
+        c.gridx = 1;
+        c.gridy = 2;
+        container.add(txtMatricula, c);
+        
+        btnCadastrarAluno = new JButton();
+        c.gridx = 1;
+        c.gridy = 3;
+        container.add(btnCadastrarAluno, c);
+        //Conteudo dos componentes
+        lblNome.setText("Nome: ");
+        lblTelefone.setText("Telefone: ");
+        lblMatricula.setText("Matricula: ");
+        btnCadastrarAluno.setText("Cadastrar Aluno");
+        
+        //Acao do Botao
+        GerenciadorBotaoCadastrarAluno gerenciadorBtnCadastrarAluno = new GerenciadorBotaoCadastrarAluno();
+        btnCadastrarAluno.addActionListener(gerenciadorBtnCadastrarAluno);
+                
+        //Adicionando componentes a tela
+   
+        
+        //Configuracoes da tela
+        setSize(600, 500);
+        setLocationRelativeTo(null);
+        setVisible(true);
+        pack();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
+        
+        
+        /*System.out.println("----------CADASTRAR ALUNO----------");
         System.out.println("Nome: ");
         String nome = recebeValorString();
         System.out.println("Telefone: ");
         long telefone = recebeValorLong();
         System.out.println("Matricula: ");
         int matricula = recebeValorInteiro();
-        ControladorPessoa.getInstancia().cadastrarAluno(nome, telefone, matricula);
+        ControladorPessoa.getInstancia().cadastrarAluno(nome, telefone, matricula);*/
     }
 
     public void excluirAluno() {
@@ -317,6 +409,25 @@ import javax.swing.JFrame;
         System.out.println("Nome: " + nome);
         System.out.println("Telefone: " + telefone);
         System.out.println("Siape: " + siape);
+    }
+    private class GerenciadorBotoes implements ActionListener{
+    
+        @Override
+        public void actionPerformed(ActionEvent ae){
+            ControladorPessoa.getInstancia().exibirTelas(ae.getActionCommand());
+        }
+    }
+    private class GerenciadorBotaoCadastrarAluno implements ActionListener{
+        
+        @Override
+        public void actionPerformed(ActionEvent ae){
+            String nome = txtNome.getText();
+            long telefone = Long.parseLong(txtTelefone.getText());
+            int matricula = Integer.parseInt(txtMatricula.getText());
+            
+            ControladorPessoa.getInstancia().cadastrarAluno(nome, telefone, matricula);
+        }
+
     }
 
 }

@@ -303,5 +303,13 @@ public class ControladorPessoa {
     public String encontrarNomePessoa(Pessoa pessoa) {
         return pessoa.getNomePessoa();
     }
+    
+    public void exibirTelas(String opcao){
+        switch(opcao){
+            case "1": telaPessoa.incluirAluno();
+                break;
+            
+        }
+    }
 
 }
