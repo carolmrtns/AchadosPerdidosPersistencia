@@ -114,7 +114,7 @@ public class ControladorPessoa {
         if (!verificarPessoaExistente(visitante)) {
             telaPessoa.exibirDadosVisitante(visitante.getNomePessoa(), visitante.getTelefonePessoa(), visitante.getCpf());
             //pessoas.add(visitante);
-            
+            PessoaDAO.getInstancia().put(visitante);
         } else {
             telaPessoa.exibirMensagem("---------------------------");
             telaPessoa.exibirMensagem("Cpf ja cadastrado!");
@@ -310,6 +310,8 @@ public class ControladorPessoa {
                 break;
             case "2": telaPessoa.incluirFuncionario();
                 break;
+            case "3": telaPessoa.incluirVisitante();
+                break;    
         }
     }
 
