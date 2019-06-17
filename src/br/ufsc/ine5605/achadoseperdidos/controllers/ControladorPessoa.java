@@ -308,7 +308,8 @@ public class ControladorPessoa {
         switch(opcao){
             case "1": telaPessoa.incluirAluno();
                 break;
-            
+            case "2": telaPessoa.incluirFuncionario();
+                break;
         }
     }
 

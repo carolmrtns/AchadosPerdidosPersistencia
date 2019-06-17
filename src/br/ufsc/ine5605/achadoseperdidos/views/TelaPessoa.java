@@ -37,7 +37,10 @@ import javax.swing.JTextField;
      private JTextField txtTelefone;
      private JLabel lblMatricula;
      private JTextField txtMatricula;
+     private JLabel lblSiape;
+     private JTextField txtSiape;
      private JButton btnCadastrarAluno;
+     private JButton btnCadastrarFuncionario;
     
 
     public TelaPessoa() {
@@ -59,26 +62,35 @@ import javax.swing.JTextField;
         JMenu aluno = new JMenu("Aluno");
         menPessoa.add(aluno);
         
-        JMenuItem cadastrarAluno = new JMenuItem("Cadastrar Aluno");
+        JMenu funcionario = new JMenu("Funcionario");
+        menPessoa.add(funcionario);
         
+        JMenuItem cadastrarAluno = new JMenuItem("Cadastrar Aluno");        
         aluno.add(cadastrarAluno);
         cadastrarAluno.setActionCommand("1");
+        
+        JMenuItem cadastrarFuncionario = new JMenuItem("Cadastrar Funcionario");        
+        funcionario.add(cadastrarFuncionario);
+        cadastrarFuncionario.setActionCommand("2");
+        
+       
         
         
         btnVoltar = new JButton();
         btnVoltar.setText("Voltar");
-        btnVoltar.setActionCommand("2");
+        btnVoltar.setActionCommand("5");
         
         //container.add(btnVoltar);
         
         GerenciadorBotoes gerenciadorBotoes = new GerenciadorBotoes();
         cadastrarAluno.addActionListener(gerenciadorBotoes);
+        cadastrarFuncionario.addActionListener(gerenciadorBotoes);
         
         setSize(360, 150);
         
         setVisible(true);
         
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         /*int escolhaTipo;
 
         System.out.println("----------TELA PESSOA----------");
@@ -265,17 +277,7 @@ import javax.swing.JTextField;
         setLocationRelativeTo(null);
         setVisible(true);
         pack();
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
-        
-        
-        /*System.out.println("----------CADASTRAR ALUNO----------");
-        System.out.println("Nome: ");
-        String nome = recebeValorString();
-        System.out.println("Telefone: ");
-        long telefone = recebeValorLong();
-        System.out.println("Matricula: ");
-        int matricula = recebeValorInteiro();
-        ControladorPessoa.getInstancia().cadastrarAluno(nome, telefone, matricula);*/
+        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);  
     }
 
     public void excluirAluno() {
@@ -308,15 +310,75 @@ import javax.swing.JTextField;
         this.exibirDadosAluno(novoNome, novoTelefone, novaMatricula);
     }
 
-    private void incluirFuncionario() {
-        System.out.println("----------CADASTRAR FUNCIONARIO----------");
+    public void incluirFuncionario() {
+                //Componentes da tela
+        Container container = getContentPane();
+        container.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        
+        
+        lblNome = new JLabel();
+        c.gridx = 0;
+        c.gridy = 0;
+        container.add(lblNome, c);
+        
+        txtNome = new JTextField(20);
+        c.gridx = 1;
+        c.gridy = 0;
+        container.add(txtNome, c);
+        
+        lblTelefone = new JLabel();
+        c.gridx = 0;
+        c.gridy = 1;
+        container.add(lblTelefone, c);
+        
+        txtTelefone = new JTextField(20);
+        c.gridx = 1;
+        c.gridy = 1;
+        container.add(txtTelefone, c);
+        
+        lblSiape = new JLabel();
+        c.gridx = 0;
+        c.gridy = 2;
+        container.add(lblSiape, c);
+       
+        txtSiape = new JTextField(20);
+        c.gridx = 1;
+        c.gridy = 2;
+        container.add(txtSiape, c);
+        
+        btnCadastrarFuncionario = new JButton();
+        c.gridx = 1;
+        c.gridy = 3;
+        container.add(btnCadastrarFuncionario, c);
+        //Conteudo dos componentes
+        lblNome.setText("Nome: ");
+        lblTelefone.setText("Telefone: ");
+        lblSiape.setText("Siape: ");
+        btnCadastrarFuncionario.setText("Cadastrar Funcionario");
+        
+        //Acao do Botao
+        GerenciadorBotaoCadastrarFuncionario gerenciadorBtnCadastrarFuncionario = new GerenciadorBotaoCadastrarFuncionario();
+        btnCadastrarFuncionario.addActionListener(gerenciadorBtnCadastrarFuncionario);
+        
+                
+        //Adicionando componentes a tela
+   
+        
+        //Configuracoes da tela
+        setSize(600, 500);
+        setLocationRelativeTo(null);
+        setVisible(true);
+        pack();
+        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);  
+        /*System.out.println("----------CADASTRAR FUNCIONARIO----------");
         System.out.println("Nome: ");
         String nome = recebeValorString();
         System.out.println("Telefone: ");
         long telefone = recebeValorLong();
         System.out.println("Siape: ");
         int siape = recebeValorInteiro();
-        ControladorPessoa.getInstancia().cadastrarFuncionario(nome, telefone, siape);
+        ControladorPessoa.getInstancia().cadastrarFuncionario(nome, telefone, siape);*/
     }
 
     public void excluirFuncionario() {
@@ -426,6 +488,18 @@ import javax.swing.JTextField;
             int matricula = Integer.parseInt(txtMatricula.getText());
             
             ControladorPessoa.getInstancia().cadastrarAluno(nome, telefone, matricula);
+        }
+
+    }
+    private class GerenciadorBotaoCadastrarFuncionario implements ActionListener{
+        
+        @Override
+        public void actionPerformed(ActionEvent ae){
+            String nome = txtNome.getText();
+            long telefone = Long.parseLong(txtTelefone.getText());
+            int siape = Integer.parseInt(txtSiape.getText());
+            
+            ControladorPessoa.getInstancia().cadastrarFuncionario(nome, telefone, siape);
         }
 
     }
