@@ -29,7 +29,6 @@ public class TelaPrincipal extends TelaGlobal {
     private Scanner teclado;
     //private ControladorPrincipal controladorPrincipal;
     private JLabel labelIcone;
-    private JButton botao;
     private ImageIcon icone;
 
     public TelaPrincipal() {
@@ -68,47 +67,43 @@ public class TelaPrincipal extends TelaGlobal {
         Container container = getContentPane();
         container.setLayout(new FlowLayout());
         
+        //Criando menu de navegacao
         JMenuBar menuPrincipal = new JMenuBar();
-        
         setJMenuBar(menuPrincipal);
-
-        JMenu telas = new JMenu("Telas");
-        //JMenu editMenu = new JMenu("Edit");
-        menuPrincipal.add(telas);
-        //menuPrincipal.add(editMenu);        
         
+        //Criando aba no menu de navegacao
+        JMenu telas = new JMenu("Telas");
+        menuPrincipal.add(telas);
+        
+        //Criando itens para menu de navegacao
         JMenuItem pessoas = new JMenuItem("Pessoas");
         JMenuItem locais = new JMenuItem("Locais");
         JMenuItem objetos = new JMenuItem("Objetos");
         
+        //Adiocionado os itens criados na aba
         telas.add(pessoas);
         telas.add(locais);
         telas.add(objetos);
         
+        //Setando acoes nos itens criados
         pessoas.setActionCommand("1");
         locais.setActionCommand("2");
         objetos.setActionCommand("3");
         
+        //Passando para o gerenciados de botoes
         GerenciadorBotoes gerenciadorBotoes = new GerenciadorBotoes();
         pessoas.addActionListener(gerenciadorBotoes);
         locais.addActionListener(gerenciadorBotoes);
         objetos.addActionListener(gerenciadorBotoes);
         
+        //Adiocionando imagem na tela
         labelIcone = new JLabel(icone);
-        
-        botao = new JButton();
-        
-        //label.setText("Tela Principal");
-        botao.setText("Botao");
-        
         container.add(labelIcone);
-        //container.add(botao);
         
         setSize(600, 500);
         setLocationRelativeTo(null);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
     }
 
     public void exibirTelaPessoa() {
@@ -123,33 +118,10 @@ public class TelaPrincipal extends TelaGlobal {
         ControladorPrincipal.getInstancia().listarTelaObjeto();
     }
     
-    //VAI TER QUE TIRAR ESSA MELECA DAQUI DEPOIS
-    /*
-    public String recebeValorString(){
-        return teclado.nextLine();
-    }
-    
-    public int recebeValorInteiro(){
-        int valor = -1;
-        do {
-            try {
-                valor = teclado.nextInt();
-            } catch (Exception e) {
-                System.out.println("Valor invalido! Digite um numero inteiro");
-                valor = -1;
-            } finally {
-                teclado.nextLine();
-            }
-        } while (valor == -1);
-        return valor;
-    }    
-    */
     private class GerenciadorBotoes implements ActionListener{
-    
-    @Override
-    public void actionPerformed(ActionEvent ae){
-        ControladorPrincipal.getInstancia().mostrarTelas(ae.getActionCommand());
+        @Override
+        public void actionPerformed(ActionEvent ae){
+            ControladorPrincipal.getInstancia().mostrarTelas(ae.getActionCommand());
+        }
     }
-    
-}
 }

@@ -88,23 +88,32 @@ public class ControladorObjeto {
         }
     }
     
-    public void listarObjetosPerdidos(){
-        /*
+    public Object[][] listarObjetosPerdidos(){
         TipoStatus status = null;
+        Object dados[][];
         telaObjeto.exibirMensagem("----------LISTANDO OBJETOS PERDIDOS----------");
         for(Objeto objetosLista : ObjetoDAO.getInstancia().getList()){
             if(objetosLista.getStatus().equals(status.PERDIDO)){
-                telaObjeto.exibirMensagem("Codigo:" + objetosLista.getCodigo());
-                telaObjeto.exibirMensagem("Descricao:" + objetosLista.getDescricao());
-                telaObjeto.exibirMensagem("Status:" + objetosLista.getStatus());
-                telaObjeto.exibirMensagem("Tipo:" + objetosLista.getTipoObjeto());
-                telaObjeto.exibirMensagem("Local:" + ControladorPrincipal.getInstancia().retornarNomeLocal(objetosLista.getLocal()));
-                telaObjeto.exibirMensagem("Cadastrador:" + ControladorPrincipal.getInstancia().retornarNomePessoa(objetosLista.getCadastrador()));
-                telaObjeto.exibirMensagem("---------------------------------------------");
+                //String codigo[][] = (String) objetosLista.getCodigo();
+                Object dado[] = {objetosLista.getCodigo(), objetosLista.getDescricao(), 
+                    objetosLista.getTipoObjeto(), objetosLista.getLocal(), objetosLista.getCadastrador()};
+               // for(int i = 0; i <){
+                    
+                //}
+                //dados[][] = {dado};
+                //String dadosObjetos[][] = {codigo};
+                //return objetosLista.getCodigo();
+                
+                //telaObjeto.exibirMensagem("Codigo:" + objetosLista.getCodigo());
+                //telaObjeto.exibirMensagem("Descricao:" + objetosLista.getDescricao());
+                //telaObjeto.exibirMensagem("Status:" + objetosLista.getStatus());
+                //telaObjeto.exibirMensagem("Tipo:" + objetosLista.getTipoObjeto());
+                //telaObjeto.exibirMensagem("Local:" + ControladorPrincipal.getInstancia().retornarNomeLocal(objetosLista.getLocal()));
+                //telaObjeto.exibirMensagem("Cadastrador:" + ControladorPrincipal.getInstancia().retornarNomePessoa(objetosLista.getCadastrador()));
+                //telaObjeto.exibirMensagem("---------------------------------------------");
             } 
         }
-        */
-
+        return null;
     }
 
     public void listarObjetosPorTipo(TipoObjeto tipoObjeto){
@@ -133,19 +142,5 @@ public class ControladorObjeto {
         }
         return null;
     }
-    
-    public void exibirTelas(String opcao){
-        switch(opcao){
-            case "1": telaObjeto.inserirObjetos();
-                break;
-            case "2": telaObjeto.alterarStatusObjeto();
-                break;
-            case "3": telaObjeto.exibirObjetos();
-                break;
-            case "4": telaObjeto.exibirObjetosPorTipo(null);
-                break;
-        }
-    }
-   
     
 }

@@ -33,6 +33,8 @@ public class TelaObjeto extends TelaGlobal{
     private Scanner teclado;
     //private ControladorObjeto controladorObjeto;
     private JTable tabelaObjeto;
+    private JLabel lblCodigo;
+    private JTextField txtCodigo;
     private JLabel lblDescricao;
     private JTextField txtDescricao;
     private JLabel lblStatus;
@@ -44,6 +46,7 @@ public class TelaObjeto extends TelaGlobal{
     private JLabel lblCadastrador;
     private JTextField txtCadastrador;
     private JButton btnCadastrar;
+    private JButton btnAlterar;
     
     public TelaObjeto(){
         super("Tela Objeto");
@@ -52,57 +55,24 @@ public class TelaObjeto extends TelaGlobal{
     }
     
     public void menuInicial(){        
-        Container container = getContentPane();
-        container.setLayout(new FlowLayout());
-        
-        JMenuBar menuPrincipal = new JMenuBar();
-        
-        setJMenuBar(menuPrincipal);
-
-        JMenu objetos = new JMenu("Objetos");
-        menuPrincipal.add(objetos);
-        
-        JMenuItem cadastrar = new JMenuItem("Cadastrar novo objeto");
-        JMenuItem alterar = new JMenuItem("Achei meu objeto");
-        JMenuItem listar = new JMenuItem("Listar objetos perdidos");
-        JMenuItem listarPorTipo = new JMenuItem("Listar objetos perdidos por tipo");
-        
-        objetos.add(cadastrar);
-        objetos.add(alterar);
-        objetos.add(listar);
-        objetos.add(listarPorTipo);
-                
-        cadastrar.setActionCommand("1");
-        alterar.setActionCommand("2");
-        listar.setActionCommand("3");
-        listarPorTipo.setActionCommand("4");
-        
-        String colunas[] = {"Descricao", "Status", "Tipo Objeto", "Local", "Cadastrador"};
-        String listaObjetos[];
-        TipoStatus status = null;
-        
-        GerenciadorBotoes gerenciadorBotoes = new GerenciadorBotoes();
-        cadastrar.addActionListener(gerenciadorBotoes);
-        alterar.addActionListener(gerenciadorBotoes);
-        listar.addActionListener(gerenciadorBotoes);
-        listarPorTipo.addActionListener(gerenciadorBotoes);
- 
-        setSize(600, 500);
-        setLocationRelativeTo(null);
-        setVisible(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        
-        
-    }
-    
-    public void inserirObjetos(){
-        
         //Componentes da tela
         Container container = getContentPane();
         container.setLayout(new FlowLayout());
         
+        //Tabela que lista os dados recuperados do arquivo
+        String colunas[] = {"Codigo", "Descricao", "Status", "Tipo Objeto", "Local", "Cadastrador"};
+        Object dadosObjetos[][] = ControladorObjeto.getInstancia().listarObjetosPerdidos();
+        
+        tabelaObjeto = new JTable(dadosObjetos, colunas);
+        
+        
+        //Componentes de campo
         TipoStatus tipoStatus[] = {TipoStatus.ENCONTRADO, TipoStatus.PERDIDO};
         TipoObjeto tipoObjeto[] = {TipoObjeto.ALIMENTO, TipoObjeto.DOCUMENTOS, 
             TipoObjeto.ELETROELETRONICO, TipoObjeto.MATERIAIS, TipoObjeto.VESTUARIO};
+
+        lblCodigo = new JLabel();
+        txtCodigo = new JTextField(10);        
         
         lblDescricao = new JLabel();
         txtDescricao = new JTextField(10);
@@ -112,29 +82,40 @@ public class TelaObjeto extends TelaGlobal{
         
         lblTipoObjeto = new JLabel();
         cmbTipoObjeto = new JComboBox(tipoObjeto);
-        
+
         lblLocal = new JLabel();
         txtLocal = new JTextField(10);
 
         lblCadastrador = new JLabel();
         txtCadastrador = new JTextField(10);        
-        
+
         btnCadastrar = new JButton();
+        btnAlterar = new JButton();
         //Fim componentes da tela
         
         //Conteudo dentro dos componentes da tela
+        lblCodigo.setText("Codigo: ");
+        txtCodigo.setEditable(false);
         lblDescricao.setText("Descricao: ");
         lblStatus.setText("Status: ");
         lblTipoObjeto.setText("Tipo Objeto: ");
         lblLocal.setText("Local: ");
         lblCadastrador.setText("Cadastrador: ");        
         btnCadastrar.setText("Cadastrar");
+        btnAlterar.setText("Alterar");
+        //setando acoes nos botoes
+        btnCadastrar.setActionCommand("1");
+        btnAlterar.setActionCommand("2");
         
-        //Adicionando acao no button
-        GerenciadorBotaoCadastrar gerenciadorBotaoCadastrar = new GerenciadorBotaoCadastrar();
-        btnCadastrar.addActionListener(gerenciadorBotaoCadastrar);
+        //Adicionando acao nos buttons
+        GerenciadorBotoes gerenciadorBotoes = new GerenciadorBotoes();
+        btnCadastrar.addActionListener(gerenciadorBotoes);
+        btnAlterar.addActionListener(gerenciadorBotoes);
         
         //Adicionando componentes a tela
+        //container.add(tabelaObjeto);
+        container.add(lblCodigo);
+        container.add(txtCodigo);
         container.add(lblDescricao);
         container.add(txtDescricao);
         container.add(lblStatus);
@@ -146,13 +127,19 @@ public class TelaObjeto extends TelaGlobal{
         container.add(lblCadastrador);
         container.add(txtCadastrador);
         container.add(btnCadastrar);
+        container.add(btnAlterar);
         
         //Configuracoes da tela
         setSize(600, 500);
         setLocationRelativeTo(null);
         setVisible(true);
-        pack();
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);        
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);          
+        
+    }
+    
+   /* public void inserirObjetos(){
+        
+      
         
     }
     
@@ -175,7 +162,7 @@ public class TelaObjeto extends TelaGlobal{
     public void exibirObjetosPorTipo(TipoObjeto tipoObjeto){
         ControladorObjeto.getInstancia().listarObjetosPorTipo(tipoObjeto);
     }
-    
+    */
     public void exibirDadosObjeto(int codigo, String descricao, TipoStatus status, TipoObjeto tipoObjeto, String nomeLocal, String nomeCadastrador){
         System.out.println("----------OBJETO CADASTRADO----------");
         System.out.println("Codigo: " + codigo);
@@ -186,18 +173,12 @@ public class TelaObjeto extends TelaGlobal{
         System.out.println("Cadastrador: " + nomeCadastrador);
     }
     
+   
     private class GerenciadorBotoes implements ActionListener{
-    
-        @Override
-        public void actionPerformed(ActionEvent ae){
-            ControladorObjeto.getInstancia().exibirTelas(ae.getActionCommand());
-        }
-    }
-    
-    private class GerenciadorBotaoCadastrar implements ActionListener{
         
         @Override
         public void actionPerformed(ActionEvent ae){
+            int codigo = Integer.parseInt(txtCodigo.getText());
             String descricao = txtDescricao.getText();
             TipoStatus status = (TipoStatus) cmbStatus.getSelectedItem();
             TipoObjeto tipoObjeto = (TipoObjeto) cmbTipoObjeto.getSelectedItem();
@@ -210,9 +191,16 @@ public class TelaObjeto extends TelaGlobal{
             System.out.println(local);
             System.out.println(cadastrador);            
             
-            ControladorObjeto.getInstancia().cadastrarObjetos(descricao, status, 
+            switch(ae.getActionCommand()){
+                case "1": ControladorObjeto.getInstancia().cadastrarObjetos(descricao, status, 
                     tipoObjeto, local, cadastrador);
+                    break;
+                case "2": ControladorObjeto.getInstancia().atualizarStatusObjeto(codigo, 
+                        status, cadastrador);
+                    break;
+            }
+
         }
     }
-    
+         
 }
