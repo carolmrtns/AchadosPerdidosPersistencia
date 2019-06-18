@@ -7,10 +7,15 @@ package br.ufsc.ine5605.achadoseperdidos.views;
 import br.ufsc.ine5605.achadoseperdidos.models.TipoObjeto;
 import br.ufsc.ine5605.achadoseperdidos.models.TipoStatus;
 import br.ufsc.ine5605.achadoseperdidos.controllers.ControladorObjeto;
+import br.ufsc.ine5605.achadoseperdidos.controllers.ControladorPrincipal;
 import br.ufsc.ine5605.achadoseperdidos.models.Objeto;
 import br.ufsc.ine5605.achadoseperdidos.persistencia.ObjetoDAO;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Scanner;
@@ -22,15 +27,18 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author Caroline Martins Alves
  */
 public class TelaObjeto extends TelaGlobal{
     
-    private Scanner teclado;
+    //private Scanner teclado;
     //private ControladorObjeto controladorObjeto;
     private JTable tabelaObjeto;
     private JLabel lblCodigo;
@@ -47,11 +55,12 @@ public class TelaObjeto extends TelaGlobal{
     private JTextField txtCadastrador;
     private JButton btnCadastrar;
     private JButton btnAlterar;
+    private JScrollPane spBaseTabela;
+    private GridBagConstraints constraint;
     
     public TelaObjeto(){
         super("Tela Objeto");
-        teclado = new Scanner(System.in);
-        //this.controladorObjeto = ControladorObjeto.getInstancia();
+        constraint = new GridBagConstraints();
     }
     
     public void menuInicial(){        
@@ -60,11 +69,15 @@ public class TelaObjeto extends TelaGlobal{
         container.setLayout(new FlowLayout());
         
         //Tabela que lista os dados recuperados do arquivo
-        String colunas[] = {"Codigo", "Descricao", "Status", "Tipo Objeto", "Local", "Cadastrador"};
-        Object dadosObjetos[][] = ControladorObjeto.getInstancia().listarObjetosPerdidos();
-        
-        tabelaObjeto = new JTable(dadosObjetos, colunas);
-        
+        tabelaObjeto = new JTable();
+        tabelaObjeto.setPreferredScrollableViewportSize(new Dimension(500,70));
+        tabelaObjeto.setFillsViewportHeight(true);
+        constraint.fill = GridBagConstraints.CENTER;
+        constraint.gridwidth = 2;
+        constraint.gridheight = 4;
+        constraint.gridx = 0;
+        constraint.gridy = 4;
+        spBaseTabela = new JScrollPane(tabelaObjeto);
         
         //Componentes de campo
         TipoStatus tipoStatus[] = {TipoStatus.ENCONTRADO, TipoStatus.PERDIDO};
@@ -103,7 +116,7 @@ public class TelaObjeto extends TelaGlobal{
         lblCadastrador.setText("Cadastrador: ");        
         btnCadastrar.setText("Cadastrar");
         btnAlterar.setText("Alterar");
-        //setando acoes nos botoes
+        //Setando acoes nos botoes
         btnCadastrar.setActionCommand("1");
         btnAlterar.setActionCommand("2");
         
@@ -113,7 +126,7 @@ public class TelaObjeto extends TelaGlobal{
         btnAlterar.addActionListener(gerenciadorBotoes);
         
         //Adicionando componentes a tela
-        //container.add(tabelaObjeto);
+        container.add(spBaseTabela, constraint);
         container.add(lblCodigo);
         container.add(txtCodigo);
         container.add(lblDescricao);
@@ -129,13 +142,36 @@ public class TelaObjeto extends TelaGlobal{
         container.add(btnCadastrar);
         container.add(btnAlterar);
         
+        //ONDÉ QUE CHAMA ISSO AQUI PARA ATUALIZAR OS DADOS DA JTABLE?
+        //EU CHUTO QUE É DEPOIS DE CADASTRAR
+        //VER ESSA PARADINHA
+        updateData();
+        
         //Configuracoes da tela
         setSize(600, 500);
         setLocationRelativeTo(null);
         setVisible(true);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);          
-        
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);            
     }
+    
+    //NAO SEI ONDE QUE FICA ISSO AQUI
+    private void updateData(){
+        DefaultTableModel modelTbItens = new DefaultTableModel();
+        modelTbItens.addColumn("Codigo");
+        modelTbItens.addColumn("Descricao");
+        modelTbItens.addColumn("Status");
+        modelTbItens.addColumn("Tipo Objeto");
+        modelTbItens.addColumn("Local");
+        modelTbItens.addColumn("Cadastrador");
+        
+        for(Objeto objetoLista: ObjetoDAO.getInstancia().getList()){
+            modelTbItens.addRow(new Object[]{objetoLista.getCodigo(), objetoLista.getDescricao(), objetoLista.getStatus(), 
+                objetoLista.getTipoObjeto(), ControladorPrincipal.getInstancia().retornarNomeLocal(objetoLista.getLocal()), 
+                ControladorPrincipal.getInstancia().retornarNomePessoa(objetoLista.getCadastrador())});
+        }
+        tabelaObjeto.setModel(modelTbItens);
+        this.repaint();
+   }
     
    /* public void inserirObjetos(){
         
@@ -178,13 +214,14 @@ public class TelaObjeto extends TelaGlobal{
         
         @Override
         public void actionPerformed(ActionEvent ae){
-            int codigo = Integer.parseInt(txtCodigo.getText());
+            //int codigo = Integer.parseInt(txtCodigo.getText());
             String descricao = txtDescricao.getText();
             TipoStatus status = (TipoStatus) cmbStatus.getSelectedItem();
             TipoObjeto tipoObjeto = (TipoObjeto) cmbTipoObjeto.getSelectedItem();
             String local = txtLocal.getText();
             String cadastrador = txtCadastrador.getText();
-
+            
+            //System.out.println(codigo);
             System.out.println(descricao);
             System.out.println(status);
             System.out.println(tipoObjeto);
@@ -195,9 +232,9 @@ public class TelaObjeto extends TelaGlobal{
                 case "1": ControladorObjeto.getInstancia().cadastrarObjetos(descricao, status, 
                     tipoObjeto, local, cadastrador);
                     break;
-                case "2": ControladorObjeto.getInstancia().atualizarStatusObjeto(codigo, 
-                        status, cadastrador);
-                    break;
+               // case "2": ControladorObjeto.getInstancia().atualizarStatusObjeto(codigo, 
+                        //status, cadastrador);
+                    //break;
             }
 
         }

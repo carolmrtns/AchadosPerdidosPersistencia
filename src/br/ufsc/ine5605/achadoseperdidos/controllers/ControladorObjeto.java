@@ -88,32 +88,22 @@ public class ControladorObjeto {
         }
     }
     
-    public Object[][] listarObjetosPerdidos(){
+    public void listarObjetosPerdidos(){
         TipoStatus status = null;
-        Object dados[][];
-        telaObjeto.exibirMensagem("----------LISTANDO OBJETOS PERDIDOS----------");
+        //telaObjeto.exibirMensagem("----------LISTANDO OBJETOS PERDIDOS----------");
         for(Objeto objetosLista : ObjetoDAO.getInstancia().getList()){
             if(objetosLista.getStatus().equals(status.PERDIDO)){
-                //String codigo[][] = (String) objetosLista.getCodigo();
-                Object dado[] = {objetosLista.getCodigo(), objetosLista.getDescricao(), 
-                    objetosLista.getTipoObjeto(), objetosLista.getLocal(), objetosLista.getCadastrador()};
-               // for(int i = 0; i <){
-                    
-                //}
-                //dados[][] = {dado};
-                //String dadosObjetos[][] = {codigo};
-                //return objetosLista.getCodigo();
-                
-                //telaObjeto.exibirMensagem("Codigo:" + objetosLista.getCodigo());
-                //telaObjeto.exibirMensagem("Descricao:" + objetosLista.getDescricao());
-                //telaObjeto.exibirMensagem("Status:" + objetosLista.getStatus());
-                //telaObjeto.exibirMensagem("Tipo:" + objetosLista.getTipoObjeto());
-                //telaObjeto.exibirMensagem("Local:" + ControladorPrincipal.getInstancia().retornarNomeLocal(objetosLista.getLocal()));
-                //telaObjeto.exibirMensagem("Cadastrador:" + ControladorPrincipal.getInstancia().retornarNomePessoa(objetosLista.getCadastrador()));
-                //telaObjeto.exibirMensagem("---------------------------------------------");
+                /*
+                telaObjeto.exibirMensagem("Codigo:" + objetosLista.getCodigo());
+                telaObjeto.exibirMensagem("Descricao:" + objetosLista.getDescricao());
+                telaObjeto.exibirMensagem("Status:" + objetosLista.getStatus());
+                telaObjeto.exibirMensagem("Tipo:" + objetosLista.getTipoObjeto());
+                telaObjeto.exibirMensagem("Local:" + ControladorPrincipal.getInstancia().retornarNomeLocal(objetosLista.getLocal()));
+                telaObjeto.exibirMensagem("Cadastrador:" + ControladorPrincipal.getInstancia().retornarNomePessoa(objetosLista.getCadastrador()));
+                telaObjeto.exibirMensagem("---------------------------------------------");
+                */
             } 
         }
-        return null;
     }
 
     public void listarObjetosPorTipo(TipoObjeto tipoObjeto){
