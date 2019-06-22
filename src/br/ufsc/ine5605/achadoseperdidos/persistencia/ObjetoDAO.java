@@ -7,6 +7,8 @@ package br.ufsc.ine5605.achadoseperdidos.persistencia;
 
 
 import br.ufsc.ine5605.achadoseperdidos.models.Objeto;
+import br.ufsc.ine5605.achadoseperdidos.models.Pessoa;
+import br.ufsc.ine5605.achadoseperdidos.models.TipoStatus;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -89,6 +91,14 @@ public class ObjetoDAO {
     
     public void removeObjeto(Objeto objeto){
         cacheObjetos.remove(objeto.getId());
+    }
+    
+    public void atualizaStatus(Integer codigo, TipoStatus status, Pessoa dono){
+        Objeto novoObjeto = getList().get(codigo);
+        novoObjeto.setStatus(status);
+        novoObjeto.setCadastrador(dono);
+        cacheObjetos.put(codigo, novoObjeto);
+        persist();
     }
     
         

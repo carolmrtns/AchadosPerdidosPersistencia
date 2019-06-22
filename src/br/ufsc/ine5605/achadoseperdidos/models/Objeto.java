@@ -23,9 +23,9 @@ public class Objeto implements Identificavel, Serializable{
     private Pessoa cadastrador;
     private Pessoa dono;
     
-    public Objeto(String descricao, TipoStatus status, TipoObjeto tipoObjeto,
+    public Objeto(int codigo, String descricao, TipoStatus status, TipoObjeto tipoObjeto,
             Local local, Pessoa cadastrador){
-        this.codigo = getProxCodigo();
+        this.codigo = codigo;
         this.descricao = descricao;
         this.status = status;
         this.tipoObjeto = tipoObjeto;
