@@ -211,21 +211,27 @@ public class ControladorPessoa {
     }
 
     public void alterarAluno(Aluno aluno, String nome, long telefone, int matricula) {
+        PessoaDAO.getInstancia().removeAluno(aluno);
         aluno.setNomePessoa(nome);
         aluno.setTelefonePessoa(telefone);
         aluno.setMatricula(matricula);
+        PessoaDAO.getInstancia().put(aluno);
     }
 
     public void alterarFuncionario(Funcionario funcionario, String nome, long telefone, int siape) {
+        PessoaDAO.getInstancia().removeFuncionario(funcionario);
         funcionario.setNomePessoa(nome);
         funcionario.setTelefonePessoa(telefone);
         funcionario.setSiape(siape);
+        PessoaDAO.getInstancia().put(funcionario);
     }
 
     public void alterarVisitante(Visitante visitante, String nome, long telefone, int cpf) {
+        PessoaDAO.getInstancia().removeVisitante(visitante);
         visitante.setNomePessoa(nome);
         visitante.setTelefonePessoa(telefone);
         visitante.setCpf(cpf);
+        PessoaDAO.getInstancia().put(visitante);
     }
 
     public void listarFuncionarios() {
@@ -306,11 +312,11 @@ public class ControladorPessoa {
     
     public void exibirTelas(String opcao){
         switch(opcao){
-            case "1": telaPessoa.incluirAluno();
+            case "1": telaPessoa.mostrarTelaAluno();
                 break;
-            case "2": telaPessoa.incluirFuncionario();
+            case "2": telaPessoa.mostrarTelaFuncionario();
                 break;
-            case "3": telaPessoa.incluirVisitante();
+            case "3": telaPessoa.mostrarTelaVisitante();
                 break;    
         }
     }

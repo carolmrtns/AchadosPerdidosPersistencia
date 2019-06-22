@@ -10,284 +10,194 @@ import br.ufsc.ine5605.achadoseperdidos.models.Funcionario;
 import br.ufsc.ine5605.achadoseperdidos.models.Visitante;
 import br.ufsc.ine5605.achadoseperdidos.controllers.ControladorPessoa;
 import java.util.InputMismatchException;
-import java.awt.Container;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Scanner;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 /**
  *
  * @author Henrique Meireles
- */public class TelaPessoa extends TelaGlobal{
+ */
+public class TelaPessoa extends TelaGlobal {
 
-   // private Scanner teclado; > Deletado para JFrame
-     private JButton btnVoltar;
-     private JLabel lblNome;
-     private JTextField txtNome;
-     private JLabel lblTelefone;
-     private JTextField txtTelefone;
-     private JLabel lblMatricula;
-     private JTextField txtMatricula;
-     private JLabel lblSiape;
-     private JTextField txtSiape;
-     private JLabel lblCpf;
-     private JTextField txtCpf;
-     private JButton btnCadastrarAluno;
-     private JButton btnCadastrarFuncionario;
-     private JButton btnCadastrarVisitante;
-    
+    // private Scanner teclado; > Deletado para JFrame
+    private JLabel lblNomeAluno;
+    private JTextField txtNomeAluno;
+    private JLabel lblNomeVisitante;
+    private JTextField txtNomeVisitante;
+    private JLabel lblNomeFuncionario;
+    private JTextField txtNomeFuncionario;
+    private JLabel lblTelefoneAluno;
+    private JTextField txtTelefoneAluno;
+    private JLabel lblTelefoneVisitante;
+    private JTextField txtTelefoneVisitante;
+    private JLabel lblTelefoneFuncionario;
+    private JTextField txtTelefoneFuncionario;
+    private JLabel lblMatricula;
+    private JTextField txtMatricula;
+    private JLabel lblSiape;
+    private JTextField txtSiape;
+    private JLabel lblCpf;
+    private JTextField txtCpf;
+    private JButton btnCadastrarAluno;
+    private JButton btnExcluirAluno;
+    private JButton btnAlterarAluno;
+    private JButton btnCadastrarFuncionario;
+    private JButton btnExcluirFuncionario;
+    private JButton btnAlterarFuncionario;
+    private JButton btnCadastrarVisitante;
+    private JButton btnExcluirVisitante;
+    private JButton btnAlterarVisitante;
+    private JPanel pnlTelaPrincipal;
+    private JPanel pnlTelaAluno;
+    private JPanel pnlTelaVisitante;
+    private JPanel pnlTelaFuncionario;
+    private Container container;
 
     public TelaPessoa() {
-         super("Tela Pessoa");
-        
-         
+        super("Tela Pessoa");
+
     }
 
     public void initComponents() {
-       
-        //teclado = new Scanner(System.in);
-        Container container = getContentPane();
-        container.setLayout(new GridBagLayout());
-        
-        //Criando a Barra de Menu Superior e Adicionando suas opcoes
-        JMenuBar menPessoa = new JMenuBar();
-        setJMenuBar(menPessoa);
-        
-        JMenu aluno = new JMenu("Aluno");
-        menPessoa.add(aluno);
-        
-        JMenu funcionario = new JMenu("Funcionario");
-        menPessoa.add(funcionario);
-        
-        JMenu visitante = new JMenu("Visitante");
-        menPessoa.add(visitante);
-        
-        JMenuItem cadastrarAluno = new JMenuItem("Cadastrar Aluno");        
-        aluno.add(cadastrarAluno);
-        cadastrarAluno.setActionCommand("1");
-        
-        JMenuItem cadastrarFuncionario = new JMenuItem("Cadastrar Funcionario");        
-        funcionario.add(cadastrarFuncionario);
-        cadastrarFuncionario.setActionCommand("2");
-        
-        JMenuItem cadastrarVisitante = new JMenuItem("Cadastrar Visitante");        
-        visitante.add(cadastrarVisitante);
-        cadastrarVisitante.setActionCommand("3");
-       
-        
-        
-        btnVoltar = new JButton();
-        btnVoltar.setText("Voltar");
-        btnVoltar.setActionCommand("5");
-        
-        //container.add(btnVoltar);
-        
-        GerenciadorBotoes gerenciadorBotoes = new GerenciadorBotoes();
-        cadastrarAluno.addActionListener(gerenciadorBotoes);
-        cadastrarFuncionario.addActionListener(gerenciadorBotoes);
-        cadastrarVisitante.addActionListener(gerenciadorBotoes);
-        
-        setSize(360, 150);
-        
-        setVisible(true);
-        
-        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        /*int escolhaTipo;
 
-        System.out.println("----------TELA PESSOA----------");
-        System.out.println("1 - Cadastrar uma Pessoa");
-        System.out.println("2 - Excluir uma Pessoa");
-        System.out.println("3 - Alterar uma Pessoa");
-        System.out.println("4 - Listar Pessoas");
-        System.out.println("0 - Voltar");
-        System.out.println("-------------------------------");
-        System.out.print("Digite o número da operação desejada: ");
-        escolhaTipo = recebeValorInteiro();
-        switch (escolhaTipo) {
-            case 1:
-                System.out.println("----------CADASTRAR PESSOA----------");
-                System.out.println("1 - Cadastrar um Aluno");
-                System.out.println("2 - Cadastrar um Funcionario");
-                System.out.println("3 - Cadastrar um Visitante");
-                System.out.println("0 - Voltar");
-                System.out.println("------------------------------------");
-                System.out.print("Digite o número da operação desejada: ");
-                int opcao = recebeValorInteiro();
-                switch (opcao) {
-                    case 1:
-                        this.incluirAluno();
-                        break;
-                    case 2:
-                        this.incluirFuncionario();
-                        break;
-                    case 3:
-                        this.incluirVisitante();
-                        break;
-                    case 0:
-                        this.menuInicial();
-                        break;
-                    default:
-                        System.out.println("Operacao invalida!");
-                }
-                break;
-            case 2:
-                System.out.println("----------EXCLUIR PESSOA----------");
-                System.out.println("1 - Excluir Aluno");
-                System.out.println("2 - Excluir Funcionario");
-                System.out.println("3 - Excluir Visitante");
-                System.out.println("0 - Voltar");
-                System.out.println("------------------------------------");
-                System.out.print("Digite o número da operação desejada: ");
-                opcao = recebeValorInteiro();
-                switch (opcao) {
-                    case 1:
-                        this.excluirAluno();
-                        break;
-                    case 2:
-                        this.excluirFuncionario();
-                        break;
-                    case 3:
-                        this.excluirVisitante();
-                        break;
-                    case 0:
-                        this.menuInicial();
-                        break;
-                    default:
-                        System.out.println("Operacao invalida!");
-                }
-                break;
-            case 3:
-                System.out.println("----------ALTERAR PESSOA----------");
-                System.out.println("1 - Alterar um Aluno");
-                System.out.println("2 - Alterar um Funcionario");
-                System.out.println("3 - Alterar um Visitante");
-                System.out.println("0 - Voltar");
-                System.out.println("------------------------------------");
-                System.out.print("Digite o número da operação desejada: ");
-                opcao = recebeValorInteiro();
-                switch (opcao) {
-                    case 1:
-                        this.alterarAluno();
-                        break;
-                    case 2:
-                        this.alterarFuncionario();
-                        break;
-                    case 3:
-                        this.alterarVisitante();
-                        break;
-                    case 0:
-                        this.menuInicial();
-                        break;
-                    default:
-                        System.out.println("Operacao invalida!");
-                }
-                break;
-            case 4:
-                System.out.println("----------LISTAR PESSOA----------");
-                System.out.println("1 - Listar Alunos");
-                System.out.println("2 - Listar Funcionarios");
-                System.out.println("3 - Listar Visitantes");
-                System.out.println("0 - Voltar");
-                System.out.println("------------------------------------");
-                System.out.print("Digite o número da operação desejada: ");
-                opcao = recebeValorInteiro();
-                switch (opcao) {
-                    case 1:
-                        this.listarAlunos();
-                        break;
-                    case 2:
-                        this.listarFuncionarios();
-                        break;
-                    case 3:
-                        this.listarVisitantes();
-                        break;
-                    case 0:
-                        this.menuInicial();
-                        break;
-                    default:
-                        System.out.println("Operacao invalida!");
-                }
-                break;
-            case 0:
-                (ControladorPessoa.getInstancia().getControladorPrincipal()).inicia();
-                break;
-            default:
-                System.out.println("--------------------------------------");
-                System.out.println("Operação inválida!");
-                break;
-        }
-      */
+        //Criando o container principal
+        container = getContentPane();
+        container.setLayout(new GridBagLayout());
+
+        //carregando os paineis nas variaveis da classe
+        pnlTelaAluno = telaAluno();
+        pnlTelaFuncionario = telaFuncionario();
+        pnlTelaVisitante = telaVisitante();
+
+        //setando o panel principal
+        pnlTelaPrincipal = telaPrincipal();
+        container.add(pnlTelaPrincipal);
+
+        setSize(600, 500);
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+
     }
 
-    public void incluirAluno() {
+    public JPanel telaPrincipal() {
         //Componentes da tela
-        Container container = getContentPane();
-        container.setLayout(new GridBagLayout());
+        JPanel painelPrincipal = new JPanel();
+        painelPrincipal.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
-        
-        
-        lblNome = new JLabel();
-        c.gridx = 0;
-        c.gridy = 0;
-        container.add(lblNome, c);
-        
-        txtNome = new JTextField(20);
-        c.gridx = 1;
-        c.gridy = 0;
-        container.add(txtNome, c);
-        
-        lblTelefone = new JLabel();
-        c.gridx = 0;
-        c.gridy = 1;
-        container.add(lblTelefone, c);
-        
-        txtTelefone = new JTextField(20);
-        c.gridx = 1;
-        c.gridy = 1;
-        container.add(txtTelefone, c);
-        
+
+        JMenuBar menPessoa = new JMenuBar();
+        setJMenuBar(menPessoa);
+
+        JMenu aluno = new JMenu("Aluno");
+        menPessoa.add(aluno);
+
+        JMenuItem telaAluno = new JMenuItem("Operações Aluno");
+        aluno.add(telaAluno);
+        telaAluno.setActionCommand("1");
+
+        JMenu funcionario = new JMenu("Funcionario");
+        menPessoa.add(funcionario);
+
+        JMenuItem telaFuncionario = new JMenuItem("Operações Funcionario");
+        funcionario.add(telaFuncionario);
+        telaFuncionario.setActionCommand("2");
+
+        JMenu visitante = new JMenu("Visitante");
+        menPessoa.add(visitante);
+
+        JMenuItem telaVisitante = new JMenuItem("Operações Visitante");
+        visitante.add(telaVisitante);
+        telaVisitante.setActionCommand("3");
+
+        GerenciadorBotoes gerenciadorBotoes = new GerenciadorBotoes();
+        telaAluno.addActionListener(gerenciadorBotoes);
+        telaFuncionario.addActionListener(gerenciadorBotoes);
+        telaVisitante.addActionListener(gerenciadorBotoes);
+
+        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+
+        return painelPrincipal;
+    }
+
+    public JPanel telaAluno() {
+        //Componentes da tela
+        JPanel painelAluno = new JPanel();
+        painelAluno.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+
         lblMatricula = new JLabel();
         c.gridx = 0;
-        c.gridy = 2;
-        container.add(lblMatricula, c);
-       
+        c.gridy = 0;
+        painelAluno.add(lblMatricula, c);
+
         txtMatricula = new JTextField(20);
         c.gridx = 1;
+        c.gridy = 0;
+        painelAluno.add(txtMatricula, c);
+
+        lblNomeAluno = new JLabel();
+        c.gridx = 0;
+        c.gridy = 1;
+        painelAluno.add(lblNomeAluno, c);
+
+        txtNomeAluno = new JTextField(20);
+        c.gridx = 1;
+        c.gridy = 1;
+        painelAluno.add(txtNomeAluno, c);
+
+        lblTelefoneAluno = new JLabel();
+        c.gridx = 0;
         c.gridy = 2;
-        container.add(txtMatricula, c);
-        
+        painelAluno.add(lblTelefoneAluno, c);
+
+        txtTelefoneAluno = new JTextField(20);
+        c.gridx = 1;
+        c.gridy = 2;
+        painelAluno.add(txtTelefoneAluno, c);
+
         btnCadastrarAluno = new JButton();
         c.gridx = 1;
         c.gridy = 3;
-        container.add(btnCadastrarAluno, c);
+        painelAluno.add(btnCadastrarAluno, c);
+
+        btnExcluirAluno = new JButton();
+        c.gridx = 1;
+        c.gridy = 4;
+        painelAluno.add(btnExcluirAluno, c);
+
+        btnAlterarAluno = new JButton();
+        c.gridx = 1;
+        c.gridy = 5;
+        painelAluno.add(btnAlterarAluno, c);
         //Conteudo dos componentes
-        lblNome.setText("Nome: ");
-        lblTelefone.setText("Telefone: ");
+        lblNomeAluno.setText("Nome: ");
+        lblTelefoneAluno.setText("Telefone: ");
         lblMatricula.setText("Matricula: ");
         btnCadastrarAluno.setText("Cadastrar Aluno");
-        
-        //Acao do Botao
-        GerenciadorBotaoCadastrarAluno gerenciadorBtnCadastrarAluno = new GerenciadorBotaoCadastrarAluno();
+        btnExcluirAluno.setText("Excluir Aluno");
+        btnAlterarAluno.setText("Alterar Aluno");
+
+        //setando os action commands
+        btnCadastrarAluno.setActionCommand("1");
+        btnAlterarAluno.setActionCommand("2");
+        btnExcluirAluno.setActionCommand("3");
+
+        //Acao dos Botoes
+        GerenciadorBotoesAluno gerenciadorBtnCadastrarAluno = new GerenciadorBotoesAluno();
         btnCadastrarAluno.addActionListener(gerenciadorBtnCadastrarAluno);
-                
+        btnExcluirAluno.addActionListener(gerenciadorBtnCadastrarAluno);
+        btnAlterarAluno.addActionListener(gerenciadorBtnCadastrarAluno);
+
         //Adicionando componentes a tela
-   
-        
         //Configuracoes da tela
         setSize(600, 500);
         setLocationRelativeTo(null);
         setVisible(true);
-        pack();
-        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);  
+        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        return painelAluno;
     }
 
     public void excluirAluno() {
@@ -320,75 +230,82 @@ import javax.swing.JTextField;
         this.exibirDadosAluno(novoNome, novoTelefone, novaMatricula);
     }
 
-    public void incluirFuncionario() {
-        //Componentes da tela
-        Container container = getContentPane();
-        container.setLayout(new GridBagLayout());
+    public JPanel telaFuncionario() {
+        JPanel painelFuncionario = new JPanel();
+        painelFuncionario.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
-        
-        
-        lblNome = new JLabel();
-        c.gridx = 0;
-        c.gridy = 0;
-        container.add(lblNome, c);
-        
-        txtNome = new JTextField(20);
-        c.gridx = 1;
-        c.gridy = 0;
-        container.add(txtNome, c);
-        
-        lblTelefone = new JLabel();
-        c.gridx = 0;
-        c.gridy = 1;
-        container.add(lblTelefone, c);
-        
-        txtTelefone = new JTextField(20);
-        c.gridx = 1;
-        c.gridy = 1;
-        container.add(txtTelefone, c);
-        
+
         lblSiape = new JLabel();
         c.gridx = 0;
-        c.gridy = 2;
-        container.add(lblSiape, c);
-       
+        c.gridy = 0;
+        painelFuncionario.add(lblSiape, c);
+
         txtSiape = new JTextField(20);
         c.gridx = 1;
+        c.gridy = 0;
+        painelFuncionario.add(txtSiape, c);
+
+        lblNomeFuncionario = new JLabel();
+        c.gridx = 0;
+        c.gridy = 1;
+        painelFuncionario.add(lblNomeFuncionario, c);
+
+        txtNomeFuncionario = new JTextField(20);
+        c.gridx = 1;
+        c.gridy = 1;
+        painelFuncionario.add(txtNomeFuncionario, c);
+
+        lblTelefoneFuncionario = new JLabel();
+        c.gridx = 0;
         c.gridy = 2;
-        container.add(txtSiape, c);
-        
+        painelFuncionario.add(lblTelefoneFuncionario, c);
+
+        txtTelefoneFuncionario = new JTextField(20);
+        c.gridx = 1;
+        c.gridy = 2;
+        painelFuncionario.add(txtTelefoneFuncionario, c);
+
         btnCadastrarFuncionario = new JButton();
         c.gridx = 1;
         c.gridy = 3;
-        container.add(btnCadastrarFuncionario, c);
-        //Conteudo dos componentes
-        lblNome.setText("Nome: ");
-        lblTelefone.setText("Telefone: ");
+        painelFuncionario.add(btnCadastrarFuncionario, c);
+
+        btnExcluirFuncionario = new JButton();
+        c.gridx = 1;
+        c.gridy = 4;
+        painelFuncionario.add(btnExcluirFuncionario, c);
+
+        btnAlterarFuncionario = new JButton();
+        c.gridx = 1;
+        c.gridy = 5;
+        painelFuncionario.add(btnAlterarFuncionario, c);
+
+        lblNomeFuncionario.setText("Nome: ");
+        lblTelefoneFuncionario.setText("Telefone: ");
         lblSiape.setText("Siape: ");
         btnCadastrarFuncionario.setText("Cadastrar Funcionario");
-        
-        //Acao do Botao
-        GerenciadorBotaoCadastrarFuncionario gerenciadorBtnCadastrarFuncionario = new GerenciadorBotaoCadastrarFuncionario();
-        btnCadastrarFuncionario.addActionListener(gerenciadorBtnCadastrarFuncionario);
-        
-                
-        //Adicionando componentes a tela
-   
-        
+        btnExcluirFuncionario.setText("Excluir Funcionario");
+        btnAlterarFuncionario.setText("Alterar Funcionario");
+
+        //setando os action commands
+        btnCadastrarFuncionario.setActionCommand("1");
+        btnAlterarFuncionario.setActionCommand("2");
+        btnExcluirFuncionario.setActionCommand("3");
+
+        //Acao dos Botoes
+        GerenciadorBotoesFuncionario gerenciadorBtnFuncionario = new GerenciadorBotoesFuncionario();
+        btnCadastrarFuncionario.addActionListener(gerenciadorBtnFuncionario);
+        btnExcluirFuncionario.addActionListener(gerenciadorBtnFuncionario);
+        btnAlterarFuncionario.addActionListener(gerenciadorBtnFuncionario);
+
         //Configuracoes da tela
         setSize(600, 500);
         setLocationRelativeTo(null);
         setVisible(true);
-        pack();
-        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);  
-        /*System.out.println("----------CADASTRAR FUNCIONARIO----------");
-        System.out.println("Nome: ");
-        String nome = recebeValorString();
-        System.out.println("Telefone: ");
-        long telefone = recebeValorLong();
-        System.out.println("Siape: ");
-        int siape = recebeValorInteiro();
-        ControladorPessoa.getInstancia().cadastrarFuncionario(nome, telefone, siape);*/
+        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+
+        return painelFuncionario;
+
     }
 
     public void excluirFuncionario() {
@@ -421,75 +338,73 @@ import javax.swing.JTextField;
         this.exibirDadosFuncionario(novoNome, novoTelefone, novoSiape);
     }
 
-    public void incluirVisitante() {
-        //Componentes da tela
-        Container containerIncluirVisitante = getContentPane();
-        containerIncluirVisitante.setLayout(new GridBagLayout());
+    public JPanel telaVisitante() {
+        JPanel painelVisitante = new JPanel();
+        painelVisitante.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
-        
-        
-        lblNome = new JLabel();
-        c.gridx = 0;
-        c.gridy = 0;
-        containerIncluirVisitante.add(lblNome, c);
-        
-        txtNome = new JTextField(20);
-        c.gridx = 1;
-        c.gridy = 0;
-        containerIncluirVisitante.add(txtNome, c);
-        
-        lblTelefone = new JLabel();
-        c.gridx = 0;
-        c.gridy = 1;
-        containerIncluirVisitante.add(lblTelefone, c);
-        
-        txtTelefone = new JTextField(20);
-        c.gridx = 1;
-        c.gridy = 1;
-        containerIncluirVisitante.add(txtTelefone, c);
-        
+
         lblCpf = new JLabel();
         c.gridx = 0;
-        c.gridy = 2;
-        containerIncluirVisitante.add(lblCpf, c);
-       
+        c.gridy = 0;
+        painelVisitante.add(lblCpf, c);
+
         txtCpf = new JTextField(20);
         c.gridx = 1;
+        c.gridy = 0;
+        painelVisitante.add(txtCpf, c);
+
+        lblNomeVisitante = new JLabel();
+        c.gridx = 0;
+        c.gridy = 1;
+        painelVisitante.add(lblNomeVisitante, c);
+
+        txtNomeVisitante = new JTextField(20);
+        c.gridx = 1;
+        c.gridy = 1;
+        painelVisitante.add(txtNomeVisitante, c);
+
+        lblTelefoneVisitante = new JLabel();
+        c.gridx = 0;
         c.gridy = 2;
-        containerIncluirVisitante.add(txtCpf, c);
-        
+        painelVisitante.add(lblTelefoneVisitante, c);
+
+        txtTelefoneVisitante = new JTextField(20);
+        c.gridx = 1;
+        c.gridy = 2;
+        painelVisitante.add(txtTelefoneVisitante, c);
+
         btnCadastrarVisitante = new JButton();
         c.gridx = 1;
         c.gridy = 3;
-        containerIncluirVisitante.add(btnCadastrarVisitante, c);
-        //Conteudo dos componentes
-        lblNome.setText("Nome: ");
-        lblTelefone.setText("Telefone: ");
+        painelVisitante.add(btnCadastrarVisitante, c);
+
+        btnExcluirVisitante = new JButton();
+        c.gridx = 1;
+        c.gridy = 4;
+        painelVisitante.add(btnExcluirVisitante, c);
+
+        btnAlterarVisitante = new JButton();
+        c.gridx = 1;
+        c.gridy = 5;
+        painelVisitante.add(btnAlterarVisitante, c);
+
+        lblNomeVisitante.setText("Nome: ");
+        lblTelefoneVisitante.setText("Telefone: ");
         lblCpf.setText("Cpf: ");
-        btnCadastrarVisitante.setText("Cadastrar Funcionario");
-        
-        //Acao do Botao
-        GerenciadorBotaoCadastrarVisitante gerenciadorBtnCadastrarVisitante = new GerenciadorBotaoCadastrarVisitante();
-        btnCadastrarVisitante.addActionListener(gerenciadorBtnCadastrarVisitante);
-        
-                
-        //Adicionando componentes a tela
-   
-        
-        //Configuracoes da tela
-        setSize(600, 500);
-        setLocationRelativeTo(null);
-        setVisible(true);
-        pack();
-        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);  
-        /*System.out.println("----------CADASTRAR VISITANTE----------");
-        System.out.println("Nome: ");
-        String nome = recebeValorString();
-        System.out.println("Telefone: ");
-        long telefone = recebeValorLong();
-        System.out.println("Cpf: ");
-        int cpf = recebeValorInteiro();
-        ControladorPessoa.getInstancia().cadastrarVisitante(nome, telefone, cpf);*/
+        btnCadastrarVisitante.setText("Cadastrar Visitante");
+        btnExcluirVisitante.setText("Excluir Visitante");
+        btnAlterarVisitante.setText("Alterar Visitante");
+
+        btnCadastrarVisitante.setActionCommand("1");
+        btnAlterarVisitante.setActionCommand("2");
+        btnExcluirVisitante.setActionCommand("3");
+
+        GerenciadorBotoesVisitante gerenciadorBtnVisitante = new GerenciadorBotoesVisitante();
+        btnCadastrarVisitante.addActionListener(gerenciadorBtnVisitante);
+        btnExcluirVisitante.addActionListener(gerenciadorBtnVisitante);
+        btnAlterarVisitante.addActionListener(gerenciadorBtnVisitante);
+
+        return painelVisitante;
     }
 
     public void excluirVisitante() {
@@ -542,46 +457,142 @@ import javax.swing.JTextField;
         System.out.println("Telefone: " + telefone);
         System.out.println("Siape: " + siape);
     }
-    private class GerenciadorBotoes implements ActionListener{
-    
+
+    public void mostrarTelaPrincipal() {
+        container.remove(pnlTelaPrincipal);
+        container.remove(pnlTelaAluno);
+        container.remove(pnlTelaFuncionario);
+        container.remove(pnlTelaVisitante);
+        container.add(pnlTelaPrincipal);
+        container.revalidate();
+        container.repaint();
+    }
+
+    public void mostrarTelaAluno() {
+        container.remove(pnlTelaPrincipal);
+        container.remove(pnlTelaAluno);
+        container.remove(pnlTelaFuncionario);
+        container.remove(pnlTelaVisitante);
+        container.add(pnlTelaAluno);
+        container.revalidate();
+        container.repaint();
+    }
+
+    public void mostrarTelaVisitante() {
+        container.remove(pnlTelaPrincipal);
+        container.remove(pnlTelaAluno);
+        container.remove(pnlTelaFuncionario);
+        container.remove(pnlTelaVisitante);
+        container.add(pnlTelaVisitante);
+        container.revalidate();
+        container.repaint();
+    }
+
+    public void mostrarTelaFuncionario() {
+        container.remove(pnlTelaPrincipal);
+        container.remove(pnlTelaAluno);
+        container.remove(pnlTelaFuncionario);
+        container.remove(pnlTelaVisitante);
+        container.add(pnlTelaFuncionario);
+        container.revalidate();
+        container.repaint();
+    }
+
+    private class GerenciadorBotoes implements ActionListener {
+
         @Override
-        public void actionPerformed(ActionEvent ae){
+        public void actionPerformed(ActionEvent ae) {
             ControladorPessoa.getInstancia().exibirTelas(ae.getActionCommand());
         }
     }
-    private class GerenciadorBotaoCadastrarAluno implements ActionListener{
-        
+
+    private class GerenciadorBotoesAluno implements ActionListener {
+
         @Override
-        public void actionPerformed(ActionEvent ae){
-            String nome = txtNome.getText();
-            long telefone = Long.parseLong(txtTelefone.getText());
-            int matricula = Integer.parseInt(txtMatricula.getText());
-            
-            ControladorPessoa.getInstancia().cadastrarAluno(nome, telefone, matricula);
+        public void actionPerformed(ActionEvent ae) {
+            String nome;
+            long telefone;
+            int matricula;
+            switch (ae.getActionCommand()) {
+                case "1":
+                    nome = txtNomeAluno.getText();
+                    telefone = Long.parseLong(txtTelefoneAluno.getText());
+                    matricula = Integer.parseInt(txtMatricula.getText());
+                    ControladorPessoa.getInstancia().cadastrarAluno(nome, telefone, matricula);
+                    break;
+                case "2":
+                    nome = txtNomeAluno.getText();
+                    telefone = Long.parseLong(txtTelefoneAluno.getText());
+                    matricula = Integer.parseInt(txtMatricula.getText());
+                    Aluno aluno = ControladorPessoa.getInstancia().encontrarAlunoPelaMatricula(matricula);
+                    ControladorPessoa.getInstancia().alterarAluno(aluno, nome, telefone, matricula);
+                    break;
+                case "3":
+                    matricula = Integer.parseInt(txtMatricula.getText());
+                    ControladorPessoa.getInstancia().excluirAluno(matricula);
+                    break;
+            }
+        }
+    }
+
+    private class GerenciadorBotoesFuncionario implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            String nome;
+            long telefone;
+            int siape;
+
+            switch (ae.getActionCommand()) {
+                case "1":
+                    nome = txtNomeFuncionario.getText();
+                    telefone = Long.parseLong(txtTelefoneFuncionario.getText());
+                    siape = Integer.parseInt(txtSiape.getText());
+                    ControladorPessoa.getInstancia().cadastrarFuncionario(nome, telefone, siape);
+                    break;
+                case "2":
+                    nome = txtNomeFuncionario.getText();
+                    telefone = Long.parseLong(txtTelefoneFuncionario.getText());
+                    siape = Integer.parseInt(txtSiape.getText());
+                    Funcionario funcionario = ControladorPessoa.getInstancia().encontrarFuncionarioPeloSiape(siape);
+                    ControladorPessoa.getInstancia().alterarFuncionario(funcionario, nome, telefone, siape);
+                    break;
+                case "3":
+                    siape = Integer.parseInt(txtSiape.getText());
+                    ControladorPessoa.getInstancia().excluirFuncionario(siape);
+                    break;
+            }
         }
 
     }
-    private class GerenciadorBotaoCadastrarFuncionario implements ActionListener{
-        
-        @Override
-        public void actionPerformed(ActionEvent ae){
-            String nome = txtNome.getText();
-            long telefone = Long.parseLong(txtTelefone.getText());
-            int siape = Integer.parseInt(txtSiape.getText());
-            
-            ControladorPessoa.getInstancia().cadastrarFuncionario(nome, telefone, siape);
-        }
 
-    }
-    private class GerenciadorBotaoCadastrarVisitante implements ActionListener{
-        
+    private class GerenciadorBotoesVisitante implements ActionListener {
+
         @Override
-        public void actionPerformed(ActionEvent ae){
-            String nome = txtNome.getText();
-            long telefone = Long.parseLong(txtTelefone.getText());
-            int cpf = Integer.parseInt(txtCpf.getText());
-            
-            ControladorPessoa.getInstancia().cadastrarVisitante(nome, telefone, cpf);
+        public void actionPerformed(ActionEvent ae) {
+            String nome;
+            long telefone;
+            int cpf;
+
+            switch (ae.getActionCommand()) {
+                case "1":
+                    nome = txtNomeVisitante.getText();
+                    telefone = Long.parseLong(txtTelefoneVisitante.getText());
+                    cpf = Integer.parseInt(txtCpf.getText());
+                    ControladorPessoa.getInstancia().cadastrarVisitante(nome, telefone, cpf);
+                    break;
+                case "2":
+                    nome = txtNomeVisitante.getText();
+                    telefone = Long.parseLong(txtTelefoneVisitante.getText());
+                    cpf = Integer.parseInt(txtCpf.getText());
+                    Visitante visitante = ControladorPessoa.getInstancia().encontrarVisitantePeloCpf(cpf);
+                    ControladorPessoa.getInstancia().alterarVisitante(visitante, nome, telefone, cpf);
+                    break;
+                case "3":
+                    cpf = Integer.parseInt(txtCpf.getText());
+                    ControladorPessoa.getInstancia().excluirVisitante(cpf);
+                    break;
+            }
         }
 
     }
