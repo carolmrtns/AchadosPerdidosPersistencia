@@ -20,7 +20,7 @@ import java.util.HashMap;
 
 /**
  *
- * @author 18206078
+ * @author Caroline Martins Alves
  */
 public class PessoaDAO {
     

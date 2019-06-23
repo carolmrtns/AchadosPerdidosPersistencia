@@ -21,7 +21,7 @@ public class ControladorPrincipal {
     private TelaPrincipal telaPrincipal;
     private static ControladorPrincipal instancia;
     
-    public ControladorPrincipal(){
+    private ControladorPrincipal(){
         //this.controladorLocal = new ControladorLocal(this);
         this.controladorLocal = ControladorLocal.getInstancia();
         this.controladorObjeto = ControladorObjeto.getInstancia();

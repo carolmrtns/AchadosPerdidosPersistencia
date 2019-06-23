@@ -14,6 +14,8 @@ import br.ufsc.ine5605.achadoseperdidos.models.TipoStatus;
 import br.ufsc.ine5605.achadoseperdidos.persistencia.ObjetoDAO;
 import br.ufsc.ine5605.achadoseperdidos.persistencia.PessoaDAO;
 import java.util.ArrayList;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author Caroline Martins Alves
@@ -25,10 +27,9 @@ public class ControladorObjeto {
     private static ControladorObjeto instancia;
     private int codigo;
     
-    public ControladorObjeto(){
+    private ControladorObjeto(){
         //objetos = new ArrayList<>();
         telaObjeto = new TelaObjeto();
-        codigo = 1;
         //this.controladorPrincipal = controladorPrincipal;
         
     }
@@ -77,9 +78,10 @@ public class ControladorObjeto {
         if(encontrarObjetoPorCodigo(codigo) != null){
             if(encontrarObjetoPorCodigo(codigo).getStatus() != status.ENCONTRADO){
                 if(ControladorPrincipal.getInstancia().retornarPessoaPeloNome(nomeDono) != null){
-                    encontrarObjetoPorCodigo(codigo).setStatus(status);
+                    //encontrarObjetoPorCodigo(codigo).setStatus(status);
                     Pessoa dono = ControladorPrincipal.getInstancia().retornarPessoaPeloNome(nomeDono);
                     //encontrarObjetoPorCodigo(codigo).setDono(dono);
+                    //funcao no DAO que faz o put do objeto de novo no hashmap
                     ObjetoDAO.getInstancia().atualizaStatus(codigo, status, dono);
                     telaObjeto.exibirMensagem("Objeto foi atualizado com sucesso!");
                 }else{
@@ -92,7 +94,7 @@ public class ControladorObjeto {
             telaObjeto.exibirMensagem("Objeto nao existe! Status nao atualizado.");
         }
     }
-    
+    /*
     public void listarObjetosPerdidos(){
         TipoStatus status = null;
         //telaObjeto.exibirMensagem("----------LISTANDO OBJETOS PERDIDOS----------");
@@ -107,7 +109,7 @@ public class ControladorObjeto {
             } 
         }
     }
-    
+    */
     public int verificaCodigo(){
         ArrayList<Objeto> objetos = new ArrayList<>();
         objetos = ObjetoDAO.getInstancia().getList();
@@ -121,7 +123,7 @@ public class ControladorObjeto {
         }
         return codigo;
     }
-
+    /*
     public void listarObjetosPorTipo(TipoObjeto tipoObjeto){
         TipoStatus status = null;
         telaObjeto.exibirMensagem("----------LISTANDO OBJETOS PERDIDOS DO TIPO " + tipoObjeto +"----------");
@@ -139,7 +141,7 @@ public class ControladorObjeto {
             }
         }
     }
-    
+    */
     public Objeto encontrarObjetoPorCodigo(int codigo){
         for(Objeto objetosLista: ObjetoDAO.getInstancia().getList()){
             if(objetosLista.getCodigo() == codigo){

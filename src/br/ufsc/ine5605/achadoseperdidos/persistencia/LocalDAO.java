@@ -94,6 +94,14 @@ public class LocalDAO {
     public void removeLocal(Local local){
         cacheLocais.remove(local.getNomeLocal());
         persist();
-}
+    }
+    
+    public void alterarLocal(String nomeLocal, String novoNomeLocal, String novaLocalizacao){
+        Local novoLocal = getLocal(nomeLocal);
+        novoLocal.setNomeLocal(novoNomeLocal);
+        novoLocal.setLocalizacao(novaLocalizacao);
+        cacheLocais.put(nomeLocal, novoLocal);
+        persist();
+    }
     
 }

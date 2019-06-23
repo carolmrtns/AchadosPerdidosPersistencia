@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author henrique
+ * @author Henrique Meireles
  */
 public class ObjetoDAO {
     private static ObjetoDAO instancia;
@@ -89,18 +89,12 @@ public class ObjetoDAO {
         return new ArrayList(this.cacheObjetos.values());
     }
     
-    public void removeObjeto(Objeto objeto){
-        cacheObjetos.remove(objeto.getId());
-    }
-    
     public void atualizaStatus(Integer codigo, TipoStatus status, Pessoa dono){
         Objeto novoObjeto = getList().get(codigo);
         novoObjeto.setStatus(status);
-        novoObjeto.setCadastrador(dono);
+        novoObjeto.setDono(dono);
         cacheObjetos.put(codigo, novoObjeto);
         persist();
     }
-    
         
-    
 }

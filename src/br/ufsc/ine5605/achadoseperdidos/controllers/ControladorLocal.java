@@ -18,7 +18,7 @@ public class ControladorLocal {
     //private ControladorPrincipal controladorPrincipal;
     private static ControladorLocal instancia;
 
-    public ControladorLocal(){
+    private ControladorLocal(){
         //locais = new ArrayList<Local>();
         telaLocal = new TelaLocal();
         
@@ -40,7 +40,7 @@ public class ControladorLocal {
     }
     
     public void inicia(){
-        telaLocal.menuInicial();
+        telaLocal.initComponents();
     } 
     
     public static ControladorLocal getInstancia(){
@@ -100,9 +100,10 @@ public class ControladorLocal {
             Local local = encontrarLocalPeloNome(nomeLocal);
             if(local != null){
                 if(encontrarLocalPeloNome(novoNomeLocal) == null){
-                    local.setNomeLocal(novoNomeLocal);
-                    local.setLocalizacao(novaLocalizacao);
-                    telaLocal.exibirMensagem("Local cadastrado com sucesso!");
+                    //local.setNomeLocal(novoNomeLocal);
+                    //local.setLocalizacao(novaLocalizacao);
+                    LocalDAO.getInstancia().alterarLocal(nomeLocal, novoNomeLocal, novaLocalizacao);
+                    telaLocal.exibirMensagem("Local alterado com sucesso!");
                 }else{
                     telaLocal.exibirMensagem("Novo local ja existe!");
                 }

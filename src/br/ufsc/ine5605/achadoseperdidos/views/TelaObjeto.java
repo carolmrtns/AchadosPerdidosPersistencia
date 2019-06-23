@@ -27,6 +27,7 @@ public class TelaObjeto extends TelaGlobal {
     //private Scanner teclado;
     //private ControladorObjeto controladorObjeto;
     private JTable tabelaObjeto;
+    private JTable tabelaCompleta;
     private JLabel lblCodigo;
     private JTextField txtCodigo;
     private JLabel lblDescricao;
@@ -48,7 +49,7 @@ public class TelaObjeto extends TelaGlobal {
     private GridBagConstraints constraint;
     private Container container;
     private JPanel pnlTelaObjeto;
-    private JPanel pnlTelaCadastro;
+    private JPanel pnlTelaCadastrar;
     private JPanel pnlTelaAlterar;
 
     public TelaObjeto() {
@@ -60,10 +61,8 @@ public class TelaObjeto extends TelaGlobal {
 
         container = getContentPane();
         container.setLayout(new GridBagLayout());
-
-        //updateData();
         
-        pnlTelaCadastro = telaCadastrar();
+        pnlTelaCadastrar = telaCadastrar();
         pnlTelaAlterar = telaAlterar();
         
         pnlTelaObjeto = telaObjeto();
@@ -77,10 +76,22 @@ public class TelaObjeto extends TelaGlobal {
 
     public JPanel telaObjeto() {
         //Componentes da tela
+        
         JPanel painelObjeto = new JPanel();
         painelObjeto.setLayout(new GridBagLayout());
-        //GridBagConstraints gridConstraint = new GridBagConstraints();
-
+        
+        //Tabela que lista os dados recuperados do arquivo
+        tabelaCompleta = new JTable();
+        tabelaCompleta.setPreferredScrollableViewportSize(new Dimension(550, 350));
+        tabelaCompleta.setFillsViewportHeight(true);
+        constraint.fill = GridBagConstraints.CENTER;
+        constraint.gridwidth = 2;
+        constraint.gridheight = 4;
+        constraint.gridx = 0;
+        constraint.gridy = 10;
+        spBaseTabela = new JScrollPane(tabelaCompleta);
+        painelObjeto.add(spBaseTabela, constraint);         
+        
         //Criando menu de navegacao
         JMenuBar menuObjeto = new JMenuBar();
         setJMenuBar(menuObjeto);
@@ -105,6 +116,8 @@ public class TelaObjeto extends TelaGlobal {
         cadastrar.addActionListener(gerenciadorBotoes);
         alterar.addActionListener(gerenciadorBotoes);
 
+        updateDataCompleta();
+        
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
         return painelObjeto;
@@ -204,9 +217,11 @@ public class TelaObjeto extends TelaGlobal {
         GerenciadorBotoes gerenciadorBotoes = new GerenciadorBotoes();
         btnCadastrar.addActionListener(gerenciadorBotoes);
 
-        //ONDÉ QUE CHAMA ISSO AQUI PARA ATUALIZAR OS DADOS DA JTABLE?
-        //EU CHUTO QUE É DEPOIS DE CADASTRAR
-        //VER ESSA PARADINHA
+        /*
+        ONDE QUE CHAMA ESSA FUNC PARA ATUALIZAR OS DADOS DA JTABLE?
+        EU CHUTO QUE É DEPOIS DE CADASTRAR-VER ISSO
+        */
+        //TELA CADASTRAR
         updateData();
 
         //Configuracoes da tela
@@ -273,7 +288,7 @@ public class TelaObjeto extends TelaGlobal {
         gridConstraint.gridx = 0;
         gridConstraint.gridy = 4;
         painelAlteracao.add(btnAlterar, gridConstraint);
-        //fim dos componentes de tela
+        //Fim dos componentes de tela
         
         lblCodigo.setText("Codigo: ");
         lblStatus.setText("Status: ");
@@ -281,16 +296,17 @@ public class TelaObjeto extends TelaGlobal {
         lblDono.setText("Dono do Objeto: ");
         btnAlterar.setText("Atualizar");
         
-        //setando acao no button
+        //Setando acao no button
         btnAlterar.setActionCommand("4");
         
         GerenciadorBotoes gerenciadorBotoes = new GerenciadorBotoes();
         btnAlterar.addActionListener(gerenciadorBotoes);
         
-        //atualiza o conteudo na jtable
+        //Atualiza o conteudo na jtable
+        //Tela alterar
         updateData();
         
-        //configuracoes de tela
+        //Configuracoes de tela
         setSize(600, 500);
         setLocationRelativeTo(null);
         setVisible(true);
@@ -321,6 +337,29 @@ public class TelaObjeto extends TelaGlobal {
         tabelaObjeto.setModel(modelTbItens);
         this.repaint();
     }
+    
+    //NAO SEI ONDE QUE FICA ISSO AQUI
+    private void updateDataCompleta() {
+        DefaultTableModel modelTbCompItens = new DefaultTableModel();
+        modelTbCompItens.addColumn("Codigo");
+        modelTbCompItens.addColumn("Descricao");
+        modelTbCompItens.addColumn("Status");
+        modelTbCompItens.addColumn("Tipo Objeto");
+        modelTbCompItens.addColumn("Local");
+        modelTbCompItens.addColumn("Cadastrador");
+        modelTbCompItens.addColumn("Dono");
+
+        for (Objeto objetoLista : ObjetoDAO.getInstancia().getList()) {
+            modelTbCompItens.addRow(new Object[]{objetoLista.getCodigo(), 
+                objetoLista.getDescricao(), objetoLista.getStatus(), objetoLista.getTipoObjeto(), 
+                ControladorPrincipal.getInstancia().retornarNomeLocal(objetoLista.getLocal()),
+                ControladorPrincipal.getInstancia().retornarNomePessoa(objetoLista.getCadastrador()),
+                ControladorPrincipal.getInstancia().retornarNomePessoa(objetoLista.getDono())});                
+            
+        }
+        tabelaCompleta.setModel(modelTbCompItens);
+        this.repaint();
+    }    
 
     public void exibirDadosObjeto(int codigo, String descricao, TipoStatus status, TipoObjeto tipoObjeto, String nomeLocal, String nomeCadastrador) {
         System.out.println("----------OBJETO CADASTRADO----------");
@@ -335,19 +374,30 @@ public class TelaObjeto extends TelaGlobal {
     public void mostrarTelaCadastrar() {
         container.remove(pnlTelaObjeto);
         container.remove(pnlTelaAlterar);
-        container.remove(pnlTelaCadastro);
-        container.add(pnlTelaCadastro);
+        container.remove(pnlTelaCadastrar);
+        container.add(pnlTelaCadastrar);
         container.revalidate();
         container.repaint();
     }
     
     public void mostrarTelaAlterar() {
         container.remove(pnlTelaObjeto);
-        container.remove(pnlTelaCadastro);
+        container.remove(pnlTelaCadastrar);
         container.remove(pnlTelaAlterar);
         container.add(pnlTelaAlterar);
         container.revalidate();
         container.repaint();
+    }
+    
+    public void limpaBotaoCadastrar(){
+        txtDescricao.setText("");
+        txtLocal.setText("");
+        txtCadastrador.setText("");
+    }
+    
+    public void limpaBotaoAlterar(){
+        txtCodigo.setText("");
+        txtDono.setText("");
     }    
 
     private class GerenciadorBotoes implements ActionListener {
@@ -370,6 +420,7 @@ public class TelaObjeto extends TelaGlobal {
             System.out.println(tipoObjeto);
             System.out.println(local);
             System.out.println(cadastrador);
+            System.out.println(dono);
 
             switch (ae.getActionCommand()) {
                 case "1": mostrarTelaCadastrar();
@@ -379,11 +430,13 @@ public class TelaObjeto extends TelaGlobal {
                 case "3":
                     ControladorObjeto.getInstancia().cadastrarObjetos(descricao, statusCadastrar,
                             tipoObjeto, local, cadastrador);
+                    limpaBotaoCadastrar();
                     updateData();
                     break;
                 case "4":
                     ControladorObjeto.getInstancia().atualizarStatusObjeto(Integer.parseInt(codigo),
                             statusAlterar, dono);
+                    limpaBotaoAlterar();
                     updateData();
                     break;
             }

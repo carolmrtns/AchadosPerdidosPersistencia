@@ -307,7 +307,12 @@ public class ControladorPessoa {
     }
 
     public String encontrarNomePessoa(Pessoa pessoa) {
-        return pessoa.getNomePessoa();
+        try{
+            return pessoa.getNomePessoa();
+        }catch(NullPointerException ex){
+            System.out.println("Pessoa nao encontrada: "+ex);
+        }
+        return "";
     }
     
     public void exibirTelas(String opcao){
