@@ -26,7 +26,8 @@ public class ControladorPessoa {
  
 
     public void inicia() {
-        telaPessoa.initComponents();
+        telaPessoa.mostrarTelaPrincipal();
+        telaPessoa.mostraTela();
     }
     
     

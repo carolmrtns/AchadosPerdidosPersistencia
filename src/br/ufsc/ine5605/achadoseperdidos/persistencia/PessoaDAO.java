@@ -91,6 +91,39 @@ public class PessoaDAO {
         return new ArrayList(this.cachePessoas.values());
     }
     
+    public ArrayList<Aluno> getListAluno(){
+        ArrayList<Pessoa> pessoas = this.getList();
+        ArrayList<Aluno> alunos = new ArrayList<>();
+        for (Pessoa pessoaLista : pessoas) {
+            if (pessoaLista instanceof Aluno) {
+                alunos.add((Aluno) pessoaLista);
+            }
+        }
+        return alunos;
+    }
+    
+    public ArrayList<Funcionario> getListFuncionario(){
+        ArrayList<Pessoa> pessoas = this.getList();
+        ArrayList<Funcionario> funcionarios = new ArrayList<>();
+        for (Pessoa pessoaLista : pessoas) {
+            if (pessoaLista instanceof Funcionario) {
+                funcionarios.add((Funcionario) pessoaLista);
+            }
+        }
+        return funcionarios;
+    }
+    
+    public ArrayList<Visitante> getListVisitante(){
+        ArrayList<Pessoa> pessoas = this.getList();
+        ArrayList<Visitante> visitantes = new ArrayList<>();
+        for (Pessoa pessoaLista : pessoas) {
+            if (pessoaLista instanceof Visitante) {
+                visitantes.add((Visitante) pessoaLista);
+            }
+        }
+        return visitantes;
+    }
+    
     
     public void removeAluno(Aluno aluno){
         //REMOVE PELA CHAVE, COM ELA ENCONTRA E REMOVE A PESSOA

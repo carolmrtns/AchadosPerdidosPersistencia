@@ -9,12 +9,15 @@ import br.ufsc.ine5605.achadoseperdidos.models.Aluno;
 import br.ufsc.ine5605.achadoseperdidos.models.Funcionario;
 import br.ufsc.ine5605.achadoseperdidos.models.Visitante;
 import br.ufsc.ine5605.achadoseperdidos.controllers.ControladorPessoa;
+import br.ufsc.ine5605.achadoseperdidos.models.Pessoa;
+import br.ufsc.ine5605.achadoseperdidos.persistencia.PessoaDAO;
 import java.util.InputMismatchException;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
+import java.util.EventListener;
 import java.util.Scanner;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -23,6 +26,11 @@ import javax.swing.*;
 public class TelaPessoa extends TelaGlobal {
 
     // private Scanner teclado; > Deletado para JFrame
+    private JTable tabelaAluno;
+    private JTable tabelaFuncionario;
+    private JTable tabelaVisitante;
+    private JTable tabelaPessoas;
+    private JScrollPane spBaseTabela;
     private JLabel lblNomeAluno;
     private JTextField txtNomeAluno;
     private JLabel lblNomeVisitante;
@@ -58,7 +66,7 @@ public class TelaPessoa extends TelaGlobal {
 
     public TelaPessoa() {
         super("Tela Pessoa");
-
+        initComponents();
     }
 
     public void initComponents() {
@@ -71,13 +79,17 @@ public class TelaPessoa extends TelaGlobal {
         pnlTelaAluno = telaAluno();
         pnlTelaFuncionario = telaFuncionario();
         pnlTelaVisitante = telaVisitante();
+        
+      
 
         //setando o panel principal
         pnlTelaPrincipal = telaPrincipal();
+        container.remove(pnlTelaAluno);
+        container.remove(pnlTelaFuncionario);
+        container.remove(pnlTelaVisitante);
         container.add(pnlTelaPrincipal);
 
         setSize(600, 500);
-        setVisible(true);
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
     }
@@ -86,7 +98,7 @@ public class TelaPessoa extends TelaGlobal {
         //Componentes da tela
         JPanel painelPrincipal = new JPanel();
         painelPrincipal.setLayout(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
+        GridBagConstraints c = new GridBagConstraints(); 
 
         JMenuBar menPessoa = new JMenuBar();
         setJMenuBar(menPessoa);
@@ -111,6 +123,19 @@ public class TelaPessoa extends TelaGlobal {
         JMenuItem telaVisitante = new JMenuItem("Operações Visitante");
         visitante.add(telaVisitante);
         telaVisitante.setActionCommand("3");
+        
+        tabelaPessoas = new JTable();
+        tabelaPessoas.setPreferredScrollableViewportSize(new Dimension(500, 360));
+        tabelaPessoas.setFillsViewportHeight(true);
+        c.fill = GridBagConstraints.CENTER;
+        c.gridwidth = 2;
+        c.gridheight = 4;
+        c.gridx = 0;
+        c.gridy = 8;
+        spBaseTabela = new JScrollPane(tabelaPessoas);
+        painelPrincipal.add(spBaseTabela, c); 
+        
+        updateDataPessoa();
 
         GerenciadorBotoes gerenciadorBotoes = new GerenciadorBotoes();
         telaAluno.addActionListener(gerenciadorBotoes);
@@ -127,6 +152,8 @@ public class TelaPessoa extends TelaGlobal {
         JPanel painelAluno = new JPanel();
         painelAluno.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
+        
+        
 
         lblMatricula = new JLabel();
         c.gridx = 0;
@@ -172,6 +199,17 @@ public class TelaPessoa extends TelaGlobal {
         c.gridx = 1;
         c.gridy = 5;
         painelAluno.add(btnAlterarAluno, c);
+        
+        tabelaAluno = new JTable();
+        tabelaAluno.setPreferredScrollableViewportSize(new Dimension(400, 100));
+        tabelaAluno.setFillsViewportHeight(true);
+        c.fill = GridBagConstraints.CENTER;
+        c.gridwidth = 2;
+        c.gridheight = 4;
+        c.gridx = 0;
+        c.gridy = 8;
+        spBaseTabela = new JScrollPane(tabelaAluno);
+        painelAluno.add(spBaseTabela, c); 
         //Conteudo dos componentes
         lblNomeAluno.setText("Nome: ");
         lblTelefoneAluno.setText("Telefone: ");
@@ -184,12 +222,21 @@ public class TelaPessoa extends TelaGlobal {
         btnCadastrarAluno.setActionCommand("1");
         btnAlterarAluno.setActionCommand("2");
         btnExcluirAluno.setActionCommand("3");
+        
+        tabelaAluno.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent evt) {
+                tabelaAlunoClique(evt);
+            }
+        });
 
         //Acao dos Botoes
         GerenciadorBotoesAluno gerenciadorBtnCadastrarAluno = new GerenciadorBotoesAluno();
         btnCadastrarAluno.addActionListener(gerenciadorBtnCadastrarAluno);
         btnExcluirAluno.addActionListener(gerenciadorBtnCadastrarAluno);
         btnAlterarAluno.addActionListener(gerenciadorBtnCadastrarAluno);
+        
+        
+        updateDataAluno();
 
         //Adicionando componentes a tela
         //Configuracoes da tela
@@ -279,6 +326,23 @@ public class TelaPessoa extends TelaGlobal {
         c.gridx = 1;
         c.gridy = 5;
         painelFuncionario.add(btnAlterarFuncionario, c);
+        
+        tabelaFuncionario = new JTable();
+        tabelaFuncionario.setPreferredScrollableViewportSize(new Dimension(400, 100));
+        tabelaFuncionario.setFillsViewportHeight(true);
+        c.fill = GridBagConstraints.CENTER;
+        c.gridwidth = 2;
+        c.gridheight = 4;
+        c.gridx = 0;
+        c.gridy = 8;
+        spBaseTabela = new JScrollPane(tabelaFuncionario);
+        painelFuncionario.add(spBaseTabela, c); 
+        
+        tabelaFuncionario.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent evt) {
+                tabelaFuncionarioClique(evt);
+            }
+        });
 
         lblNomeFuncionario.setText("Nome: ");
         lblTelefoneFuncionario.setText("Telefone: ");
@@ -298,6 +362,7 @@ public class TelaPessoa extends TelaGlobal {
         btnExcluirFuncionario.addActionListener(gerenciadorBtnFuncionario);
         btnAlterarFuncionario.addActionListener(gerenciadorBtnFuncionario);
 
+        updateDataFuncionario();
         //Configuracoes da tela
         setSize(600, 500);
         setLocationRelativeTo(null);
@@ -387,6 +452,19 @@ public class TelaPessoa extends TelaGlobal {
         c.gridx = 1;
         c.gridy = 5;
         painelVisitante.add(btnAlterarVisitante, c);
+        
+        tabelaVisitante = new JTable();
+        tabelaVisitante.setPreferredScrollableViewportSize(new Dimension(400, 100));
+        tabelaVisitante.setFillsViewportHeight(true);
+        c.fill = GridBagConstraints.CENTER;
+        c.gridwidth = 2;
+        c.gridheight = 4;
+        c.gridx = 0;
+        c.gridy = 8;
+        spBaseTabela = new JScrollPane(tabelaVisitante);
+        painelVisitante.add(spBaseTabela, c); 
+        
+        updateDataVisitante();
 
         lblNomeVisitante.setText("Nome: ");
         lblTelefoneVisitante.setText("Telefone: ");
@@ -497,6 +575,10 @@ public class TelaPessoa extends TelaGlobal {
         container.revalidate();
         container.repaint();
     }
+    
+    public void mostraTela(){
+        setVisible(true);
+    }
 
     private class GerenciadorBotoes implements ActionListener {
 
@@ -505,6 +587,7 @@ public class TelaPessoa extends TelaGlobal {
             ControladorPessoa.getInstancia().exibirTelas(ae.getActionCommand());
         }
     }
+    
 
     private class GerenciadorBotoesAluno implements ActionListener {
 
@@ -519,6 +602,7 @@ public class TelaPessoa extends TelaGlobal {
                     telefone = Long.parseLong(txtTelefoneAluno.getText());
                     matricula = Integer.parseInt(txtMatricula.getText());
                     ControladorPessoa.getInstancia().cadastrarAluno(nome, telefone, matricula);
+                    updateDataAluno();
                     break;
                 case "2":
                     nome = txtNomeAluno.getText();
@@ -526,10 +610,12 @@ public class TelaPessoa extends TelaGlobal {
                     matricula = Integer.parseInt(txtMatricula.getText());
                     Aluno aluno = ControladorPessoa.getInstancia().encontrarAlunoPelaMatricula(matricula);
                     ControladorPessoa.getInstancia().alterarAluno(aluno, nome, telefone, matricula);
+                    updateDataAluno();
                     break;
                 case "3":
                     matricula = Integer.parseInt(txtMatricula.getText());
                     ControladorPessoa.getInstancia().excluirAluno(matricula);
+                    updateDataAluno();
                     break;
             }
         }
@@ -549,6 +635,7 @@ public class TelaPessoa extends TelaGlobal {
                     telefone = Long.parseLong(txtTelefoneFuncionario.getText());
                     siape = Integer.parseInt(txtSiape.getText());
                     ControladorPessoa.getInstancia().cadastrarFuncionario(nome, telefone, siape);
+                    updateDataFuncionario();
                     break;
                 case "2":
                     nome = txtNomeFuncionario.getText();
@@ -556,10 +643,12 @@ public class TelaPessoa extends TelaGlobal {
                     siape = Integer.parseInt(txtSiape.getText());
                     Funcionario funcionario = ControladorPessoa.getInstancia().encontrarFuncionarioPeloSiape(siape);
                     ControladorPessoa.getInstancia().alterarFuncionario(funcionario, nome, telefone, siape);
+                    updateDataFuncionario();
                     break;
                 case "3":
                     siape = Integer.parseInt(txtSiape.getText());
                     ControladorPessoa.getInstancia().excluirFuncionario(siape);
+                    updateDataFuncionario();
                     break;
             }
         }
@@ -580,6 +669,7 @@ public class TelaPessoa extends TelaGlobal {
                     telefone = Long.parseLong(txtTelefoneVisitante.getText());
                     cpf = Integer.parseInt(txtCpf.getText());
                     ControladorPessoa.getInstancia().cadastrarVisitante(nome, telefone, cpf);
+                    updateDataVisitante();
                     break;
                 case "2":
                     nome = txtNomeVisitante.getText();
@@ -587,14 +677,100 @@ public class TelaPessoa extends TelaGlobal {
                     cpf = Integer.parseInt(txtCpf.getText());
                     Visitante visitante = ControladorPessoa.getInstancia().encontrarVisitantePeloCpf(cpf);
                     ControladorPessoa.getInstancia().alterarVisitante(visitante, nome, telefone, cpf);
+                    updateDataVisitante();
                     break;
                 case "3":
                     cpf = Integer.parseInt(txtCpf.getText());
                     ControladorPessoa.getInstancia().excluirVisitante(cpf);
+                    updateDataVisitante();
                     break;
             }
         }
 
     }
+    
+    private void updateDataAluno() {
+        DefaultTableModel modelTbCompItens = new DefaultTableModel();
+        modelTbCompItens.addColumn("Matricula");
+        modelTbCompItens.addColumn("Nome");
+        modelTbCompItens.addColumn("Telefone");
+ 
+
+        for (Pessoa alunoLista : PessoaDAO.getInstancia().getListAluno()) {
+            modelTbCompItens.addRow(new Object[]{alunoLista.getId(), 
+                alunoLista.getNomePessoa(), alunoLista.getTelefonePessoa()});            
+            
+        }
+        tabelaAluno.setModel(modelTbCompItens);
+        this.repaint();
+    }
+    
+    private void updateDataFuncionario() {
+        DefaultTableModel modelTbCompItens = new DefaultTableModel();
+        modelTbCompItens.addColumn("Siape");
+        modelTbCompItens.addColumn("Nome");
+        modelTbCompItens.addColumn("Telefone");
+ 
+
+        for (Pessoa funcionarioLista : PessoaDAO.getInstancia().getListFuncionario()) {
+            modelTbCompItens.addRow(new Object[]{funcionarioLista.getId(), 
+                funcionarioLista.getNomePessoa(), funcionarioLista.getTelefonePessoa()});            
+            
+        }
+        tabelaFuncionario.setModel(modelTbCompItens);
+        this.repaint();
+    }
+    
+    private void updateDataVisitante() {
+        DefaultTableModel modelTbCompItens = new DefaultTableModel();
+        modelTbCompItens.addColumn("Cpf");
+        modelTbCompItens.addColumn("Nome");
+        modelTbCompItens.addColumn("Telefone");
+ 
+
+        for (Pessoa visitanteLista : PessoaDAO.getInstancia().getListVisitante()) {
+            modelTbCompItens.addRow(new Object[]{visitanteLista.getId(), 
+                visitanteLista.getNomePessoa(), visitanteLista.getTelefonePessoa()});            
+            
+        }
+        tabelaVisitante.setModel(modelTbCompItens);
+        this.repaint();
+    }
+    
+    private void updateDataPessoa() {
+        DefaultTableModel modelTbCompItens = new DefaultTableModel();
+        modelTbCompItens.addColumn("Id");
+        modelTbCompItens.addColumn("Nome");
+        modelTbCompItens.addColumn("Telefone");
+        modelTbCompItens.addColumn("Tipo");
+        
+ 
+
+        for (Pessoa pessoaLista : PessoaDAO.getInstancia().getList()) {
+            modelTbCompItens.addRow(new Object[]{pessoaLista.getId(), 
+                pessoaLista.getNomePessoa(), pessoaLista.getTelefonePessoa(), pessoaLista.getTipoPessoa()});            
+            
+        }
+        tabelaPessoas.setModel(modelTbCompItens);
+        this.repaint();
+    }
+    
+    private void tabelaAlunoClique(MouseEvent evt){
+        DefaultTableModel model = (DefaultTableModel) tabelaAluno.getModel();
+        int indexLinhaSelecionada = tabelaAluno.getSelectedRow();
+        txtMatricula.setText(model.getValueAt(indexLinhaSelecionada, 0).toString());
+        txtNomeAluno.setText(model.getValueAt(indexLinhaSelecionada, 1).toString());
+        txtTelefoneAluno.setText(model.getValueAt(indexLinhaSelecionada, 2).toString());
+    }
+    
+    private void tabelaFuncionarioClique(MouseEvent evt){
+        DefaultTableModel model = (DefaultTableModel) tabelaFuncionario.getModel();
+        int indexLinhaSelecionada = tabelaFuncionario.getSelectedRow();
+        txtSiape.setText(model.getValueAt(indexLinhaSelecionada, 0).toString());
+        txtNomeFuncionario.setText(model.getValueAt(indexLinhaSelecionada, 1).toString());
+        txtTelefoneFuncionario.setText(model.getValueAt(indexLinhaSelecionada, 2).toString());
+    }
+    
+    
 
 }
