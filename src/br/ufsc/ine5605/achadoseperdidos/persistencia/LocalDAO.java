@@ -96,11 +96,16 @@ public class LocalDAO {
         persist();
     }
     
-    public void alterarLocal(String nomeLocal, String novoNomeLocal, String novaLocalizacao){
-        Local novoLocal = getLocal(nomeLocal);
-        novoLocal.setNomeLocal(novoNomeLocal);
-        novoLocal.setLocalizacao(novaLocalizacao);
-        cacheLocais.put(nomeLocal, novoLocal);
+    public void alterarNomeLocal(Local local, String nomeLocal, String novaLocalizacao){
+        local.setLocalizacao(novaLocalizacao);
+        local.setNomeLocal(nomeLocal);
+        cacheLocais.put(nomeLocal, local);
+        persist();
+    }
+    
+    public void alterarLocalizacao(Local local, String nomeLocal, String novaLocalizacao){
+        local.setLocalizacao(novaLocalizacao);
+        cacheLocais.put(nomeLocal, local);
         persist();
     }
     

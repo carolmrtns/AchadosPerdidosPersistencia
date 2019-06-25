@@ -97,17 +97,18 @@ public class ControladorLocal {
         }
     }
     
-    public void atualizarDadosLocal(String nomeLocal, String novoNomeLocal, String novaLocalizacao){
-        if(!nomeLocal.equals("") && !novoNomeLocal.equals("") && !novaLocalizacao.equals("")){
-            Local local = encontrarLocalPeloNome(nomeLocal);
+    public void atualizarDadosLocal(Local local, String nomeLocal, String novaLocalizacao){
+        if(!nomeLocal.equals("") && !novaLocalizacao.equals("")){
+            //Local local = encontrarLocalPeloNome(nomeLocal);
             if(local != null){
-                if(encontrarLocalPeloNome(novoNomeLocal) == null){
+                if(encontrarLocalPeloNome(nomeLocal) == null){
                     //local.setNomeLocal(novoNomeLocal);
                     //local.setLocalizacao(novaLocalizacao);
-                    LocalDAO.getInstancia().alterarLocal(nomeLocal, novoNomeLocal, novaLocalizacao);
+                    LocalDAO.getInstancia().alterarNomeLocal(local, nomeLocal, novaLocalizacao);
                     telaLocal.exibirMensagem("Local alterado com sucesso!");
                 }else{
-                    telaLocal.exibirMensagem("Novo local ja existe!");
+                  telaLocal.exibirMensagem("Novo local ja existe!");
+                  
                 }
             }else{
                 telaLocal.exibirMensagem("Local nao existe!");
