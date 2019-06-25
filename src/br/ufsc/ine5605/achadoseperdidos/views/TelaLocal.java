@@ -26,6 +26,7 @@ public class TelaLocal extends TelaGlobal{
     private JLabel lblNomeLocal;
     private JTextField txtNomeLocal;
     private JTextField txtNomeLocalAlterar;
+    private JTextField txtNomeLocalExcluir;
     private JLabel lblLocalizacao;
     private JTextField txtLocalizacao;
     private JLabel lblNovoNomeLocal;
@@ -44,6 +45,7 @@ public class TelaLocal extends TelaGlobal{
     public TelaLocal(){
         super("Tela Local");
         constraint = new GridBagConstraints();
+        initComponents();
         //teclado = new Scanner(System.in);
         //this.controladorLocal = ControladorLocal.getInstancia();
     }
@@ -58,11 +60,14 @@ public class TelaLocal extends TelaGlobal{
         pnlTelaExcluir = telaRemover();
         
         pnlTelaLocal = telaLocal();
+        container.remove(pnlTelaCadastrar);
+        container.remove(pnlTelaAlterar);
+        container.remove(pnlTelaAlterar);
         container.add(pnlTelaLocal);
         
         setSize(600, 500);
-        setLocationRelativeTo(null);
-        setVisible(true);
+        //setLocationRelativeTo(null);
+        //setVisible(true);
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);        
         
     }
@@ -125,18 +130,6 @@ public class TelaLocal extends TelaGlobal{
         painelCadastrar.setLayout(new GridBagLayout());
         GridBagConstraints gridConstraint = new GridBagConstraints();
 
-        //Tabela que lista os dados recuperados do arquivo
-        tabelaLocal = new JTable();
-        tabelaLocal.setPreferredScrollableViewportSize(new Dimension(500, 70));
-        tabelaLocal.setFillsViewportHeight(true);
-        constraint.fill = GridBagConstraints.CENTER;
-        constraint.gridwidth = 2;
-        constraint.gridheight = 4;
-        constraint.gridx = 0;
-        constraint.gridy = 10;
-        spBaseTabela = new JScrollPane(tabelaLocal);
-        painelCadastrar.add(spBaseTabela, constraint);
-
         //Componentes de campo
         lblNomeLocal = new JLabel();
         gridConstraint.gridx = 0;
@@ -173,32 +166,6 @@ public class TelaLocal extends TelaGlobal{
         //Setando acoes nos botoes
         btnCadastrar.setActionCommand("4");
 
-        //Adicionando acao nos buttons
-        GerenciadorBotoes gerenciadorBotoes = new GerenciadorBotoes();
-        btnCadastrar.addActionListener(gerenciadorBotoes);
-
-        /*
-        ONDE QUE CHAMA ESSA FUNC PARA ATUALIZAR OS DADOS DA JTABLE?
-        EU CHUTO QUE É DEPOIS DE CADASTRAR-VER ISSO
-        */
-        //TELA CADASTRAR
-        updateData();
-
-        //Configuracoes da tela
-        setSize(600, 500);
-        setLocationRelativeTo(null);
-        setVisible(true);
-        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-
-        return painelCadastrar;
-    }
-    
-    private JPanel telaAlterar(){
-        //Componentes da tela
-        JPanel painelAlterar = new JPanel();
-        painelAlterar.setLayout(new GridBagLayout());
-        GridBagConstraints gridConstraint = new GridBagConstraints();
-
         //Tabela que lista os dados recuperados do arquivo
         tabelaLocal = new JTable();
         tabelaLocal.setPreferredScrollableViewportSize(new Dimension(500, 70));
@@ -209,7 +176,28 @@ public class TelaLocal extends TelaGlobal{
         constraint.gridx = 0;
         constraint.gridy = 10;
         spBaseTabela = new JScrollPane(tabelaLocal);
-        painelAlterar.add(spBaseTabela, constraint);
+        painelCadastrar.add(spBaseTabela, constraint);
+        
+        updateData();
+        
+        //Adicionando acao nos buttons
+        GerenciadorBotoes gerenciadorBotoes = new GerenciadorBotoes();
+        btnCadastrar.addActionListener(gerenciadorBotoes);
+
+        //Configuracoes da tela
+        setSize(600, 500);
+        setLocationRelativeTo(null);
+        //setVisible(true);
+        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+
+        return painelCadastrar;
+    }
+    
+    private JPanel telaAlterar(){
+        //Componentes da tela
+        JPanel painelAlterar = new JPanel();
+        painelAlterar.setLayout(new GridBagLayout());
+        GridBagConstraints gridConstraint = new GridBagConstraints();
 
         //Componentes de campo
         lblNomeLocal = new JLabel();
@@ -258,21 +246,28 @@ public class TelaLocal extends TelaGlobal{
         //Setando acoes nos botoes
         btnAlterar.setActionCommand("5");
 
+        //Tabela que lista os dados recuperados do arquivo
+        tabelaLocal = new JTable();
+        tabelaLocal.setPreferredScrollableViewportSize(new Dimension(500, 70));
+        tabelaLocal.setFillsViewportHeight(true);
+        constraint.fill = GridBagConstraints.CENTER;
+        constraint.gridwidth = 2;
+        constraint.gridheight = 4;
+        constraint.gridx = 0;
+        constraint.gridy = 10;
+        spBaseTabela = new JScrollPane(tabelaLocal);
+        painelAlterar.add(spBaseTabela, constraint);
+        
+        updateData();        
+        
         //Adicionando acao nos buttons
         GerenciadorBotoes gerenciadorBotoes = new GerenciadorBotoes();
         btnAlterar.addActionListener(gerenciadorBotoes);
 
-        /*
-        ONDE QUE CHAMA ESSA FUNC PARA ATUALIZAR OS DADOS DA JTABLE?
-        EU CHUTO QUE É DEPOIS DE CADASTRAR-VER ISSO
-        */
-        //TELA ALTERAR
-        updateData();
-
         //Configuracoes da tela
         setSize(600, 500);
         setLocationRelativeTo(null);
-        setVisible(true);
+        //setVisible(true);
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
         return painelAlterar;        
@@ -284,28 +279,16 @@ public class TelaLocal extends TelaGlobal{
         painelRemover.setLayout(new GridBagLayout());
         GridBagConstraints gridConstraint = new GridBagConstraints();
 
-        //Tabela que lista os dados recuperados do arquivo
-        tabelaLocal = new JTable();
-        tabelaLocal.setPreferredScrollableViewportSize(new Dimension(500, 70));
-        tabelaLocal.setFillsViewportHeight(true);
-        constraint.fill = GridBagConstraints.CENTER;
-        constraint.gridwidth = 2;
-        constraint.gridheight = 4;
-        constraint.gridx = 0;
-        constraint.gridy = 10;
-        spBaseTabela = new JScrollPane(tabelaLocal);
-        painelRemover.add(spBaseTabela, constraint);
-
         //Componentes de campo
         lblNomeLocal = new JLabel();
         gridConstraint.gridx = 0;
         gridConstraint.gridy = 1;
         painelRemover.add(lblNomeLocal, gridConstraint);
 
-        txtNomeLocal = new JTextField(20);
+        txtNomeLocalExcluir = new JTextField(20);
         gridConstraint.gridx = 1;
         gridConstraint.gridy = 1;
-        painelRemover.add(txtNomeLocal, gridConstraint);
+        painelRemover.add(txtNomeLocalExcluir, gridConstraint);
         
         btnExcluir = new JButton();
         gridConstraint.gridx = 0;
@@ -320,61 +303,32 @@ public class TelaLocal extends TelaGlobal{
         //Setando acoes nos botoes
         btnExcluir.setActionCommand("6");
 
+        //Tabela que lista os dados recuperados do arquivo
+        tabelaLocal = new JTable();
+        tabelaLocal.setPreferredScrollableViewportSize(new Dimension(500, 70));
+        tabelaLocal.setFillsViewportHeight(true);
+        constraint.fill = GridBagConstraints.CENTER;
+        constraint.gridwidth = 2;
+        constraint.gridheight = 4;
+        constraint.gridx = 0;
+        constraint.gridy = 10;
+        spBaseTabela = new JScrollPane(tabelaLocal);
+        painelRemover.add(spBaseTabela, constraint);        
+        
+        updateData();
+        
         //Adicionando acao nos buttons
         GerenciadorBotoes gerenciadorBotoes = new GerenciadorBotoes();
         btnExcluir.addActionListener(gerenciadorBotoes);
 
-        /*
-        ONDE QUE CHAMA ESSA FUNC PARA ATUALIZAR OS DADOS DA JTABLE?
-        EU CHUTO QUE É DEPOIS DE CADASTRAR-VER ISSO
-        */
-        //TELA REMOVER
-        updateData();
-
         //Configuracoes da tela
         setSize(600, 500);
         setLocationRelativeTo(null);
-        setVisible(true);
+        //setVisible(true);
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
         return painelRemover;        
     }
-    
-    /*
-    public void inserirLocal(){
-        System.out.println("----------INCLUIR LOCAL----------");
-        System.out.println("Nome do local: ");
-        String nomeLocal = teclado.nextLine();
-        System.out.println("Localizacao: ");
-        String localizacao = teclado.nextLine();
-        
-        ControladorLocal.getInstancia().cadastrarLocal(nomeLocal, localizacao);
-    }
-    
-    public void removerLocal(){
-        System.out.println("----------EXCLUSAO DE LOCAIS----------");
-        System.out.println("Nome do local: ");
-        String nomeLocal = recebeValorString();
-
-        ControladorLocal.getInstancia().excluirLocal(nomeLocal);
-    }
-    
-    public void exibirLocais(){
-        ControladorLocal.getInstancia().listarLocais();
-    }
-    
-    public void alterarDadosLocal(){
-        System.out.println("----------ALTERAR DADOS DO LOCAL----------");
-        System.out.println("Digite o nome do local a ser alterado: ");
-        String nomeLocal = recebeValorString();
-        System.out.println("Digite o novo nome do local: ");
-        String novoNomeLocal = recebeValorString();
-        System.out.println("Digite a nova localizacao: ");
-        String novaLocalizacao = recebeValorString();
-        
-        ControladorLocal.getInstancia().atualizarDadosLocal(nomeLocal, novoNomeLocal, novaLocalizacao);
-    }
-    */
     
     //NAO SEI ONDE QUE FICA ISSO AQUI
     private void updateData() {
@@ -389,15 +343,27 @@ public class TelaLocal extends TelaGlobal{
 
         tabelaLocal.setModel(modelTbItens);
         this.repaint();
+        
     }
     
-       
+    public void mostrarTelaLocal(){
+        container.remove(pnlTelaAlterar);
+        container.remove(pnlTelaExcluir);
+        container.remove(pnlTelaLocal);
+        container.remove(pnlTelaCadastrar);
+        container.add(pnlTelaLocal);
+        updateData();
+        container.revalidate();
+        container.repaint();
+    }
+    
     public void mostrarTelaCadastrar(){
         container.remove(pnlTelaAlterar);
         container.remove(pnlTelaExcluir);
         container.remove(pnlTelaLocal);
         container.remove(pnlTelaCadastrar);
         container.add(pnlTelaCadastrar);
+        updateData();
         container.revalidate();
         container.repaint();
     }
@@ -408,6 +374,7 @@ public class TelaLocal extends TelaGlobal{
         container.remove(pnlTelaCadastrar);
         container.remove(pnlTelaAlterar);
         container.add(pnlTelaAlterar);
+        updateData();
         container.revalidate();
         container.repaint();       
     }
@@ -420,6 +387,10 @@ public class TelaLocal extends TelaGlobal{
         container.add(pnlTelaExcluir);
         container.revalidate();
         container.repaint();        
+    }
+    
+    public void mostrarTelas(){
+        setVisible(true);
     }
     
     public void limparFieldsCadastrar(){
@@ -439,6 +410,7 @@ public class TelaLocal extends TelaGlobal{
         public void actionPerformed(ActionEvent ae) {
             String nomeLocal = txtNomeLocal.getText();
             String nomeLocalAlterar = txtNomeLocalAlterar.getText();
+            String nomeLocalExcluir = txtNomeLocalExcluir.getText();
             String localizacao = txtLocalizacao.getText();
             String novoNomeLocal = txtNovoNomeLocal.getText();
             String novaLocalizacao = txtNovaLocalizacao.getText();
@@ -459,15 +431,16 @@ public class TelaLocal extends TelaGlobal{
                     break;
                 case "4":
                     ControladorLocal.getInstancia().cadastrarLocal(nomeLocal, localizacao);
-                    limparFieldsCadastrar();
                     updateData();
+                    limparFieldsCadastrar();
                     break;
                 case "5":
                     ControladorLocal.getInstancia().atualizarDadosLocal(nomeLocalAlterar, novoNomeLocal, novaLocalizacao);
                     limparFieldsAlterar();
                     updateData();
                     break;
-                case "6": ControladorLocal.getInstancia().excluirLocal(nomeLocal);
+                case "6": ControladorLocal.getInstancia().excluirLocal(nomeLocalExcluir);
+                    updateData();
                     break;
             }
 

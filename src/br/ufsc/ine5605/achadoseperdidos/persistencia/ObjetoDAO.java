@@ -17,8 +17,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -64,7 +62,7 @@ public class ObjetoDAO {
         }catch(IOException ex){
             System.out.println("Erro: "+ex);
         }catch(ClassNotFoundException ex){
-            System.out.println("Erro: "+ex);
+            System.out.println("Erro Classe: "+ex);
         }
     }
 
@@ -73,15 +71,17 @@ public class ObjetoDAO {
             FileOutputStream fos = new FileOutputStream(fileName);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(cacheObjetos);
+            
             oos.flush();
             fos.flush();
+            
             oos.close();
             fos.close();
             
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(ObjetoDAO.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Erro: "+ex);
         } catch (IOException ex) {
-            Logger.getLogger(ObjetoDAO.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Erro: "+ex);
         }
     }
     

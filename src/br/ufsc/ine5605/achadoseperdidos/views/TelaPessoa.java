@@ -242,7 +242,7 @@ public class TelaPessoa extends TelaGlobal {
         //Configuracoes da tela
         setSize(600, 500);
         setLocationRelativeTo(null);
-        setVisible(true);
+        //setVisible(true);
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         return painelAluno;
     }
@@ -366,7 +366,7 @@ public class TelaPessoa extends TelaGlobal {
         //Configuracoes da tela
         setSize(600, 500);
         setLocationRelativeTo(null);
-        setVisible(true);
+        //setVisible(true);
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
         return painelFuncionario;

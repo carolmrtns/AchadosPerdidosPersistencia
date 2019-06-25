@@ -40,7 +40,9 @@ public class ControladorLocal {
     }
     
     public void inicia(){
-        telaLocal.initComponents();
+        //telaLocal.initComponents();
+        telaLocal.mostrarTelaLocal();
+        telaLocal.mostrarTelas();
     } 
     
     public static ControladorLocal getInstancia(){

@@ -92,14 +92,13 @@ public class Objeto implements Identificavel, Serializable{
     public void setDono(Pessoa dono){
         this.dono = dono;
     }    
-
+    
     @Override
-    public Integer getId() {
+    public Integer getId(){
         return this.codigo;
     }
-
-    @Override
+    
+    @Override 
     public void setId(Integer id){};
-      
     
 }

@@ -37,7 +37,7 @@ public class ControladorPrincipal {
     }
     
     public void inicia(){
-        telaPrincipal.menuInicial();
+        telaPrincipal.initComponents();
     }
     
     public void listarTelaPessoa(){
