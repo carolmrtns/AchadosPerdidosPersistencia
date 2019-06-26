@@ -46,14 +46,15 @@ public class ControladorLocal {
         }
     }
 
-    public void excluirLocal(String nomeLocal) {
+    public void excluirLocal(String nomeLocal) throws ObjetoComLocalException{
         if (encontrarLocalPeloNome(nomeLocal) != null) {
             Local local = encontrarLocalPeloNome(nomeLocal);
             if (!ControladorPrincipal.getInstancia().verificarUsoLocal(local)) {
                 LocalDAO.getInstancia().removeLocal(local);
                 telaLocal.exibirMensagem("Local removido com sucesso!");
             } else {
-                telaLocal.exibirMensagem("Local nao pode ser removido, existem objetos vinculados a ele!");
+                throw new ObjetoComLocalException("Local nao pode ser removido, existem objetos vinculados a ele!");
+                //telaLocal.exibirMensagem("Local nao pode ser removido, existem objetos vinculados a ele!");
             }
         } else {
             telaLocal.exibirMensagem("Local nao existe");
@@ -73,7 +74,7 @@ public class ControladorLocal {
         return local.getNomeLocal();
     }
 
-    public void atualizarDadosLocal(Local local, String nomeLocal, String novaLocalizacao) {
+    public void atualizarDadosLocal(Local local, String nomeLocal, String novaLocalizacao) throws ObjetoComLocalException{
         if (!nomeLocal.equals("") && !novaLocalizacao.equals("")) {
             if (local != null) {
                 if (!ControladorPrincipal.getInstancia().verificarUsoLocal(local)) {
@@ -92,7 +93,8 @@ public class ControladorLocal {
                         }
                     }
                 } else {
-                    telaLocal.exibirMensagem("Local nao pode ser alterado, existem objetos a ele!");
+                    //telaLocal.exibirMensagem("Local nao pode ser alterado, existem objetos vinculados a ele!");
+                    throw new ObjetoComLocalException("Local nao pode ser alterado, existem objetos vinculados a ele!");
                 }
             } else {
                 telaLocal.exibirMensagem("Local nao existe!");

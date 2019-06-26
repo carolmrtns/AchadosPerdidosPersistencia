@@ -6,6 +6,7 @@
 package br.ufsc.ine5605.achadoseperdidos.views;
 
 import br.ufsc.ine5605.achadoseperdidos.controllers.ControladorLocal;
+import br.ufsc.ine5605.achadoseperdidos.controllers.ObjetoComLocalException;
 import br.ufsc.ine5605.achadoseperdidos.models.Local;
 import br.ufsc.ine5605.achadoseperdidos.persistencia.LocalDAO;
 import java.awt.*;
@@ -202,12 +203,21 @@ public class TelaLocal extends TelaGlobal {
                     break;
                 case "2":
                     Local local = ControladorLocal.getInstancia().encontrarLocalPeloNome(nomeLocalAlterar);
-                    ControladorLocal.getInstancia().atualizarDadosLocal(local, nomeLocal, localizacao);
+                    try{
+                        ControladorLocal.getInstancia().atualizarDadosLocal(local, nomeLocal, localizacao);
+                    }catch(ObjetoComLocalException ex){
+                        exibirMensagem(ex.getMessage());
+                    }
                     updateData();
                     limparFields();
                     break;
                 case "3":
-                    ControladorLocal.getInstancia().excluirLocal(nomeLocal);
+                    try{
+                    ControladorLocal.getInstancia().excluirLocal(nomeLocal);    
+                    }catch(ObjetoComLocalException ex){
+                        exibirMensagem(ex.getMessage());
+                    }
+                    
                     updateData();
                     limparFields();
                     break;
