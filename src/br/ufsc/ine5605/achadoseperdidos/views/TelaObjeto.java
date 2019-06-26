@@ -334,7 +334,7 @@ public class TelaObjeto extends TelaGlobal {
         modelTbCompItens.addColumn("Cadastrador");
         modelTbCompItens.addColumn("Dono");
 
-        for (Objeto objetoLista : ObjetoDAO.getInstancia().getList()) {
+        for (Objeto objetoLista : ObjetoDAO.getInstancia().getList()) {      
             modelTbCompItens.addRow(new Object[]{objetoLista.getCodigo(),
                 objetoLista.getDescricao(), objetoLista.getStatus(), objetoLista.getTipoObjeto(),
                 ControladorPrincipal.getInstancia().retornarNomeLocal(objetoLista.getLocal()),
@@ -351,7 +351,7 @@ public class TelaObjeto extends TelaGlobal {
         container.remove(pnlTelaCadastrar);
         container.remove(pnlTelaAlterar);
         container.add(pnlTelaObjeto);
-        updateDataCompleta();
+        updateDataCompleta();            
         container.revalidate();
         container.repaint();
     }
@@ -361,7 +361,7 @@ public class TelaObjeto extends TelaGlobal {
         container.remove(pnlTelaCadastrar);
         container.remove(pnlTelaAlterar);
         container.add(pnlTelaCadastrar);
-        updateData();
+        updateData();            
         container.revalidate();
         container.repaint();
     }

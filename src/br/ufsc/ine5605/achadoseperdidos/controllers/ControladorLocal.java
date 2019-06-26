@@ -8,7 +8,6 @@ package br.ufsc.ine5605.achadoseperdidos.controllers;
 import br.ufsc.ine5605.achadoseperdidos.models.Local;
 import br.ufsc.ine5605.achadoseperdidos.persistencia.LocalDAO;
 import br.ufsc.ine5605.achadoseperdidos.views.TelaLocal;
-import java.util.ArrayList;
 
 /**
  *
@@ -49,8 +48,13 @@ public class ControladorLocal {
 
     public void excluirLocal(String nomeLocal) {
         if (encontrarLocalPeloNome(nomeLocal) != null) {
-            LocalDAO.getInstancia().removeLocal(encontrarLocalPeloNome(nomeLocal));
-            telaLocal.exibirMensagem("Local removido com sucesso!");
+            Local local = encontrarLocalPeloNome(nomeLocal);
+            if (!ControladorPrincipal.getInstancia().verificarUsoLocal(local)) {
+                LocalDAO.getInstancia().removeLocal(local);
+                telaLocal.exibirMensagem("Local removido com sucesso!");
+            } else {
+                telaLocal.exibirMensagem("Local nao pode ser removido, existem objetos vinculados a ele!");
+            }
         } else {
             telaLocal.exibirMensagem("Local nao existe");
         }
@@ -72,19 +76,23 @@ public class ControladorLocal {
     public void atualizarDadosLocal(Local local, String nomeLocal, String novaLocalizacao) {
         if (!nomeLocal.equals("") && !novaLocalizacao.equals("")) {
             if (local != null) {
-                if (encontrarLocalPeloNome(nomeLocal) == null) {
-                    LocalDAO.getInstancia().removeLocal(local);
-                    local.setNomeLocal(nomeLocal);
-                    local.setLocalizacao(novaLocalizacao);
-                    LocalDAO.getInstancia().put(local);
-                    telaLocal.exibirMensagem("Local alterado com sucesso!");
-                } else {
-                    if (!local.getLocalizacao().equals(novaLocalizacao)) {
-                        LocalDAO.getInstancia().alterarLocalizacao(local, novaLocalizacao);
-                        telaLocal.exibirMensagem("Somente localizacao alterada, pois local já existe!");
+                if (!ControladorPrincipal.getInstancia().verificarUsoLocal(local)) {
+                    if (encontrarLocalPeloNome(nomeLocal) == null) {
+                        LocalDAO.getInstancia().removeLocal(local);
+                        local.setNomeLocal(nomeLocal);
+                        local.setLocalizacao(novaLocalizacao);
+                        LocalDAO.getInstancia().put(local);
+                        telaLocal.exibirMensagem("Local alterado com sucesso!");
                     } else {
-                        telaLocal.exibirMensagem("Nome do local nao alterado, pois local já existe!");
+                        if (!local.getLocalizacao().equals(novaLocalizacao)) {
+                            LocalDAO.getInstancia().alterarLocalizacao(local, novaLocalizacao);
+                            telaLocal.exibirMensagem("Somente localizacao alterada, pois local já existe!");
+                        } else {
+                            telaLocal.exibirMensagem("Nome do local nao alterado, pois local já existe!");
+                        }
                     }
+                } else {
+                    telaLocal.exibirMensagem("Local nao pode ser alterado, existem objetos a ele!");
                 }
             } else {
                 telaLocal.exibirMensagem("Local nao existe!");

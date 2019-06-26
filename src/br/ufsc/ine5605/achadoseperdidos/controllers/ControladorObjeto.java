@@ -108,5 +108,14 @@ public class ControladorObjeto {
         }
         return null;
     }
+    
+    public boolean localEhUsado(Local local){
+        for (Objeto objetosLista : ObjetoDAO.getInstancia().getList()) {
+            if (objetosLista.getLocal().getNomeLocal().equals(local.getNomeLocal())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

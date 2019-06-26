@@ -311,9 +311,9 @@ public class ControladorPessoa {
         try{
             return pessoa.getNomePessoa();
         }catch(NullPointerException ex){
-            System.out.println("Pessoa nao encontrada: "+ex);
+            //telaPessoa.exibirMensagem("Pessoa nao encontrada: "+ex);
+            return "";
         }
-        return "";
     }
     
     public void exibirTelas(String opcao){
