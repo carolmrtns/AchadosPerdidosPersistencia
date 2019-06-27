@@ -625,8 +625,8 @@ public class TelaPessoa extends TelaGlobal {
                         break;
                     case "3":                                               
                         matricula = Integer.parseInt(txtMatricula.getText());
-                        int response = JOptionPane.showConfirmDialog(null, "Voce desaja excluir o aluno matricula: "+ matricula +"?", "Confirmar Exclusão Aluno",
-                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                        int response = JOptionPane.showConfirmDialog(null, "Você deseja excluir o Aluno matricula: "+ matricula +"?", "Confirmar Exclusão Aluno",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.OK_CANCEL_OPTION);
                         if (response == JOptionPane.NO_OPTION) {
                             updateDataAluno();
                         } else if (response == JOptionPane.YES_OPTION) {
@@ -667,9 +667,15 @@ public class TelaPessoa extends TelaGlobal {
                         updateDataFuncionario();
                         break;
                     case "3":
-                        siape = Integer.parseInt(txtSiape.getText());
-                        ControladorPessoa.getInstancia().excluirFuncionario(siape);
-                        updateDataFuncionario();
+                        siape = Integer.parseInt(txtSiape.getText());                        
+                        int response = JOptionPane.showConfirmDialog(null, "Você deseja excluir o Funcionario siape: "+ siape +"?", "Confirmar Exclusão Funcionário",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.OK_CANCEL_OPTION);
+                        if (response == JOptionPane.NO_OPTION) {
+                            updateDataFuncionario();
+                        } else if (response == JOptionPane.YES_OPTION) {
+                            ControladorPessoa.getInstancia().excluirFuncionario(siape);
+                            updateDataFuncionario();
+                        }
                         break;
                 }
             } catch (PessoaExistenteException ex) {
@@ -705,9 +711,15 @@ public class TelaPessoa extends TelaGlobal {
                         updateDataVisitante();
                         break;
                     case "3":
-                        cpf = Integer.parseInt(txtCpf.getText());
-                        ControladorPessoa.getInstancia().excluirVisitante(cpf);
-                        updateDataVisitante();
+                        cpf = Integer.parseInt(txtCpf.getText());                        
+                        int response = JOptionPane.showConfirmDialog(null, "Você deseja excluir o Visitante cpf: "+ cpf +"?", "Confirmar Exclusão Visitante",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.OK_CANCEL_OPTION);
+                        if (response == JOptionPane.NO_OPTION) {
+                            updateDataVisitante();
+                        } else if (response == JOptionPane.YES_OPTION) {                            
+                            ControladorPessoa.getInstancia().excluirVisitante(cpf);
+                            updateDataVisitante();
+                        }
                         break;
                 }
             } catch (PessoaExistenteException ex) {
