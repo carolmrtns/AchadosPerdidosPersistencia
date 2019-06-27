@@ -75,7 +75,7 @@ public class ControladorObjeto {
     public void atualizarStatusObjeto(Integer codigo, TipoStatus status, String nomeDono)
             throws PessoaNaoExisteException, ObjetoJaTemDonoException, 
             ObjetoNaoExisteException, ValoresNulosException {
-        if (codigo > 0 && status != null && !nomeDono.equals("")) {
+        if (codigo >= 0 && status != null && !nomeDono.equals("")) {
             //Verifica se o objeto a ser atualizado existe
             if (encontrarObjetoPorCodigo(codigo) != null) {
                 //Verifica se o objeto a ser atualizado esta com estatus de PERDIDO
@@ -106,7 +106,7 @@ public class ControladorObjeto {
             int indice = ObjetoDAO.getInstancia().getList().size() - 1;
             codigo = ObjetoDAO.getInstancia().getList().get(indice).getCodigo() + 1;
         } else {
-            codigo = 1;
+            codigo = 0;
         }
         return codigo;
     }
@@ -127,6 +127,16 @@ public class ControladorObjeto {
             }
         }
         return false;
+    }
+    
+    public int verificaCodigoDigitadoVazio(String numeroDigitado){
+        int numeroInteiro;
+        if(numeroDigitado.equals("")){
+            numeroInteiro = -1;
+        }else{
+            numeroInteiro = Integer.parseInt(numeroDigitado);
+        }
+        return numeroInteiro;
     }
 
 }

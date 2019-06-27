@@ -19,6 +19,8 @@ import br.ufsc.ine5605.achadoseperdidos.persistencia.ObjetoDAO;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.*;
 import javax.swing.table.*;
 
@@ -106,21 +108,25 @@ public class TelaObjeto extends TelaGlobal {
         menuObjeto.add(objeto);
 
         //Criando itens para menu de navegacao
+        JMenuItem inicio = new JMenuItem("Tela Inicial Objeto");
         JMenuItem cadastrar = new JMenuItem("Cadastrar Objetos");
-        JMenuItem alterar = new JMenuItem("Encontrei meu Objeto");
+        JMenuItem alterar = new JMenuItem("Encontrei Meu Objeto");
 
         //Adiocionado os itens criados na aba
+        objeto.add(inicio);
         objeto.add(cadastrar);
         objeto.add(alterar);
 
         //Setando acoes nos itens criados
-        cadastrar.setActionCommand("1");
-        alterar.setActionCommand("2");
+        inicio.setActionCommand("1");
+        cadastrar.setActionCommand("2");
+        alterar.setActionCommand("3");
 
         GerenciadorBotoes gerenciadorBotoes = new GerenciadorBotoes();
+        inicio.addActionListener(gerenciadorBotoes);
         cadastrar.addActionListener(gerenciadorBotoes);
         alterar.addActionListener(gerenciadorBotoes);
-
+        
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
         return painelObjeto;
@@ -202,7 +208,7 @@ public class TelaObjeto extends TelaGlobal {
         btnCadastrar.setText("Cadastrar");
 
         //Setando acoes nos botoes
-        btnCadastrar.setActionCommand("3");
+        btnCadastrar.setActionCommand("4");
 
         //Tabela que lista os dados recuperados do arquivo
         tabelaObjetoCadastrar = new JTable();
@@ -271,17 +277,7 @@ public class TelaObjeto extends TelaGlobal {
         constraint.gridx = 0;
         constraint.gridy = 4;
         painelAlteracao.add(btnAlterar, constraint);
-        //Fim dos componentes de tela
-
-        lblCodigo.setText("Codigo: ");
-        lblStatus.setText("Status: ");
-        lblDescricao.setText("Descricao: ");
-        lblDono.setText("Dono do Objeto: ");
-        btnAlterar.setText("Atualizar");
-
-        //Setando acao no button
-        btnAlterar.setActionCommand("4");
-
+        
         //Tabela que lista os dados recuperados do arquivo
         tabelaObjetoAlterar = new JTable();
         tabelaObjetoAlterar.setPreferredScrollableViewportSize(new Dimension(500, 70));
@@ -292,8 +288,24 @@ public class TelaObjeto extends TelaGlobal {
         constraint.gridx = 0;
         constraint.gridy = 10;
         spBaseTabelaAlt = new JScrollPane(tabelaObjetoAlterar);
-        painelAlteracao.add(spBaseTabelaAlt, constraint);
+        painelAlteracao.add(spBaseTabelaAlt, constraint);        
+        //Fim dos componentes de tela
 
+        lblCodigo.setText("Codigo: ");
+        lblStatus.setText("Status: ");
+        lblDescricao.setText("Descricao: ");
+        lblDono.setText("Dono do Objeto: ");
+        btnAlterar.setText("Atualizar");
+
+        //Setando acao no button
+        btnAlterar.setActionCommand("5");
+
+        tabelaObjetoAlterar.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent evt) {
+                tabelaObjetoClique(evt);
+            }
+        });        
+        
         GerenciadorBotoes gerenciadorBotoes = new GerenciadorBotoes();
         btnAlterar.addActionListener(gerenciadorBotoes);
 
@@ -390,12 +402,18 @@ public class TelaObjeto extends TelaGlobal {
         txtDescricao.setText("");
         txtLocal.setText("");
         txtCadastrador.setText("");
-    }
-
+    }    
+    
     public void limpaBotaoAlterar() {
         txtCodigo.setText("");
         txtDono.setText("");
     }
+    
+    public void tabelaObjetoClique(MouseEvent ev) {
+        DefaultTableModel model = (DefaultTableModel) tabelaObjetoAlterar.getModel();
+        int indexLinhaSelecionada = tabelaObjetoAlterar.getSelectedRow();
+        txtCodigo.setText(model.getValueAt(indexLinhaSelecionada, 0).toString());
+    }    
 
     private class GerenciadorBotoes implements ActionListener {
 
@@ -411,13 +429,15 @@ public class TelaObjeto extends TelaGlobal {
             String dono;
 
             switch (ae.getActionCommand()) {
-                case "1":
-                    mostrarTelaCadastrar();
+                case "1": mostrarTelaObjeto();
                     break;
                 case "2":
-                    mostrarTelaAlterar();
+                    mostrarTelaCadastrar();
                     break;
                 case "3":
+                    mostrarTelaAlterar();
+                    break;
+                case "4":
                     descricao = txtDescricao.getText();
                     statusCadastrar = (TipoStatus) cmbStatusCadastrar.getSelectedItem();
                     tipoObjeto = (TipoObjeto) cmbTipoObjeto.getSelectedItem();
@@ -436,14 +456,11 @@ public class TelaObjeto extends TelaGlobal {
                     updateData();
                     limpaBotaoCadastrar();
                     break;
-                case "4":
+                case "5":
                     codigo = txtCodigo.getText();
                     statusAlterar = (TipoStatus) cmbStatusAlterar.getSelectedItem();
                     dono = txtDono.getText();
-                    int codigoInteiro = -1;
-                    if (!codigo.equals("")) {
-                         codigoInteiro = Integer.parseInt(codigo);
-                    }
+                    int codigoInteiro = ControladorObjeto.getInstancia().verificaCodigoDigitadoVazio(codigo);
                     try {
                         ControladorObjeto.getInstancia().atualizarStatusObjeto(codigoInteiro,
                                 statusAlterar, dono);
