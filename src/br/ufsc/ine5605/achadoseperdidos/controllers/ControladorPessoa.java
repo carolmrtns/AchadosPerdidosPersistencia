@@ -5,6 +5,7 @@
  */
 package br.ufsc.ine5605.achadoseperdidos.controllers;
 
+import br.ufsc.ine5605.achadoseperdidos.exceptions.PessoaExistenteException;
 import br.ufsc.ine5605.achadoseperdidos.models.Aluno;
 import br.ufsc.ine5605.achadoseperdidos.models.Funcionario;
 import br.ufsc.ine5605.achadoseperdidos.models.Pessoa;
@@ -70,7 +71,7 @@ public class ControladorPessoa {
         return instancia;
     }
 
-    public void cadastrarAluno(String nome, long telefone, int matricula) {
+    public void cadastrarAluno(String nome, long telefone, int matricula) throws PessoaExistenteException {
         if (nome.equals("") || nome.equals(" ") || telefone == 0l || matricula == 0) {
             telaPessoa.exibirMensagem("-------------------------");
             telaPessoa.exibirMensagem("Os campos nao podem ser vazios ou iguais a zero!");
@@ -83,12 +84,11 @@ public class ControladorPessoa {
             //pessoas.add(aluno);
             PessoaDAO.getInstancia().put(aluno);
         } else {
-            telaPessoa.exibirMensagem("---------------------------");
-            telaPessoa.exibirMensagem("Matricula ja cadastrada!");
+            throw new PessoaExistenteException("Matricula ja cadastrada!");
         }
     }
 
-    public void cadastrarFuncionario(String nome, long telefone, int siape) {
+    public void cadastrarFuncionario(String nome, long telefone, int siape) throws PessoaExistenteException {
         if (nome.equals("") || nome.equals(" ") || telefone == 0l || siape == 0) {
             telaPessoa.exibirMensagem("---------------------------");
             telaPessoa.exibirMensagem("Os campos nao podem ser vazios ou iguais a zero!");
@@ -100,12 +100,11 @@ public class ControladorPessoa {
             //pessoas.add(funcionario);
             PessoaDAO.getInstancia().put(funcionario);
         } else {
-            telaPessoa.exibirMensagem("---------------------------");
-            telaPessoa.exibirMensagem("Siape ja cadastrado!");
+            throw new PessoaExistenteException("Siape ja cadastrado!");
         }
     }
 
-    public void cadastrarVisitante(String nome, long telefone, int cpf) {
+    public void cadastrarVisitante(String nome, long telefone, int cpf) throws PessoaExistenteException {
         if (nome.equals("") || nome.equals(" ") || telefone == 0l || cpf == 0l) {
             telaPessoa.exibirMensagem("---------------------------");
             telaPessoa.exibirMensagem("Os campos nao podem ser vazios ou iguais a zero!");
@@ -117,8 +116,7 @@ public class ControladorPessoa {
             //pessoas.add(visitante);
             PessoaDAO.getInstancia().put(visitante);
         } else {
-            telaPessoa.exibirMensagem("---------------------------");
-            telaPessoa.exibirMensagem("Cpf ja cadastrado!");
+            throw new PessoaExistenteException("Cpf ja cadastrado!");
         }
     }
 
@@ -323,7 +321,10 @@ public class ControladorPessoa {
             case "2": telaPessoa.mostrarTelaFuncionario();
                 break;
             case "3": telaPessoa.mostrarTelaVisitante();
-                break;    
+                break;  
+            case "4": telaPessoa.mostrarTelaPrincipal();
+                      telaPessoa.atualizaListaPessoas();
+                break;  
         }
     }
 
