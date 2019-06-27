@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.ufsc.ine5605.achadoseperdidos.controllers;
+package br.ufsc.ine5605.achadoseperdidos.exceptions;
 
 /**
  *
@@ -16,7 +16,7 @@ public class ObjetoComLocalException extends Exception {
         this("Local nao pode ser alterado, existem objetos vinculados a ele!");
     }
      */
-    public ObjetoComLocalException(String message) {
-        super(message);
+    public ObjetoComLocalException(String mensagem) {
+        super(mensagem);
     }
 }

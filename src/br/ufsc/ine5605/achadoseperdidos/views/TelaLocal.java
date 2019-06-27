@@ -6,7 +6,10 @@
 package br.ufsc.ine5605.achadoseperdidos.views;
 
 import br.ufsc.ine5605.achadoseperdidos.controllers.ControladorLocal;
-import br.ufsc.ine5605.achadoseperdidos.controllers.ObjetoComLocalException;
+import br.ufsc.ine5605.achadoseperdidos.exceptions.LocalJaCadastradoException;
+import br.ufsc.ine5605.achadoseperdidos.exceptions.LocalNaoExisteException;
+import br.ufsc.ine5605.achadoseperdidos.exceptions.ObjetoComLocalException;
+import br.ufsc.ine5605.achadoseperdidos.exceptions.ValoresNulosException;
 import br.ufsc.ine5605.achadoseperdidos.models.Local;
 import br.ufsc.ine5605.achadoseperdidos.persistencia.LocalDAO;
 import java.awt.*;
@@ -14,6 +17,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -96,7 +101,7 @@ public class TelaLocal extends TelaGlobal {
         gridConstraint.gridx = 1;
         gridConstraint.gridy = 5;
         painelObjeto.add(btnExcluir, gridConstraint);
-        
+
         //Tabela que lista os dados recuperados do arquivo
         tabelaLocal = new JTable();
         tabelaLocal.setPreferredScrollableViewportSize(new Dimension(500, 70));
@@ -107,7 +112,7 @@ public class TelaLocal extends TelaGlobal {
         constraint.gridx = 0;
         constraint.gridy = 10;
         spBaseTabela = new JScrollPane(tabelaLocal);
-        painelObjeto.add(spBaseTabela, constraint);        
+        painelObjeto.add(spBaseTabela, constraint);
         //Fim componentes da tela
 
         //Conteudo dentro dos componentes da tela
@@ -197,27 +202,40 @@ public class TelaLocal extends TelaGlobal {
 
             switch (ae.getActionCommand()) {
                 case "1":
-                    ControladorLocal.getInstancia().cadastrarLocal(nomeLocal, localizacao);
+                    try {
+                        ControladorLocal.getInstancia().cadastrarLocal(nomeLocal, localizacao);
+                    } catch (LocalJaCadastradoException ex) {
+                        exibirMensagem(ex.getMessage());
+                    } catch (ValoresNulosException ex) {
+                        exibirMensagem(ex.getMessage());
+                    }
                     updateData();
                     limparFields();
                     break;
                 case "2":
                     Local local = ControladorLocal.getInstancia().encontrarLocalPeloNome(nomeLocalAlterar);
-                    try{
+                    try {
                         ControladorLocal.getInstancia().atualizarDadosLocal(local, nomeLocal, localizacao);
-                    }catch(ObjetoComLocalException ex){
+                    } catch (ObjetoComLocalException ex) {
+                        exibirMensagem(ex.getMessage());
+                    } catch (ValoresNulosException ex) {
+                        exibirMensagem(ex.getMessage());
+                    } catch (LocalJaCadastradoException ex) {
+                        exibirMensagem(ex.getMessage());
+                    } catch (LocalNaoExisteException ex) {
                         exibirMensagem(ex.getMessage());
                     }
                     updateData();
                     limparFields();
                     break;
                 case "3":
-                    try{
-                    ControladorLocal.getInstancia().excluirLocal(nomeLocal);    
-                    }catch(ObjetoComLocalException ex){
+                    try {
+                        ControladorLocal.getInstancia().excluirLocal(nomeLocal);
+                    } catch (ObjetoComLocalException ex) {
+                        exibirMensagem(ex.getMessage());
+                    } catch (LocalNaoExisteException ex) {
                         exibirMensagem(ex.getMessage());
                     }
-                    
                     updateData();
                     limparFields();
                     break;

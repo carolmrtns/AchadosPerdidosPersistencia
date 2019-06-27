@@ -9,6 +9,11 @@ import br.ufsc.ine5605.achadoseperdidos.models.TipoObjeto;
 import br.ufsc.ine5605.achadoseperdidos.models.TipoStatus;
 import br.ufsc.ine5605.achadoseperdidos.controllers.ControladorObjeto;
 import br.ufsc.ine5605.achadoseperdidos.controllers.ControladorPrincipal;
+import br.ufsc.ine5605.achadoseperdidos.exceptions.LocalNaoExisteException;
+import br.ufsc.ine5605.achadoseperdidos.exceptions.ObjetoJaTemDonoException;
+import br.ufsc.ine5605.achadoseperdidos.exceptions.ObjetoNaoExisteException;
+import br.ufsc.ine5605.achadoseperdidos.exceptions.PessoaNaoExisteException;
+import br.ufsc.ine5605.achadoseperdidos.exceptions.ValoresNulosException;
 import br.ufsc.ine5605.achadoseperdidos.models.Objeto;
 import br.ufsc.ine5605.achadoseperdidos.persistencia.ObjetoDAO;
 import java.awt.*;
@@ -22,6 +27,7 @@ import javax.swing.table.*;
  * @author Caroline Martins Alves
  */
 public class TelaObjeto extends TelaGlobal {
+
     private JTable tabelaObjetoAlterar;
     private JTable tabelaObjetoCadastrar;
     private JTable tabelaCompleta;
@@ -334,7 +340,7 @@ public class TelaObjeto extends TelaGlobal {
         modelTbCompItens.addColumn("Cadastrador");
         modelTbCompItens.addColumn("Dono");
 
-        for (Objeto objetoLista : ObjetoDAO.getInstancia().getList()) {      
+        for (Objeto objetoLista : ObjetoDAO.getInstancia().getList()) {
             modelTbCompItens.addRow(new Object[]{objetoLista.getCodigo(),
                 objetoLista.getDescricao(), objetoLista.getStatus(), objetoLista.getTipoObjeto(),
                 ControladorPrincipal.getInstancia().retornarNomeLocal(objetoLista.getLocal()),
@@ -351,7 +357,7 @@ public class TelaObjeto extends TelaGlobal {
         container.remove(pnlTelaCadastrar);
         container.remove(pnlTelaAlterar);
         container.add(pnlTelaObjeto);
-        updateDataCompleta();            
+        updateDataCompleta();
         container.revalidate();
         container.repaint();
     }
@@ -361,7 +367,7 @@ public class TelaObjeto extends TelaGlobal {
         container.remove(pnlTelaCadastrar);
         container.remove(pnlTelaAlterar);
         container.add(pnlTelaCadastrar);
-        updateData();            
+        updateData();
         container.revalidate();
         container.repaint();
     }
@@ -417,8 +423,16 @@ public class TelaObjeto extends TelaGlobal {
                     tipoObjeto = (TipoObjeto) cmbTipoObjeto.getSelectedItem();
                     local = txtLocal.getText();
                     cadastrador = txtCadastrador.getText();
-                    ControladorObjeto.getInstancia().cadastrarObjetos(descricao, statusCadastrar,
-                            tipoObjeto, local, cadastrador);
+                    try {
+                        ControladorObjeto.getInstancia().cadastrarObjetos(descricao, statusCadastrar,
+                                tipoObjeto, local, cadastrador);
+                    } catch (LocalNaoExisteException ex) {
+                        exibirMensagem(ex.getMessage());
+                    } catch (PessoaNaoExisteException ex) {
+                        exibirMensagem(ex.getMessage());
+                    } catch (ValoresNulosException ex) {
+                        exibirMensagem(ex.getMessage());
+                    }
                     updateData();
                     limpaBotaoCadastrar();
                     break;
@@ -426,8 +440,23 @@ public class TelaObjeto extends TelaGlobal {
                     codigo = txtCodigo.getText();
                     statusAlterar = (TipoStatus) cmbStatusAlterar.getSelectedItem();
                     dono = txtDono.getText();
-                    ControladorObjeto.getInstancia().atualizarStatusObjeto(Integer.parseInt(codigo),
-                            statusAlterar, dono);
+                    int codigoInteiro = -1;
+                    if (!codigo.equals("")) {
+                         codigoInteiro = Integer.parseInt(codigo);
+                    }
+                    try {
+                        ControladorObjeto.getInstancia().atualizarStatusObjeto(codigoInteiro,
+                                statusAlterar, dono);
+                    } catch (PessoaNaoExisteException ex) {
+                        exibirMensagem(ex.getMessage());
+                    } catch (ObjetoJaTemDonoException ex) {
+                        exibirMensagem(ex.getMessage());
+                    } catch (ObjetoNaoExisteException ex) {
+                        exibirMensagem(ex.getMessage());
+                    } catch (ValoresNulosException ex) {
+                        exibirMensagem(ex.getMessage());
+                    }
+
                     updateData();
                     limpaBotaoAlterar();
                     break;

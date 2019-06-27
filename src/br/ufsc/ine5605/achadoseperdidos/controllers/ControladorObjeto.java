@@ -5,6 +5,11 @@
  */
 package br.ufsc.ine5605.achadoseperdidos.controllers;
 
+import br.ufsc.ine5605.achadoseperdidos.exceptions.PessoaNaoExisteException;
+import br.ufsc.ine5605.achadoseperdidos.exceptions.LocalNaoExisteException;
+import br.ufsc.ine5605.achadoseperdidos.exceptions.ObjetoJaTemDonoException;
+import br.ufsc.ine5605.achadoseperdidos.exceptions.ObjetoNaoExisteException;
+import br.ufsc.ine5605.achadoseperdidos.exceptions.ValoresNulosException;
 import br.ufsc.ine5605.achadoseperdidos.models.Local;
 import br.ufsc.ine5605.achadoseperdidos.models.Objeto;
 import br.ufsc.ine5605.achadoseperdidos.models.Pessoa;
@@ -12,7 +17,6 @@ import br.ufsc.ine5605.achadoseperdidos.views.TelaObjeto;
 import br.ufsc.ine5605.achadoseperdidos.models.TipoObjeto;
 import br.ufsc.ine5605.achadoseperdidos.models.TipoStatus;
 import br.ufsc.ine5605.achadoseperdidos.persistencia.ObjetoDAO;
-import java.util.ArrayList;
 
 /**
  *
@@ -42,7 +46,8 @@ public class ControladorObjeto {
     }
 
     public void cadastrarObjetos(String descricao, TipoStatus status,
-            TipoObjeto tipoObjeto, String nomeLocal, String nomeCadastrador) {
+            TipoObjeto tipoObjeto, String nomeLocal, String nomeCadastrador)
+            throws ValoresNulosException, PessoaNaoExisteException, LocalNaoExisteException {
         if (!descricao.equals("") && status != null && tipoObjeto != null
                 && !nomeLocal.equals("") && !nomeCadastrador.equals("")) {
             if (ControladorPrincipal.getInstancia().retornarPessoaPeloNome(nomeCadastrador) != null) {
@@ -57,49 +62,55 @@ public class ControladorObjeto {
                     ObjetoDAO.getInstancia().put(novoObjeto);
                     telaObjeto.exibirMensagem("Objeto cadastrado com Sucesso!");
                 } else {
-                    telaObjeto.exibirMensagem("Digite um local existente! Objeto nao foi inserido.");
+                    throw new LocalNaoExisteException("Digite um local existente! Objeto nao foi inserido.");
                 }
             } else {
-                telaObjeto.exibirMensagem("Cadastrador nao existe! Cadastre-se e tente inserir o objeto novamente!");
+                throw new PessoaNaoExisteException("Cadastrador nao existe! Cadastre-se e tente inserir o objeto novamente!");
             }
         } else {
-            telaObjeto.exibirMensagem("Nenhum dos valores pode ser nulo. Nao foi possivel cadastrar o objeto!");
+            throw new ValoresNulosException("Nenhum dos valores pode ser nulo. Nao foi possivel cadastrar o objeto!");
         }
     }
 
-    public void atualizarStatusObjeto(Integer codigo, TipoStatus status, String nomeDono) {
-        if (encontrarObjetoPorCodigo(codigo) != null) {
-            if (encontrarObjetoPorCodigo(codigo).getStatus() != status.ENCONTRADO) {
-                if (ControladorPrincipal.getInstancia().retornarPessoaPeloNome(nomeDono) != null) {
-                    Pessoa dono = ControladorPrincipal.getInstancia().retornarPessoaPeloNome(nomeDono);
-                    ObjetoDAO.getInstancia().atualizaStatus(codigo, status, dono);
-                    telaObjeto.exibirMensagem("Objeto foi atualizado com sucesso!");
+    public void atualizarStatusObjeto(Integer codigo, TipoStatus status, String nomeDono)
+            throws PessoaNaoExisteException, ObjetoJaTemDonoException, 
+            ObjetoNaoExisteException, ValoresNulosException {
+        if (codigo > 0 && status != null && !nomeDono.equals("")) {
+            //Verifica se o objeto a ser atualizado existe
+            if (encontrarObjetoPorCodigo(codigo) != null) {
+                //Verifica se o objeto a ser atualizado esta com estatus de PERDIDO
+                if (encontrarObjetoPorCodigo(codigo).getStatus() != status.ENCONTRADO) {
+                    //Verifica se o dono existe
+                    if (ControladorPrincipal.getInstancia().retornarPessoaPeloNome(nomeDono) != null) {
+                        Pessoa dono = ControladorPrincipal.getInstancia().retornarPessoaPeloNome(nomeDono);
+                        ObjetoDAO.getInstancia().atualizaStatus(codigo, status, dono);
+                        telaObjeto.exibirMensagem("Objeto foi atualizado com sucesso!");
+                    } else {
+                        throw new PessoaNaoExisteException("Dono nao existe! Status nao atualizado.");
+                    }
                 } else {
-                    telaObjeto.exibirMensagem("Dono nao existe! Status nao atualizado.");
+                    throw new ObjetoJaTemDonoException("Esse objeto ja esta com seu dono! Status nao atualizado.");
                 }
             } else {
-                telaObjeto.exibirMensagem("Esse objeto ja esta com seu dono! Status nao atualizado.");
+                throw new ObjetoNaoExisteException("Objeto nao existe! Status nao atualizado.");
             }
         } else {
-            telaObjeto.exibirMensagem("Objeto nao existe! Status nao atualizado.");
+            throw new ValoresNulosException("Valores nao podem ser nulos!");
         }
+
     }
-    
+
     //Funcao verifica o ultimo codigo adicionado e incrementa 1 para o novo objeto
     public int verificaCodigo() {
-        try {
-            if (!ObjetoDAO.getInstancia().getList().isEmpty()) {
-                int indice = ObjetoDAO.getInstancia().getList().size() - 1;
-                codigo = ObjetoDAO.getInstancia().getList().get(indice).getCodigo() + 1;
-            } else {
-                codigo = 1;
-            }
-        } catch (Exception ex) {
-            System.out.println("Erro"+ex);
+        if (!ObjetoDAO.getInstancia().getList().isEmpty()) {
+            int indice = ObjetoDAO.getInstancia().getList().size() - 1;
+            codigo = ObjetoDAO.getInstancia().getList().get(indice).getCodigo() + 1;
+        } else {
+            codigo = 1;
         }
         return codigo;
-    }    
-    
+    }
+
     public Objeto encontrarObjetoPorCodigo(int codigo) {
         for (Objeto objetosLista : ObjetoDAO.getInstancia().getList()) {
             if (objetosLista.getCodigo() == codigo) {
@@ -108,8 +119,8 @@ public class ControladorObjeto {
         }
         return null;
     }
-    
-    public boolean localEhUsado(Local local){
+
+    public boolean localEhUsado(Local local) {
         for (Objeto objetosLista : ObjetoDAO.getInstancia().getList()) {
             if (objetosLista.getLocal().getNomeLocal().equals(local.getNomeLocal())) {
                 return true;
