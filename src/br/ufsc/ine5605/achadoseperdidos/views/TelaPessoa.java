@@ -623,10 +623,16 @@ public class TelaPessoa extends TelaGlobal {
                         ControladorPessoa.getInstancia().alterarAluno(aluno, nome, telefone, matricula);
                         updateDataAluno();
                         break;
-                    case "3":
+                    case "3":                                               
                         matricula = Integer.parseInt(txtMatricula.getText());
-                        ControladorPessoa.getInstancia().excluirAluno(matricula);
-                        updateDataAluno();
+                        int response = JOptionPane.showConfirmDialog(null, "Voce desaja excluir o aluno matricula: "+ matricula +"?", "Confirmar Exclusão Aluno",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                        if (response == JOptionPane.NO_OPTION) {
+                            updateDataAluno();
+                        } else if (response == JOptionPane.YES_OPTION) {
+                            ControladorPessoa.getInstancia().excluirAluno(matricula);
+                            updateDataAluno();
+                        }                         
                         break;
                 }
             } catch (PessoaExistenteException ex) {
