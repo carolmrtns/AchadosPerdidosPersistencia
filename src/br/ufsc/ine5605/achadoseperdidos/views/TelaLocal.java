@@ -17,8 +17,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -195,11 +193,6 @@ public class TelaLocal extends TelaGlobal {
             String nomeLocal = txtNomeLocal.getText();
             String localizacao = txtLocalizacao.getText();
 
-            System.out.println("-------------------------------------------");
-            System.out.println("Nome Local: " + nomeLocal);
-            System.out.println("Nome Local Alterar: " + nomeLocalAlterar);
-            System.out.println("Localizacao: " + localizacao);
-
             switch (ae.getActionCommand()) {
                 case "1":
                     try {
@@ -229,12 +222,18 @@ public class TelaLocal extends TelaGlobal {
                     limparFields();
                     break;
                 case "3":
-                    try {
-                        ControladorLocal.getInstancia().excluirLocal(nomeLocal);
-                    } catch (ObjetoComLocalException ex) {
-                        exibirMensagem(ex.getMessage());
-                    } catch (LocalNaoExisteException ex) {
-                        exibirMensagem(ex.getMessage());
+                    int resposta = JOptionPane.showConfirmDialog(null, "Deseja excluir " + nomeLocal + "?", "Confirmar",
+                            JOptionPane.YES_NO_OPTION, JOptionPane.OK_CANCEL_OPTION);
+                    if (resposta == JOptionPane.YES_OPTION) {
+                        try {
+                            ControladorLocal.getInstancia().excluirLocal(nomeLocal);
+                        } catch (ObjetoComLocalException ex) {
+                            exibirMensagem(ex.getMessage());
+                        } catch (LocalNaoExisteException ex) {
+                            exibirMensagem(ex.getMessage());
+                        }
+                    } else {
+                        exibirMensagem("Botão NAO pressionado. Local nao foi excluido!");
                     }
                     updateData();
                     limparFields();
