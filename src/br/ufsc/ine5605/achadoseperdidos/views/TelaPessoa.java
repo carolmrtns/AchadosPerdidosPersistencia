@@ -11,6 +11,7 @@ import br.ufsc.ine5605.achadoseperdidos.models.Visitante;
 import br.ufsc.ine5605.achadoseperdidos.controllers.ControladorPessoa;
 import br.ufsc.ine5605.achadoseperdidos.exceptions.PessoaExistenteException;
 import br.ufsc.ine5605.achadoseperdidos.exceptions.PessoaNaoExisteException;
+import br.ufsc.ine5605.achadoseperdidos.exceptions.PessoaPossuiVinculoException;
 import br.ufsc.ine5605.achadoseperdidos.exceptions.ValoresNulosException;
 import br.ufsc.ine5605.achadoseperdidos.models.Pessoa;
 import br.ufsc.ine5605.achadoseperdidos.persistencia.PessoaDAO;
@@ -557,11 +558,13 @@ public class TelaPessoa extends TelaGlobal {
                     case "3":
                         try {
                             matricula = Integer.parseInt(txtMatricula.getText());
+                            ControladorPessoa.getInstancia().avisaPessoaVinculadaComObjeto(matricula);
                             int response = JOptionPane.showConfirmDialog(null, "Você deseja excluir o Aluno matricula: " + matricula + "?", "Confirmar Exclusão Aluno",
                                     JOptionPane.YES_NO_OPTION, JOptionPane.OK_CANCEL_OPTION);
                             if (response == JOptionPane.NO_OPTION) {
                                 updateDataAluno();
                             } else if (response == JOptionPane.YES_OPTION) {
+                                
                                 ControladorPessoa.getInstancia().excluirAluno(matricula);
                                 limparCampos("aluno");
                             }
@@ -569,6 +572,8 @@ public class TelaPessoa extends TelaGlobal {
                             exibirMensagem(ex.getMessage());
                         } catch (NumberFormatException ex) {
                             exibirMensagem("Não foi possivel excluir, Verifique a matricula!");
+                        } catch (PessoaPossuiVinculoException ex){
+                            exibirMensagem(ex.getMessage());
                         }
 
                         updateDataAluno();
@@ -627,6 +632,7 @@ public class TelaPessoa extends TelaGlobal {
                     case "3":
                         try {
                             siape = Integer.parseInt(txtSiape.getText());
+                            ControladorPessoa.getInstancia().avisaPessoaVinculadaComObjeto(siape);
                             int response = JOptionPane.showConfirmDialog(null, "Você deseja excluir o Funcionario siape: " + siape + "?", "Confirmar Exclusão Funcionário",
                                     JOptionPane.YES_NO_OPTION, JOptionPane.OK_CANCEL_OPTION);
                             if (response == JOptionPane.NO_OPTION) {
@@ -640,6 +646,8 @@ public class TelaPessoa extends TelaGlobal {
                             exibirMensagem(ex.getMessage());
                         } catch (NumberFormatException ex) {
                             exibirMensagem("Não foi possivel excluir, Verifique o siape!");
+                        } catch (PessoaPossuiVinculoException ex){
+                            exibirMensagem(ex.getMessage());
                         }
                         break;
                 }
@@ -695,7 +703,9 @@ public class TelaPessoa extends TelaGlobal {
                         break;
                     case "3":
                         try {
+                            
                             cpf = Integer.parseInt(txtCpf.getText());
+                            ControladorPessoa.getInstancia().avisaPessoaVinculadaComObjeto(cpf);
                             int response = JOptionPane.showConfirmDialog(null, "Você deseja excluir o Visitante cpf: " + cpf + "?", "Confirmar Exclusão Visitante",
                                     JOptionPane.YES_NO_OPTION, JOptionPane.OK_CANCEL_OPTION);
                             if (response == JOptionPane.NO_OPTION) {
@@ -709,6 +719,8 @@ public class TelaPessoa extends TelaGlobal {
                             exibirMensagem(ex.getMessage());
                         } catch (NumberFormatException ex) {
                             exibirMensagem("Não foi possivel excluir, Verifique o cpf!");
+                        } catch (PessoaPossuiVinculoException ex){
+                            exibirMensagem(ex.getMessage());
                         }
                         break;
                 }

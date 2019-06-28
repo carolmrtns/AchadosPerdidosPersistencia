@@ -6,7 +6,9 @@
 package br.ufsc.ine5605.achadoseperdidos.controllers;
 
 import br.ufsc.ine5605.achadoseperdidos.models.Local;
+import br.ufsc.ine5605.achadoseperdidos.models.Objeto;
 import br.ufsc.ine5605.achadoseperdidos.models.Pessoa;
+import br.ufsc.ine5605.achadoseperdidos.persistencia.ObjetoDAO;
 import br.ufsc.ine5605.achadoseperdidos.views.TelaPrincipal;
 
 /**
@@ -70,6 +72,15 @@ public class ControladorPrincipal {
 
     public boolean verificarUsoLocal(Local local) {
         return controladorObjeto.localEhUsado(local);
+    }
+    
+    public boolean vinculoComObjeto(Pessoa pessoa){
+        for (Objeto objetosLista : ObjetoDAO.getInstancia().getList()) {
+            if (objetosLista.getCadastrador().equals(pessoa)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void mostrarTelas(String opcao) {

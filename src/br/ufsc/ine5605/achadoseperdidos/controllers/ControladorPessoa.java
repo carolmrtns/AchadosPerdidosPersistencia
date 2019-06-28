@@ -7,6 +7,7 @@ package br.ufsc.ine5605.achadoseperdidos.controllers;
 
 import br.ufsc.ine5605.achadoseperdidos.exceptions.PessoaNaoExisteException;
 import br.ufsc.ine5605.achadoseperdidos.exceptions.PessoaExistenteException;
+import br.ufsc.ine5605.achadoseperdidos.exceptions.PessoaPossuiVinculoException;
 import br.ufsc.ine5605.achadoseperdidos.exceptions.ValoresNulosException;
 import br.ufsc.ine5605.achadoseperdidos.models.Aluno;
 import br.ufsc.ine5605.achadoseperdidos.models.Funcionario;
@@ -123,7 +124,6 @@ public class ControladorPessoa {
         }
         if (aluno != null) {
             PessoaDAO.getInstancia().removeAluno(aluno);
-            //pessoas.remove(a);
         } else {
             throw new PessoaNaoExisteException("Não foi possivel excluir - Aluno nao existente");
         }
@@ -315,6 +315,16 @@ public class ControladorPessoa {
             //telaPessoa.exibirMensagem("Pessoa nao encontrada: "+ex);
             return "";
         }
+    }
+    
+    public void avisaPessoaVinculadaComObjeto(int id) throws PessoaPossuiVinculoException{
+        for (Pessoa pessoaLista : PessoaDAO.getInstancia().getList()) {
+                if (pessoaLista.getId() == id) {
+                    if(ControladorPrincipal.getInstancia().vinculoComObjeto(pessoaLista)){
+                        throw new PessoaPossuiVinculoException("Não é possivel excluir - Possui vinculo com objeto cadastrado");
+                    }
+                }
+            }
     }
 
     public void exibirTelas(String opcao) {
