@@ -76,7 +76,7 @@ public class ControladorPrincipal {
     
     public boolean vinculoComObjeto(Pessoa pessoa){
         for (Objeto objetosLista : ObjetoDAO.getInstancia().getList()) {
-            if (objetosLista.getCadastrador().equals(pessoa)) {
+            if (objetosLista.getCadastrador().getNomePessoa().equals(pessoa.getNomePessoa())) {
                 return true;
             }
         }
