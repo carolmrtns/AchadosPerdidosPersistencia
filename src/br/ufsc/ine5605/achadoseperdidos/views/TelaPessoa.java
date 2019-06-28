@@ -10,6 +10,8 @@ import br.ufsc.ine5605.achadoseperdidos.models.Funcionario;
 import br.ufsc.ine5605.achadoseperdidos.models.Visitante;
 import br.ufsc.ine5605.achadoseperdidos.controllers.ControladorPessoa;
 import br.ufsc.ine5605.achadoseperdidos.exceptions.PessoaExistenteException;
+import br.ufsc.ine5605.achadoseperdidos.exceptions.PessoaNaoExisteException;
+import br.ufsc.ine5605.achadoseperdidos.exceptions.ValoresNulosException;
 import br.ufsc.ine5605.achadoseperdidos.models.Pessoa;
 import br.ufsc.ine5605.achadoseperdidos.persistencia.PessoaDAO;
 import java.util.InputMismatchException;
@@ -519,36 +521,64 @@ public class TelaPessoa extends TelaGlobal {
                 int matricula;
                 switch (ae.getActionCommand()) {
                     case "1":
-                        nome = txtNomeAluno.getText();
-                        telefone = Long.parseLong(txtTelefoneAluno.getText());
-                        matricula = Integer.parseInt(txtMatricula.getText());
-                        ControladorPessoa.getInstancia().cadastrarAluno(nome, telefone, matricula);
+                        try {
+                            nome = txtNomeAluno.getText();
+                            telefone = Long.parseLong(txtTelefoneAluno.getText());
+                            matricula = Integer.parseInt(txtMatricula.getText());
+                            ControladorPessoa.getInstancia().cadastrarAluno(nome, telefone, matricula);
+                            limparCampos("aluno");
+                        } catch (ValoresNulosException ex) {
+                            exibirMensagem(ex.getMessage());
+                        } catch (NumberFormatException ex) {
+                            exibirMensagem("Preencha todos os campos corretamente! \n\"telefone\" e \"matricula\" devem ser preenchidos apenas com numeros!");
+                        }
                         updateDataAluno();
+
                         break;
                     case "2":
-                        nome = txtNomeAluno.getText();
-                        telefone = Long.parseLong(txtTelefoneAluno.getText());
-                        matricula = Integer.parseInt(txtMatricula.getText());
-                        Aluno aluno = ControladorPessoa.getInstancia().encontrarAlunoPelaMatricula(matricula);
-                        ControladorPessoa.getInstancia().alterarAluno(aluno, nome, telefone, matricula);
+                        try {
+                            nome = txtNomeAluno.getText();
+                            telefone = Long.parseLong(txtTelefoneAluno.getText());
+                            matricula = Integer.parseInt(txtMatricula.getText());
+                            Aluno aluno = ControladorPessoa.getInstancia().encontrarAlunoPelaMatricula(matricula);
+                            ControladorPessoa.getInstancia().alterarAluno(aluno, nome, telefone, matricula);
+                            limparCampos("aluno");
+                        } catch (ValoresNulosException ex) {
+                            exibirMensagem(ex.getMessage());
+                        } catch (NumberFormatException ex) {
+                            exibirMensagem("Preencha todos os campos corretamente! \n\"telefone\" e \"matricula\" devem ser preenchidos apenas com numeros!");
+                        } catch (NullPointerException ex) {
+                            exibirMensagem("Não foi possivel alterar, Verifique a matrícula!");
+                        }
+
                         updateDataAluno();
+
                         break;
                     case "3":
-                        matricula = Integer.parseInt(txtMatricula.getText());
-                        int response = JOptionPane.showConfirmDialog(null, "Você deseja excluir o Aluno matricula: " + matricula + "?", "Confirmar Exclusão Aluno",
-                                JOptionPane.YES_NO_OPTION, JOptionPane.OK_CANCEL_OPTION);
-                        if (response == JOptionPane.NO_OPTION) {
-                            updateDataAluno();
-                        } else if (response == JOptionPane.YES_OPTION) {
-                            ControladorPessoa.getInstancia().excluirAluno(matricula);
-                            updateDataAluno();
+                        try {
+                            matricula = Integer.parseInt(txtMatricula.getText());
+                            int response = JOptionPane.showConfirmDialog(null, "Você deseja excluir o Aluno matricula: " + matricula + "?", "Confirmar Exclusão Aluno",
+                                    JOptionPane.YES_NO_OPTION, JOptionPane.OK_CANCEL_OPTION);
+                            if (response == JOptionPane.NO_OPTION) {
+                                updateDataAluno();
+                            } else if (response == JOptionPane.YES_OPTION) {
+                                ControladorPessoa.getInstancia().excluirAluno(matricula);
+                                limparCampos("aluno");
+                            }
+                        } catch (PessoaNaoExisteException ex) {
+                            exibirMensagem(ex.getMessage());
+                        } catch (NumberFormatException ex) {
+                            exibirMensagem("Não foi possivel excluir, Verifique a matricula!");
                         }
+
+                        updateDataAluno();
+
                         break;
                 }
-
             } catch (PessoaExistenteException ex) {
 
             }
+
         }
     }
 
@@ -563,29 +593,53 @@ public class TelaPessoa extends TelaGlobal {
 
                 switch (ae.getActionCommand()) {
                     case "1":
-                        nome = txtNomeFuncionario.getText();
-                        telefone = Long.parseLong(txtTelefoneFuncionario.getText());
-                        siape = Integer.parseInt(txtSiape.getText());
-                        ControladorPessoa.getInstancia().cadastrarFuncionario(nome, telefone, siape);
-                        updateDataFuncionario();
+                        try {
+                            nome = txtNomeFuncionario.getText();
+                            telefone = Long.parseLong(txtTelefoneFuncionario.getText());
+                            siape = Integer.parseInt(txtSiape.getText());
+                            ControladorPessoa.getInstancia().cadastrarFuncionario(nome, telefone, siape);
+                            limparCampos("funcionario");
+                        } catch (ValoresNulosException ex) {
+                            exibirMensagem(ex.getMessage());
+                        } catch (NumberFormatException ex) {
+                            exibirMensagem("Preencha todos os campos corretamente! \n\"telefone\" e \"siape\" devem ser preenchidos apenas com numeros!");
+                        } finally {
+                            updateDataFuncionario();
+                        }
                         break;
                     case "2":
-                        nome = txtNomeFuncionario.getText();
-                        telefone = Long.parseLong(txtTelefoneFuncionario.getText());
-                        siape = Integer.parseInt(txtSiape.getText());
-                        Funcionario funcionario = ControladorPessoa.getInstancia().encontrarFuncionarioPeloSiape(siape);
-                        ControladorPessoa.getInstancia().alterarFuncionario(funcionario, nome, telefone, siape);
+                        try {
+                            nome = txtNomeFuncionario.getText();
+                            telefone = Long.parseLong(txtTelefoneFuncionario.getText());
+                            siape = Integer.parseInt(txtSiape.getText());
+                            Funcionario funcionario = ControladorPessoa.getInstancia().encontrarFuncionarioPeloSiape(siape);
+                            ControladorPessoa.getInstancia().alterarFuncionario(funcionario, nome, telefone, siape);
+                            limparCampos("funcionario");
+                        } catch (ValoresNulosException ex) {
+                            exibirMensagem(ex.getMessage());
+                        } catch (NumberFormatException ex) {
+                            exibirMensagem("Preencha todos os campos corretamente! \n\"telefone\" e \"siape\" devem ser preenchidos apenas com numeros!");
+                        } catch (NullPointerException ex) {
+                            exibirMensagem("Não foi possivel alterar, Verifique o siape!");
+                        }
                         updateDataFuncionario();
                         break;
                     case "3":
-                        siape = Integer.parseInt(txtSiape.getText());
-                        int response = JOptionPane.showConfirmDialog(null, "Você deseja excluir o Funcionario siape: " + siape + "?", "Confirmar Exclusão Funcionário",
-                                JOptionPane.YES_NO_OPTION, JOptionPane.OK_CANCEL_OPTION);
-                        if (response == JOptionPane.NO_OPTION) {
-                            updateDataFuncionario();
-                        } else if (response == JOptionPane.YES_OPTION) {
-                            ControladorPessoa.getInstancia().excluirFuncionario(siape);
-                            updateDataFuncionario();
+                        try {
+                            siape = Integer.parseInt(txtSiape.getText());
+                            int response = JOptionPane.showConfirmDialog(null, "Você deseja excluir o Funcionario siape: " + siape + "?", "Confirmar Exclusão Funcionário",
+                                    JOptionPane.YES_NO_OPTION, JOptionPane.OK_CANCEL_OPTION);
+                            if (response == JOptionPane.NO_OPTION) {
+                                updateDataFuncionario();
+                            } else if (response == JOptionPane.YES_OPTION) {
+                                ControladorPessoa.getInstancia().excluirFuncionario(siape);
+                                updateDataFuncionario();
+                                limparCampos("funcionario");
+                            }
+                        } catch (PessoaNaoExisteException ex) {
+                            exibirMensagem(ex.getMessage());
+                        } catch (NumberFormatException ex) {
+                            exibirMensagem("Não foi possivel excluir, Verifique o siape!");
                         }
                         break;
                 }
@@ -607,29 +661,54 @@ public class TelaPessoa extends TelaGlobal {
 
                 switch (ae.getActionCommand()) {
                     case "1":
-                        nome = txtNomeVisitante.getText();
-                        telefone = Long.parseLong(txtTelefoneVisitante.getText());
-                        cpf = Integer.parseInt(txtCpf.getText());
-                        ControladorPessoa.getInstancia().cadastrarVisitante(nome, telefone, cpf);
-                        updateDataVisitante();
+                        try {
+                            nome = txtNomeVisitante.getText();
+                            telefone = Long.parseLong(txtTelefoneVisitante.getText());
+                            cpf = Integer.parseInt(txtCpf.getText());
+                            ControladorPessoa.getInstancia().cadastrarVisitante(nome, telefone, cpf);
+                            limparCampos("visitante");
+                        } catch (ValoresNulosException ex) {
+                            exibirMensagem(ex.getMessage());
+                        } catch (NumberFormatException ex) {
+                            exibirMensagem("Preencha todos os campos corretamente! \n\"telefone\" e \"cpf\" devem ser preenchidos apenas com numeros!");
+                        } finally {
+                            updateDataVisitante();
+                        }
+
                         break;
                     case "2":
-                        nome = txtNomeVisitante.getText();
-                        telefone = Long.parseLong(txtTelefoneVisitante.getText());
-                        cpf = Integer.parseInt(txtCpf.getText());
-                        Visitante visitante = ControladorPessoa.getInstancia().encontrarVisitantePeloCpf(cpf);
-                        ControladorPessoa.getInstancia().alterarVisitante(visitante, nome, telefone, cpf);
+                        try {
+                            nome = txtNomeVisitante.getText();
+                            telefone = Long.parseLong(txtTelefoneVisitante.getText());
+                            cpf = Integer.parseInt(txtCpf.getText());
+                            Visitante visitante = ControladorPessoa.getInstancia().encontrarVisitantePeloCpf(cpf);
+                            ControladorPessoa.getInstancia().alterarVisitante(visitante, nome, telefone, cpf);
+                            limparCampos("visitante");
+                        } catch (ValoresNulosException ex) {
+                            exibirMensagem(ex.getMessage());
+                        } catch (NumberFormatException ex) {
+                            exibirMensagem("Preencha todos os campos corretamente! \n\"telefone\" e \"cpf\" devem ser preenchidos apenas com numeros!");
+                        } catch (NullPointerException ex) {
+                            exibirMensagem("Não foi possivel alterar, Verifique o cpf!");
+                        }
                         updateDataVisitante();
                         break;
                     case "3":
-                        cpf = Integer.parseInt(txtCpf.getText());
-                        int response = JOptionPane.showConfirmDialog(null, "Você deseja excluir o Visitante cpf: " + cpf + "?", "Confirmar Exclusão Visitante",
-                                JOptionPane.YES_NO_OPTION, JOptionPane.OK_CANCEL_OPTION);
-                        if (response == JOptionPane.NO_OPTION) {
-                            updateDataVisitante();
-                        } else if (response == JOptionPane.YES_OPTION) {
-                            ControladorPessoa.getInstancia().excluirVisitante(cpf);
-                            updateDataVisitante();
+                        try {
+                            cpf = Integer.parseInt(txtCpf.getText());
+                            int response = JOptionPane.showConfirmDialog(null, "Você deseja excluir o Visitante cpf: " + cpf + "?", "Confirmar Exclusão Visitante",
+                                    JOptionPane.YES_NO_OPTION, JOptionPane.OK_CANCEL_OPTION);
+                            if (response == JOptionPane.NO_OPTION) {
+                                updateDataVisitante();
+                            } else if (response == JOptionPane.YES_OPTION) {
+                                ControladorPessoa.getInstancia().excluirVisitante(cpf);
+                                updateDataVisitante();
+                                limparCampos("visitante");
+                            }
+                        } catch (PessoaNaoExisteException ex) {
+                            exibirMensagem(ex.getMessage());
+                        } catch (NumberFormatException ex) {
+                            exibirMensagem("Não foi possivel excluir, Verifique o cpf!");
                         }
                         break;
                 }
@@ -738,6 +817,22 @@ public class TelaPessoa extends TelaGlobal {
             txtTelefoneVisitante.setText(model.getValueAt(indexLinhaSelecionada, 2).toString());
         } catch (ArrayIndexOutOfBoundsException ex) {
             this.exibirMensagem("Nenhuma linha selecionada");
+        }
+    }
+
+    public void limparCampos(String tipo) {
+        if (tipo.equals("aluno")) {
+            txtNomeAluno.setText("");
+            txtTelefoneAluno.setText("");
+            txtMatricula.setText("");
+        } else if (tipo.equals("visitante")) {
+            txtNomeVisitante.setText("");
+            txtTelefoneVisitante.setText("");
+            txtCpf.setText("");
+        } else if (tipo.equals("funcionario")) {
+            txtNomeFuncionario.setText("");
+            txtTelefoneFuncionario.setText("");
+            txtSiape.setText("");
         }
     }
 

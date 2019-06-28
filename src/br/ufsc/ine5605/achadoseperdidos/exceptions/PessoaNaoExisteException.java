@@ -5,6 +5,8 @@
  */
 package br.ufsc.ine5605.achadoseperdidos.exceptions;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author caroline
