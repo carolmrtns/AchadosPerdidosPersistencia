@@ -40,28 +40,6 @@ public class ControladorPessoa {
     private ControladorPessoa() {
         //pessoas = new ArrayList<>();
         telaPessoa = new TelaPessoa();
-
-        //Pessoas pré cadastradas para a apresentação
-        Aluno a1 = new Aluno("Henrique", 31973173333l, TipoPessoa.ALUNO, 18202529);
-        Aluno a2 = new Aluno("Carol", 49999241963l, TipoPessoa.ALUNO, 18206078);
-        Visitante v1 = new Visitante("Joao", 31973173333l, TipoPessoa.VISITANTE, 123456);
-        Visitante v2 = new Visitante("Maria", 49999241963l, TipoPessoa.VISITANTE, 456789);
-        Funcionario f1 = new Funcionario("Jose", 31973173333l, TipoPessoa.FUNCIONARIO, 123);
-        Funcionario f2 = new Funcionario("Ana", 49999241963l, TipoPessoa.FUNCIONARIO, 234);
-        //pessoas.add(a1);
-        //pessoas.add(a2);
-        //pessoas.add(v1);
-        //pessoas.add(v2);
-        //pessoas.add(f1);
-        //pessoas.add(f2);
-
-        PessoaDAO.getInstancia().put(a1);
-        PessoaDAO.getInstancia().put(a2);
-        PessoaDAO.getInstancia().put(v1);
-        PessoaDAO.getInstancia().put(v2);
-        PessoaDAO.getInstancia().put(f1);
-        PessoaDAO.getInstancia().put(f2);
-
     }
 
     public static ControladorPessoa getInstancia() {
