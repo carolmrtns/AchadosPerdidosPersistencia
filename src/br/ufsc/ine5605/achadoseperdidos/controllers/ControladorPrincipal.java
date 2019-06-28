@@ -6,7 +6,9 @@
 package br.ufsc.ine5605.achadoseperdidos.controllers;
 
 import br.ufsc.ine5605.achadoseperdidos.models.Local;
+import br.ufsc.ine5605.achadoseperdidos.models.Objeto;
 import br.ufsc.ine5605.achadoseperdidos.models.Pessoa;
+import br.ufsc.ine5605.achadoseperdidos.persistencia.ObjetoDAO;
 import br.ufsc.ine5605.achadoseperdidos.views.TelaPrincipal;
 
 /**
@@ -14,67 +16,83 @@ import br.ufsc.ine5605.achadoseperdidos.views.TelaPrincipal;
  * @author Caroline Martins Alves
  */
 public class ControladorPrincipal {
-    
+
     private ControladorLocal controladorLocal;
     private ControladorObjeto controladorObjeto;
     private ControladorPessoa controladorPessoa;
     private TelaPrincipal telaPrincipal;
     private static ControladorPrincipal instancia;
-    
-    public ControladorPrincipal(){
+
+    private ControladorPrincipal() {
         //this.controladorLocal = new ControladorLocal(this);
         this.controladorLocal = ControladorLocal.getInstancia();
         this.controladorObjeto = ControladorObjeto.getInstancia();
         this.controladorPessoa = ControladorPessoa.getInstancia();
         this.telaPrincipal = new TelaPrincipal();
     }
-    
-    public static ControladorPrincipal getInstancia(){
-        if(instancia == null){
+
+    public static ControladorPrincipal getInstancia() {
+        if (instancia == null) {
             instancia = new ControladorPrincipal();
         }
         return instancia;
     }
-    
-    public void inicia(){
-        telaPrincipal.menuInicial();
+
+    public void inicia() {
+        telaPrincipal.initComponents();
     }
-    
-    public void listarTelaPessoa(){
+
+    public void listarTelaPessoa() {
         controladorPessoa.inicia();
     }
-    
-    public void listarTelaObjeto(){
+
+    public void listarTelaObjeto() {
         controladorObjeto.inicia();
     }
-    
-    public void listarTelaLocal(){
+
+    public void listarTelaLocal() {
         controladorLocal.inicia();
     }
-    
-    public Pessoa retornarPessoaPeloNome(String nomePessoa){
+
+    public Pessoa retornarPessoaPeloNome(String nomePessoa) {
         return controladorPessoa.encontrarPessoaPeloNome(nomePessoa);
     }
-    
-    public Local retornarLocalPeloNome(String nomeLocal){
+
+    public Local retornarLocalPeloNome(String nomeLocal) {
         return controladorLocal.encontrarLocalPeloNome(nomeLocal);
     }
-    
-    public String retornarNomePessoa(Pessoa pessoa){
+
+    public String retornarNomePessoa(Pessoa pessoa) {
         return controladorPessoa.encontrarNomePessoa(pessoa);
     }
-    
-    public String retornarNomeLocal(Local local){
+
+    public String retornarNomeLocal(Local local) {
         return controladorLocal.encontrarNomeDoLocal(local);
     }
+
+    public boolean verificarUsoLocal(Local local) {
+        return controladorObjeto.localEhUsado(local);
+    }
     
-    public void mostrarTelas(String opcao){
-        switch(opcao){
-            case "1": listarTelaPessoa();
+    public boolean vinculoComObjeto(Pessoa pessoa){
+        for (Objeto objetosLista : ObjetoDAO.getInstancia().getList()) {
+            if (objetosLista.getCadastrador().getNomePessoa().equals(pessoa.getNomePessoa())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void mostrarTelas(String opcao) {
+        switch (opcao) {
+            case "1":
+                listarTelaPessoa();
                 break;
-            case "2": listarTelaLocal();
+            case "2":
+                listarTelaLocal();
                 break;
-            case "3": listarTelaObjeto();
+            case "3":
+                listarTelaObjeto();
                 break;
         }
     }

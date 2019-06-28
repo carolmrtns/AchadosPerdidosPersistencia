@@ -5,11 +5,13 @@
  */
 package br.ufsc.ine5605.achadoseperdidos.models;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Caroline Martins Alves
  */
-public class Local {
+public class Local implements Serializable{
     
     private String nomeLocal;
     private String localizacao;

@@ -6,137 +6,78 @@
 package br.ufsc.ine5605.achadoseperdidos.views;
 
 import br.ufsc.ine5605.achadoseperdidos.controllers.ControladorPrincipal;
-import br.ufsc.ine5605.achadoseperdidos.controllers.GerenciadorBotoes;
 import java.awt.Container;
 import java.awt.FlowLayout;
-import java.util.Scanner;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-
 /**
  *
  * @author Caroline Martins Alves
  */
-public class TelaPrincipal extends JFrame { 
+public class TelaPrincipal extends TelaGlobal {
 
-    private Scanner teclado;
-    //private ControladorPrincipal controladorPrincipal;
     private JLabel labelIcone;
-    private JButton botao;
     private ImageIcon icone;
 
     public TelaPrincipal() {
         super("Achados e Perdidos - Tela Principal");
         icone = new ImageIcon("achadosperdidos.png");
-        teclado = new Scanner(System.in);
-        //this.controladorPrincipal = controladorPrincipal;
     }
 
-    public void menuInicial() {
-        /*
-        int opcao;
-        do {
-            System.out.println("----------ACHADOS E PERDIDOS----------");
-            System.out.println("1 - Pessoas");
-            System.out.println("2 - Locais");
-            System.out.println("3 - Objetos");
-            System.out.println("0 - Sair");
-            System.out.println("--------------------------------------");
-            System.out.println("Digite o numero da opcao desejada: ");
-            opcao = recebeValorInteiro();
-            switch (opcao) {
-                case 1:
-                    exibirTelaPessoa();
-                    break;
-                case 2:
-                    exibirTelaLocal();
-                    break;
-                case 3:
-                    exibirTelaObjeto();
-                    break;
-            }
-        } while (opcao != 0);
-        */
+    public void initComponents() {
         Container container = getContentPane();
         container.setLayout(new FlowLayout());
-        
+
+        //Criando menu de navegacao
         JMenuBar menuPrincipal = new JMenuBar();
-        
         setJMenuBar(menuPrincipal);
 
+        //Criando aba no menu de navegacao
         JMenu telas = new JMenu("Telas");
-        //JMenu editMenu = new JMenu("Edit");
         menuPrincipal.add(telas);
-        //menuPrincipal.add(editMenu);        
-        
+
+        //Criando itens para menu de navegacao
         JMenuItem pessoas = new JMenuItem("Pessoas");
         JMenuItem locais = new JMenuItem("Locais");
         JMenuItem objetos = new JMenuItem("Objetos");
-        
+
+        //Adiocionado os itens criados na aba
         telas.add(pessoas);
         telas.add(locais);
         telas.add(objetos);
-        
+
+        //Setando acoes nos itens criados
         pessoas.setActionCommand("1");
         locais.setActionCommand("2");
         objetos.setActionCommand("3");
-        
+
+        //Passando para o gerenciados de botoes
         GerenciadorBotoes gerenciadorBotoes = new GerenciadorBotoes();
         pessoas.addActionListener(gerenciadorBotoes);
         locais.addActionListener(gerenciadorBotoes);
         objetos.addActionListener(gerenciadorBotoes);
-        
+
+        //Adiocionando imagem na tela
         labelIcone = new JLabel(icone);
-        
-        botao = new JButton();
-        
-        //label.setText("Tela Principal");
-        botao.setText("Botao");
-        
         container.add(labelIcone);
-        //container.add(botao);
-        
+
         setSize(600, 500);
         setLocationRelativeTo(null);
         setVisible(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
     }
 
-    public void exibirTelaPessoa() {
-        ControladorPrincipal.getInstancia().listarTelaPessoa();
+    private class GerenciadorBotoes implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            ControladorPrincipal.getInstancia().mostrarTelas(ae.getActionCommand());
+        }
     }
-
-    public void exibirTelaLocal() {
-        ControladorPrincipal.getInstancia().listarTelaLocal();
-    }
-
-    public void exibirTelaObjeto() {
-        ControladorPrincipal.getInstancia().listarTelaObjeto();
-    }
-    
-    //VAI TER QUE TIRAR ESSA MELECA DAQUI DEPOIS
-    public String recebeValorString(){
-        return teclado.nextLine();
-    }
-    
-    public int recebeValorInteiro(){
-        int valor = -1;
-        do {
-            try {
-                valor = teclado.nextInt();
-            } catch (Exception e) {
-                System.out.println("Valor invalido! Digite um numero inteiro");
-                valor = -1;
-            } finally {
-                teclado.nextLine();
-            }
-        } while (valor == -1);
-        return valor;
-    }    
-
 }

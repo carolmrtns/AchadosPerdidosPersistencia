@@ -5,6 +5,10 @@
  */
 package br.ufsc.ine5605.achadoseperdidos.controllers;
 
+import br.ufsc.ine5605.achadoseperdidos.exceptions.PessoaNaoExisteException;
+import br.ufsc.ine5605.achadoseperdidos.exceptions.PessoaExistenteException;
+import br.ufsc.ine5605.achadoseperdidos.exceptions.PessoaPossuiVinculoException;
+import br.ufsc.ine5605.achadoseperdidos.exceptions.ValoresNulosException;
 import br.ufsc.ine5605.achadoseperdidos.models.Aluno;
 import br.ufsc.ine5605.achadoseperdidos.models.Funcionario;
 import br.ufsc.ine5605.achadoseperdidos.models.Pessoa;
@@ -19,17 +23,15 @@ import java.util.ArrayList;
  * @author Henrique Meireles
  */
 public class ControladorPessoa {
-    
+
     private static ControladorPessoa instancia;
     //private ArrayList<Pessoa> pessoas;
     private TelaPessoa telaPessoa;
- 
 
     public void inicia() {
-        telaPessoa.menuInicial();
+        telaPessoa.mostrarTelaPrincipal();
+        telaPessoa.mostraTela();
     }
-    
-    
 
     public ControladorPrincipal getControladorPrincipal() {
         return ControladorPrincipal.getInstancia();
@@ -38,42 +40,18 @@ public class ControladorPessoa {
     private ControladorPessoa() {
         //pessoas = new ArrayList<>();
         telaPessoa = new TelaPessoa();
-        
-        //Pessoas pré cadastradas para a apresentação
-        Aluno a1 = new Aluno("Henrique", 31973173333l, TipoPessoa.ALUNO, 18202529);
-        Aluno a2 = new Aluno("Carol", 49999241963l, TipoPessoa.ALUNO, 18206078);
-        Visitante v1 = new Visitante("Joao", 31973173333l, TipoPessoa.VISITANTE, 123456);
-        Visitante v2 = new Visitante("Maria", 49999241963l, TipoPessoa.VISITANTE, 456789);
-        Funcionario f1 = new Funcionario("Jose", 31973173333l, TipoPessoa.FUNCIONARIO, 123);
-        Funcionario f2 = new Funcionario("Ana", 49999241963l, TipoPessoa.FUNCIONARIO, 234);
-        //pessoas.add(a1);
-        //pessoas.add(a2);
-        //pessoas.add(v1);
-        //pessoas.add(v2);
-        //pessoas.add(f1);
-        //pessoas.add(f2);
-        
-        PessoaDAO.getInstancia().put(a1);
-        PessoaDAO.getInstancia().put(a2);
-        PessoaDAO.getInstancia().put(v1);
-        PessoaDAO.getInstancia().put(v2);
-        PessoaDAO.getInstancia().put(f1);
-        PessoaDAO.getInstancia().put(f2);
-        
     }
-    
-    public static ControladorPessoa getInstancia(){
-        if(instancia == null){
+
+    public static ControladorPessoa getInstancia() {
+        if (instancia == null) {
             instancia = new ControladorPessoa();
         }
         return instancia;
     }
 
-    public void cadastrarAluno(String nome, long telefone, int matricula) {
-        if (nome.equals("") || nome.equals(" ") || telefone == 0l || matricula == 0) {
-            telaPessoa.exibirMensagem("-------------------------");
-            telaPessoa.exibirMensagem("Os campos nao podem ser vazios ou iguais a zero!");
-            return;
+    public void cadastrarAluno(String nome, long telefone, int matricula) throws PessoaExistenteException, ValoresNulosException {
+        if (nome.equals("") || nome.equals("") || telefone == 0l || matricula == 0) {
+            throw new ValoresNulosException("Preencha todos os campos corretamente!");
         }
         Aluno aluno = new Aluno(nome, telefone, TipoPessoa.ALUNO, matricula);
 
@@ -82,16 +60,13 @@ public class ControladorPessoa {
             //pessoas.add(aluno);
             PessoaDAO.getInstancia().put(aluno);
         } else {
-            telaPessoa.exibirMensagem("---------------------------");
-            telaPessoa.exibirMensagem("Matricula ja cadastrada!");
+            throw new PessoaExistenteException("Matricula ja cadastrada!");
         }
     }
 
-    public void cadastrarFuncionario(String nome, long telefone, int siape) {
+    public void cadastrarFuncionario(String nome, long telefone, int siape) throws PessoaExistenteException, ValoresNulosException {
         if (nome.equals("") || nome.equals(" ") || telefone == 0l || siape == 0) {
-            telaPessoa.exibirMensagem("---------------------------");
-            telaPessoa.exibirMensagem("Os campos nao podem ser vazios ou iguais a zero!");
-            return;
+            throw new ValoresNulosException("Preencha todos os campos corretamente!");
         }
         Funcionario funcionario = new Funcionario(nome, telefone, TipoPessoa.FUNCIONARIO, siape);
         if (!verificarPessoaExistente(funcionario)) {
@@ -99,29 +74,25 @@ public class ControladorPessoa {
             //pessoas.add(funcionario);
             PessoaDAO.getInstancia().put(funcionario);
         } else {
-            telaPessoa.exibirMensagem("---------------------------");
-            telaPessoa.exibirMensagem("Siape ja cadastrado!");
+            throw new PessoaExistenteException("Siape ja cadastrado!");
         }
     }
 
-    public void cadastrarVisitante(String nome, long telefone, int cpf) {
+    public void cadastrarVisitante(String nome, long telefone, int cpf) throws PessoaExistenteException, ValoresNulosException {
         if (nome.equals("") || nome.equals(" ") || telefone == 0l || cpf == 0l) {
-            telaPessoa.exibirMensagem("---------------------------");
-            telaPessoa.exibirMensagem("Os campos nao podem ser vazios ou iguais a zero!");
-            return;
+             throw new ValoresNulosException("Preencha todos os campos corretamente!");
         }
         Visitante visitante = new Visitante(nome, telefone, TipoPessoa.VISITANTE, cpf);
         if (!verificarPessoaExistente(visitante)) {
             telaPessoa.exibirDadosVisitante(visitante.getNomePessoa(), visitante.getTelefonePessoa(), visitante.getCpf());
             //pessoas.add(visitante);
-            
+            PessoaDAO.getInstancia().put(visitante);
         } else {
-            telaPessoa.exibirMensagem("---------------------------");
-            telaPessoa.exibirMensagem("Cpf ja cadastrado!");
+            throw new PessoaExistenteException("Cpf ja cadastrado!");
         }
     }
 
-    public void excluirAluno(int matricula) {
+    public void excluirAluno(int matricula) throws PessoaNaoExisteException {
         Aluno aluno = null;
         for (Pessoa pessoasLista : PessoaDAO.getInstancia().getList()) {
             if (pessoasLista instanceof Aluno && ((Aluno) pessoasLista).getMatricula() == matricula) {
@@ -131,14 +102,12 @@ public class ControladorPessoa {
         }
         if (aluno != null) {
             PessoaDAO.getInstancia().removeAluno(aluno);
-            //pessoas.remove(a);
         } else {
-            telaPessoa.exibirMensagem("---------------------------");
-            telaPessoa.exibirMensagem("Não foi possivel excluir - Pessoa nao existente");
+            throw new PessoaNaoExisteException("Não foi possivel excluir - Aluno nao existente");
         }
     }
 
-    public void excluirFuncionario(int siape) {
+    public void excluirFuncionario(int siape) throws PessoaNaoExisteException {
         Funcionario funcionario = null;
         for (Pessoa pessoasLista : PessoaDAO.getInstancia().getList()) {
             if (pessoasLista instanceof Funcionario && ((Funcionario) pessoasLista).getSiape() == siape) {
@@ -150,12 +119,11 @@ public class ControladorPessoa {
             //pessoas.remove(funcionario);
             PessoaDAO.getInstancia().removeFuncionario(funcionario);
         } else {
-            telaPessoa.exibirMensagem("---------------------------");
-            telaPessoa.exibirMensagem("Não foi possivel excluir - Pessoa nao existente");
+            throw new PessoaNaoExisteException("Não foi possivel excluir - Funcionario nao existente");
         }
     }
 
-    public void excluirVisitante(long cpf) {
+    public void excluirVisitante(long cpf) throws PessoaNaoExisteException {
         Visitante visitante = null;
         for (Pessoa pessoasLista : PessoaDAO.getInstancia().getList()) {
             if (pessoasLista instanceof Visitante && ((Visitante) pessoasLista).getCpf() == cpf) {
@@ -168,8 +136,7 @@ public class ControladorPessoa {
             //CRIAR METODO QUE REMOVE VISITANTE
             PessoaDAO.getInstancia().removeVisitante(visitante);
         } else {
-            telaPessoa.exibirMensagem("---------------------------");
-            telaPessoa.exibirMensagem("Não foi possivel excluir - Pessoa nao existente");
+            throw new PessoaNaoExisteException("Não foi possivel excluir - Visitante nao existente");
         }
     }
 
@@ -210,22 +177,41 @@ public class ControladorPessoa {
         return null;
     }
 
-    public void alterarAluno(Aluno aluno, String nome, long telefone, int matricula) {
-        aluno.setNomePessoa(nome);
-        aluno.setTelefonePessoa(telefone);
-        aluno.setMatricula(matricula);
+    public void alterarAluno(Aluno aluno, String nome, long telefone, int matricula) throws ValoresNulosException {
+        if (nome.equals("") || nome.equals(" ") || telefone == 0l || matricula == 0) {
+            throw new ValoresNulosException("Preencha todos os campos corretamente!");
+        } else {
+            PessoaDAO.getInstancia().removeAluno(aluno);
+            aluno.setNomePessoa(nome);
+            aluno.setTelefonePessoa(telefone);
+            aluno.setMatricula(matricula);
+            PessoaDAO.getInstancia().put(aluno);
+        }
     }
 
-    public void alterarFuncionario(Funcionario funcionario, String nome, long telefone, int siape) {
-        funcionario.setNomePessoa(nome);
-        funcionario.setTelefonePessoa(telefone);
-        funcionario.setSiape(siape);
+    public void alterarFuncionario(Funcionario funcionario, String nome, long telefone, int siape) throws ValoresNulosException {
+        if (nome.equals("") || nome.equals(" ") || telefone == 0l || siape == 0) {
+            throw new ValoresNulosException("Preencha todos os campos corretamente!");
+        } else {
+            PessoaDAO.getInstancia().removeFuncionario(funcionario);
+            funcionario.setNomePessoa(nome);
+            funcionario.setTelefonePessoa(telefone);
+            funcionario.setSiape(siape);
+            PessoaDAO.getInstancia().put(funcionario);
+        }
     }
 
-    public void alterarVisitante(Visitante visitante, String nome, long telefone, int cpf) {
-        visitante.setNomePessoa(nome);
-        visitante.setTelefonePessoa(telefone);
-        visitante.setCpf(cpf);
+    public void alterarVisitante(Visitante visitante, String nome, long telefone, int cpf) throws ValoresNulosException {
+        if (nome.equals("") || nome.equals(" ") || telefone == 0l || cpf == 0) {
+            throw new ValoresNulosException("Preencha todos os campos corretamente!");
+        } else {
+            PessoaDAO.getInstancia().removeVisitante(visitante);
+            visitante.setNomePessoa(nome);
+            visitante.setTelefonePessoa(telefone);
+            visitante.setCpf(cpf);
+            PessoaDAO.getInstancia().put(visitante);
+        }
+
     }
 
     public void listarFuncionarios() {
@@ -301,7 +287,40 @@ public class ControladorPessoa {
     }
 
     public String encontrarNomePessoa(Pessoa pessoa) {
-        return pessoa.getNomePessoa();
+        try {
+            return pessoa.getNomePessoa();
+        } catch (NullPointerException ex) {
+            //telaPessoa.exibirMensagem("Pessoa nao encontrada: "+ex);
+            return "";
+        }
+    }
+    
+    public void avisaPessoaVinculadaComObjeto(int id) throws PessoaPossuiVinculoException{
+        for (Pessoa pessoaLista : PessoaDAO.getInstancia().getList()) {
+                if (pessoaLista.getId() == id) {
+                    if(ControladorPrincipal.getInstancia().vinculoComObjeto(pessoaLista)){
+                        throw new PessoaPossuiVinculoException("Não é possivel excluir - Possui vinculo com objeto cadastrado");
+                    }
+                }
+            }
+    }
+
+    public void exibirTelas(String opcao) {
+        switch (opcao) {
+            case "1":
+                telaPessoa.mostrarTelaAluno();
+                break;
+            case "2":
+                telaPessoa.mostrarTelaFuncionario();
+                break;
+            case "3":
+                telaPessoa.mostrarTelaVisitante();
+                break;
+            case "4":
+                telaPessoa.mostrarTelaPrincipal();
+                telaPessoa.atualizaListaPessoas();
+                break;
+        }
     }
 
 }

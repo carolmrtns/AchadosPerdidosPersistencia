@@ -4,129 +4,139 @@
  * and open the template in the editor.
  */
 package br.ufsc.ine5605.achadoseperdidos.controllers;
+
+import br.ufsc.ine5605.achadoseperdidos.exceptions.PessoaNaoExisteException;
+import br.ufsc.ine5605.achadoseperdidos.exceptions.LocalNaoExisteException;
+import br.ufsc.ine5605.achadoseperdidos.exceptions.ObjetoJaTemDonoException;
+import br.ufsc.ine5605.achadoseperdidos.exceptions.ObjetoNaoExisteException;
+import br.ufsc.ine5605.achadoseperdidos.exceptions.ValoresNulosException;
 import br.ufsc.ine5605.achadoseperdidos.models.Local;
 import br.ufsc.ine5605.achadoseperdidos.models.Objeto;
 import br.ufsc.ine5605.achadoseperdidos.models.Pessoa;
 import br.ufsc.ine5605.achadoseperdidos.views.TelaObjeto;
 import br.ufsc.ine5605.achadoseperdidos.models.TipoObjeto;
 import br.ufsc.ine5605.achadoseperdidos.models.TipoStatus;
-import java.util.ArrayList;
+import br.ufsc.ine5605.achadoseperdidos.persistencia.ObjetoDAO;
+
 /**
  *
  * @author Caroline Martins Alves
  */
 public class ControladorObjeto {
-    private ArrayList<Objeto> objetos;
+
     private TelaObjeto telaObjeto;
-    //private ControladorPrincipal controladorPrincipal;
     private static ControladorObjeto instancia;
-    
-    public ControladorObjeto(){
-        objetos = new ArrayList<>();
-        telaObjeto = new TelaObjeto();
-        //this.controladorPrincipal = controladorPrincipal;
-    }
-    
-    public void inicia(){
-        telaObjeto.menuInicial();
+    private int codigo;
+
+    public void inicia() {
+        telaObjeto.mostrarTelaObjeto();
+        telaObjeto.mostrarTelas();
     }
 
-    public static ControladorObjeto getInstancia(){
-        if(instancia == null){
+    private ControladorObjeto() {
+        telaObjeto = new TelaObjeto();
+
+    }
+
+    public static ControladorObjeto getInstancia() {
+        if (instancia == null) {
             instancia = new ControladorObjeto();
         }
         return instancia;
-    }    
-    
-    public void cadastrarObjetos(String descricao, TipoStatus status, 
-        TipoObjeto tipoObjeto, String nomeLocal, String nomeCadastrador){
-        if(!descricao.equals("") && status != null && tipoObjeto != null && 
-                !nomeLocal.equals("") && !nomeCadastrador.equals("")){
-            if(ControladorPrincipal.getInstancia().retornarPessoaPeloNome(nomeCadastrador) != null){
-                if(ControladorPrincipal.getInstancia().retornarLocalPeloNome(nomeLocal) != null){
+    }
+
+    public void cadastrarObjetos(String descricao, TipoStatus status,
+            TipoObjeto tipoObjeto, String nomeLocal, String nomeCadastrador)
+            throws ValoresNulosException, PessoaNaoExisteException, LocalNaoExisteException {
+        if (!descricao.equals("") && status != null && tipoObjeto != null
+                && !nomeLocal.equals("") && !nomeCadastrador.equals("")) {
+            if (ControladorPrincipal.getInstancia().retornarPessoaPeloNome(nomeCadastrador) != null) {
+                if (ControladorPrincipal.getInstancia().retornarLocalPeloNome(nomeLocal) != null) {
+                    //Pegando alguns valores de parametros
+                    int codigoObjeto = verificaCodigo();
                     Pessoa cadastrador = ControladorPrincipal.getInstancia().retornarPessoaPeloNome(nomeCadastrador);
                     Local local = ControladorPrincipal.getInstancia().retornarLocalPeloNome(nomeLocal);
-
-                    Objeto novoObjeto = new Objeto(descricao, status, tipoObjeto, local, cadastrador);
-
-                    telaObjeto.exibirDadosObjeto(novoObjeto.getCodigo(), novoObjeto.getDescricao(), 
-                            novoObjeto.getStatus(), novoObjeto.getTipoObjeto(), 
-                            ControladorPrincipal.getInstancia().retornarNomeLocal(novoObjeto.getLocal()), 
-                            ControladorPrincipal.getInstancia().retornarNomePessoa(novoObjeto.getCadastrador()));
-
-                    objetos.add(novoObjeto);
+                    //Criando um novo objeto
+                    Objeto novoObjeto = new Objeto(codigoObjeto, descricao, status, tipoObjeto, local, cadastrador);
+                    //Inserindo esse novo objeto no hashmap
+                    ObjetoDAO.getInstancia().put(novoObjeto);
                     telaObjeto.exibirMensagem("Objeto cadastrado com Sucesso!");
-                }else{
-                    telaObjeto.exibirMensagem("Digite um local existente! Objeto nao foi inserido.");
+                } else {
+                    throw new LocalNaoExisteException("Digite um local existente! Objeto nao foi inserido.");
                 }
-            }else{
-                telaObjeto.exibirMensagem("Cadastrador nao existe! Cadastre-se e tente inserir o objeto novamente!");
+            } else {
+                throw new PessoaNaoExisteException("Cadastrador nao existe! Cadastre-se e tente inserir o objeto novamente!");
             }
-        }else{
-            telaObjeto.exibirMensagem("Nenhum dos valores pode ser nulo. Nao foi possivel cadastrar o objeto!");
-        }
-    }
-    
-    public void atualizarStatusObjeto(int codigo, TipoStatus status, String nomeDono){
-        if(encontrarObjetoPorCodigo(codigo) != null){
-            if(encontrarObjetoPorCodigo(codigo).getStatus() != status.ENCONTRADO){
-                if(ControladorPrincipal.getInstancia().retornarPessoaPeloNome(nomeDono) != null){
-                    encontrarObjetoPorCodigo(codigo).setStatus(status);
-                    Pessoa dono = ControladorPrincipal.getInstancia().retornarPessoaPeloNome(nomeDono);
-                    encontrarObjetoPorCodigo(codigo).setDono(dono);                    
-                }else{
-                    telaObjeto.exibirMensagem("Dono nao existe! Status nao atualizado.");
-                }
-            }else{
-                telaObjeto.exibirMensagem("Esse objeto ja esta com seu dono! Status nao atualizado.");
-            }
-        }else{
-            telaObjeto.exibirMensagem("Objeto nao existe! Status nao atualizado.");
-        }
-    }
-    
-    public void listarObjetosPerdidos(){
-        TipoStatus status = null;
-        telaObjeto.exibirMensagem("----------LISTANDO OBJETOS PERDIDOS----------");
-        for(Objeto objetosLista : objetos){
-            if(objetosLista.getStatus().equals(status.PERDIDO)){
-                telaObjeto.exibirMensagem("Codigo:" + objetosLista.getCodigo());
-                telaObjeto.exibirMensagem("Descricao:" + objetosLista.getDescricao());
-                telaObjeto.exibirMensagem("Status:" + objetosLista.getStatus());
-                telaObjeto.exibirMensagem("Tipo:" + objetosLista.getTipoObjeto());
-                telaObjeto.exibirMensagem("Local:" + ControladorPrincipal.getInstancia().retornarNomeLocal(objetosLista.getLocal()));
-                telaObjeto.exibirMensagem("Cadastrador:" + ControladorPrincipal.getInstancia().retornarNomePessoa(objetosLista.getCadastrador()));
-                telaObjeto.exibirMensagem("---------------------------------------------");
-            }
+        } else {
+            throw new ValoresNulosException("Nenhum dos valores pode ser nulo. Nao foi possivel cadastrar o objeto!");
         }
     }
 
-    public void listarObjetosPorTipo(TipoObjeto tipoObjeto){
-        TipoStatus status = null;
-        telaObjeto.exibirMensagem("----------LISTANDO OBJETOS PERDIDOS DO TIPO " + tipoObjeto +"----------");
-        for(Objeto objetosLista: objetos){
-            if(objetosLista.getTipoObjeto().equals(tipoObjeto)){
-                if(objetosLista.getStatus().equals(status.PERDIDO)){
-                    telaObjeto.exibirMensagem("Codigo:" + objetosLista.getCodigo());
-                    telaObjeto.exibirMensagem("Descricao:" + objetosLista.getDescricao());
-                    telaObjeto.exibirMensagem("Status:" + objetosLista.getStatus());
-                    telaObjeto.exibirMensagem("Tipo:" + objetosLista.getTipoObjeto());
-                    telaObjeto.exibirMensagem("Local:" + ControladorPrincipal.getInstancia().retornarNomeLocal(objetosLista.getLocal()));
-                    telaObjeto.exibirMensagem("Cadastrador:" + ControladorPrincipal.getInstancia().retornarNomePessoa(objetosLista.getCadastrador()));
-                    telaObjeto.exibirMensagem("---------------------------------------------");
+    public void atualizarStatusObjeto(Integer codigo, TipoStatus status, String nomeDono)
+            throws PessoaNaoExisteException, ObjetoJaTemDonoException, 
+            ObjetoNaoExisteException, ValoresNulosException {
+        if (codigo >= 0 && status != null && !nomeDono.equals("")) {
+            //Verifica se o objeto a ser atualizado existe
+            if (encontrarObjetoPorCodigo(codigo) != null) {
+                //Verifica se o objeto a ser atualizado esta com estatus de PERDIDO
+                if (encontrarObjetoPorCodigo(codigo).getStatus() != status.ENCONTRADO) {
+                    //Verifica se o dono existe
+                    if (ControladorPrincipal.getInstancia().retornarPessoaPeloNome(nomeDono) != null) {
+                        Pessoa dono = ControladorPrincipal.getInstancia().retornarPessoaPeloNome(nomeDono);
+                        ObjetoDAO.getInstancia().atualizaStatus(codigo, status, dono);
+                        telaObjeto.exibirMensagem("Objeto foi atualizado com sucesso!");
+                    } else {
+                        throw new PessoaNaoExisteException("Dono nao existe! Status nao atualizado.");
+                    }
+                } else {
+                    throw new ObjetoJaTemDonoException("Esse objeto ja esta com seu dono! Status nao atualizado.");
                 }
+            } else {
+                throw new ObjetoNaoExisteException("Objeto nao existe! Status nao atualizado.");
             }
+        } else {
+            throw new ValoresNulosException("Valores nao podem ser nulos!");
         }
+
     }
-    
-    public Objeto encontrarObjetoPorCodigo(int codigo){
-        for(Objeto objetosLista: objetos){
-            if(objetosLista.getCodigo() == codigo){
+
+    //Funcao verifica o ultimo codigo adicionado e incrementa 1 para o novo objeto
+    public int verificaCodigo() {
+        if (!ObjetoDAO.getInstancia().getList().isEmpty()) {
+            int indice = ObjetoDAO.getInstancia().getList().size() - 1;
+            codigo = ObjetoDAO.getInstancia().getList().get(indice).getCodigo() + 1;
+        } else {
+            codigo = 0;
+        }
+        return codigo;
+    }
+
+    public Objeto encontrarObjetoPorCodigo(int codigo) {
+        for (Objeto objetosLista : ObjetoDAO.getInstancia().getList()) {
+            if (objetosLista.getCodigo() == codigo) {
                 return objetosLista;
             }
         }
         return null;
     }
-   
+
+    public boolean localEhUsado(Local local) {
+        for (Objeto objetosLista : ObjetoDAO.getInstancia().getList()) {
+            if (objetosLista.getLocal().getNomeLocal().equals(local.getNomeLocal())) {
+                return true;
+            }
+        }
+        return false;
+    }
     
+    public int verificaCodigoDigitadoVazio(String numeroDigitado){
+        int numeroInteiro;
+        if(numeroDigitado.equals("")){
+            numeroInteiro = -1;
+        }else{
+            numeroInteiro = Integer.parseInt(numeroDigitado);
+        }
+        return numeroInteiro;
+    }
+
 }
